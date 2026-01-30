@@ -18,7 +18,7 @@ const rl = readline.createInterface({
 program
   .name("commit-ai")
   .description("AI-powered git analysis and auto-committer")
-  .version("1.2.1")
+  .version("1.2.2")
   .option("-c, --commit", "enable commit mode (prompts to commit changes)")
   .option("-y, --yes", "skip confirmation prompt (requires -c)");
 
@@ -76,13 +76,13 @@ program.action(async (options) => {
       2. Provide a "COMMIT_MESSAGE" following Conventional Commits.
       
       STRICT RULES:
-      - Do NOT use a scope (e.g., use "feat: message" instead of "feat(scope): message").
+      - Do NOT use a scope (e.g., "feat: description").
       - Use imperative mood ("add" not "added").
-      - No period at the end.
+      - No period at the end of the COMMIT_MESSAGE.
 
       Response Format:
       REPORT:
-      - change details
+      - detail
       COMMIT_MESSAGE:
       type: description
 
@@ -106,29 +106,42 @@ program.action(async (options) => {
 
     const response = chatCompletion.choices[0]?.message?.content || "";
 
-    // Extract and strip scope using Regex if AI ignores prompt instructions
-    let commitMsg = response.split(/COMMIT_MESSAGE:/i)[1]?.trim() || "";
-    commitMsg = commitMsg.replace(/^(\w+)\s*\([^)]+\):/, "$1:");
+    // Parse the Response
+    const reportPart =
+      response
+        .split(/COMMIT_MESSAGE:/i)[0]
+        ?.replace(/REPORT:/i, "")
+        .trim() || "";
+    let titlePart = response.split(/COMMIT_MESSAGE:/i)[1]?.trim() || "";
+
+    // Cleanup title (remove scope/period if AI failed instructions)
+    titlePart = titlePart
+      .replace(/^(\w+)\s*\([^)]+\):/, "$1:")
+      .replace(/\.$/, "");
+
+    // Combine for Git (Title \n\n Body)
+    const fullCommitMessage = `${titlePart}\n\n${reportPart}`;
 
     console.log("\n--- 📝 commit-ai: PROFESSIONAL REPORT ---");
     console.log(response);
     console.log("------------------------------------------\n");
 
-    if (options.commit && commitMsg) {
+    if (options.commit && titlePart) {
       let shouldCommit = false;
       if (options.yes) {
         shouldCommit = true;
       } else {
         const confirm = await rl.question(
-          `🤔 Commit with message: "${commitMsg}"? (y/n): `,
+          `🤔 Commit with message: "${titlePart}"? (y/n): `,
         );
         if (confirm.toLowerCase() === "y") shouldCommit = true;
       }
 
       if (shouldCommit) {
         await git.add(".");
-        await git.commit(commitMsg);
-        console.log("✅ Changes committed successfully!");
+        // We pass the array to commit to handle the multi-line body correctly
+        await git.commit([titlePart, reportPart]);
+        console.log("✅ Changes committed with full report!");
       }
     } else if (!options.commit) {
       console.log("💡 Note: Run with '-c' to enable commit mode.");
