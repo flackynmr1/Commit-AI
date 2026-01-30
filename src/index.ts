@@ -152,6 +152,7 @@ program.action(async (options) => {
 
     console.log(`\n${chalk.bold.cyan("─── AI SUGGESTION ───")}`);
     console.log(chalk.white(response));
+    // console.log(titlePart);
     console.log(`${chalk.bold.cyan("─────────────────────")}\n`);
 
     if (options.commit && titlePart) {
@@ -176,7 +177,6 @@ program.action(async (options) => {
       if (shouldCommit) {
         await git.add(".");
         try {
-          // Title becomes first line, Report becomes the body
           await git.commit([titlePart, reportPart]);
           log.success(`Changes committed: ${chalk.dim(titlePart)}`);
         } catch (commitErr: any) {
