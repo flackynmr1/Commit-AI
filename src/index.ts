@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-
 import "dotenv/config";
 import { Command } from "commander";
 import Groq from "groq-sdk";
@@ -151,8 +150,28 @@ program.action(async (options) => {
       .trim();
 
     console.log(`\n${chalk.bold.cyan("─── AI SUGGESTION ───")}`);
-    console.log(chalk.white(response));
-    // console.log(titlePart);
+
+    // Sanitize and format the AI response for display and commit usage
+    const cleanedReport = (reportPart || "Internal code updates")
+      .replace(/\*\*/g, "") // remove bold markers
+      .replace(/^\s*[-*]\s*/gm, "- ") // normalize bullet points
+      .replace(/\r/g, "")
+      .trim();
+
+    // Ensure the title follows `type: description` strictly
+    const titleMatch = (titlePart || "").trim().match(/^([A-Za-z]+):\s*(.+)$/);
+    if (titleMatch && titleMatch[1] && titleMatch[2]) {
+      // lower-case type, keep description as-is
+      const type = titleMatch[1].toLowerCase();
+      const desc = titleMatch[2].trim();
+      titlePart = `${type}: ${desc}`;
+    } else {
+      // fallback to a safe default
+      titlePart = "chore: update project files";
+    }
+
+    console.log(chalk.white(`REPORT:\n${cleanedReport}\n`));
+    console.log(chalk.white(`COMMIT_MESSAGE: ${titlePart}`));
     console.log(`${chalk.bold.cyan("─────────────────────")}\n`);
 
     if (options.commit && titlePart) {
