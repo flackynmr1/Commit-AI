@@ -14,6 +14,7 @@ const git: SimpleGit = simpleGit();
 
 const origin = chalk.bold.magenta("[Commit-AI]");
 
+// Enhanced log object with debug support
 const log = {
   info: (msg: string) =>
     console.log(`${origin} ${chalk.blue("[Info]")}: ${msg}`),
@@ -24,6 +25,8 @@ const log = {
   error: (msg: string) =>
     console.error(`${origin} ${chalk.red("[Error]")}: ${msg}`),
   ai: (msg: string) => console.log(`${origin} ${chalk.cyan("[AI]")}: ${msg}`),
+  debug: (msg: string) =>
+    console.log(`${origin} ${chalk.gray("[Debug]")}: ${msg}`),
 };
 
 async function getIgnorePatterns(): Promise<string[]> {
@@ -54,7 +57,7 @@ async function getIgnorePatterns(): Promise<string[]> {
 program
   .name("commit-ai")
   .description("AI-powered git analysis and auto-committer")
-  .version("1.3.0")
+  .version("1.3.2", "-v, --version")
   .option("-c, --commit", "enable commit mode")
   .option("-y, --yes", "skip confirmation prompt");
 
@@ -74,6 +77,8 @@ program.action(async (options) => {
       return;
     }
 
+    if (options.verbose) log.debug("Git repository verified.");
+
     log.info("Analyzing modified files...");
     await git.add(["--intent-to-add", "."]);
 
@@ -90,6 +95,8 @@ program.action(async (options) => {
       log.success("No changes detected.");
       return;
     }
+
+    if (options.verbose) log.debug(`Diff generated (${diff.length} chars).`);
 
     const prompt = `
       Analyze this Git diff and provide a professional report.
@@ -125,6 +132,13 @@ program.action(async (options) => {
 
     const response = chatCompletion.choices[0]?.message?.content || "";
 
+    // Verbose logging of the raw response
+    if (options.verbose) {
+      console.log(`\n${chalk.gray("--- RAW AI RESPONSE ---")}`);
+      console.log(chalk.gray(response));
+      console.log(`${chalk.gray("-----------------------")}\n`);
+    }
+
     // --- PARSING ---
     const reportMatch = response.match(
       /REPORT:?([\s\S]*?)(?=COMMIT_MESSAGE|COMMIT_BODY|$)/i,
@@ -151,16 +165,13 @@ program.action(async (options) => {
 
     let commitBody = (bodyMatch?.[1] || "").replace(/\*\*/g, "").trim();
     if (!commitBody) {
-      // Use the first few bullets from the report as a sensible body
       commitBody = report.split(/\n/).slice(0, 3).join("\n").trim();
     }
 
-    // Ensure title has the colon format
     if (!title.includes(":")) {
       title = `feat: ${title}`;
     }
 
-    // If title description is too short, append a concise phrase from the body
     const desc = title.split(":")[1]?.trim() ?? "";
     if (desc.length < 15) {
       const extra = commitBody.split(/[\n.]/)[0]?.trim();
@@ -173,7 +184,6 @@ program.action(async (options) => {
     console.log(`\n${chalk.bold.red("─── AI SUGGESTION ───")}`);
     console.log(chalk.white(`REPORT:\n${report}`));
     console.log(chalk.white(`\nCOMMIT_MESSAGE: ${title}`));
-    // console.log(chalk.white(`\nCOMMIT_BODY:\n${commitBody}`));
     console.log(`${chalk.bold.red("─────────────────────")}\n`);
 
     if (options.commit) {
@@ -202,6 +212,7 @@ program.action(async (options) => {
     }
   } catch (error: any) {
     log.error(`Critical Failure: ${error.message}`);
+    if (options.verbose) console.error(error);
   }
 });
 
