@@ -92,12 +92,15 @@ program.action(async (options) => {
     }
 
     const prompt = `
-      Analyze this Git diff.
+      Analyze this Git diff and provide a professional report.
       1. Provide a bulleted "REPORT" of technical changes.
-      2. Provide a "COMMIT_MESSAGE" in "type: description" format.
-
+      2. Provide a "COMMIT_MESSAGE" following these strict rules:
+      3. Provide a "COMMIT_MESSAGE" in "type: description" format.
+      
       STRICT RULES:
-      - Format: type: description (NO brackets, NO scopes).
+      - Format: type: description
+      - NO BRACKETS (e.g., use "feat: message" NOT "[feat]: message")
+      - NO SCOPES (e.g., use "feat: message" NOT "feat(scope): message")
       - Use imperative mood.
       - No period at the end.
 
@@ -111,7 +114,8 @@ program.action(async (options) => {
       messages: [
         {
           role: "system",
-          content: "You are commit-ai. Return only REPORT and COMMIT_MESSAGE.",
+          content:
+            "You are commit-ai. Only return the requested REPORT and COMMIT_MESSAGE sections.",
         },
         { role: "user", content: prompt },
       ],
@@ -121,36 +125,35 @@ program.action(async (options) => {
 
     const response = chatCompletion.choices[0]?.message?.content || "";
 
-    // 1. Extract Report and clean up double "REPORT" headers and Markdown
-    let cleanedReport =
-      response
-        .split(/COMMIT_MESSAGE/i)[0]
-        ?.replace(/REPORT:?/gi, "")
-        .replace(/\*\*/g, "")
-        .replace(/^\s*[-*]\s*/gm, "- ")
-        .trim() || "Code updates.";
+    // --- ROBUST PARSING WITH REGEX ---
+    const reportMatch = response.match(
+      /REPORT:?([\s\S]*?)(?=COMMIT_MESSAGE|$)/i,
+    );
+    const commitMatch = response.match(/COMMIT_MESSAGE:?([\s\S]*?)$/i);
 
-    // 2. Extract Title and clean up Markdown/brackets
-    let titlePart =
-      response
-        .split(/COMMIT_MESSAGE:?/i)[1]
-        ?.trim()
-        .split("\n")[0] || "";
-    titlePart = titlePart
+    let report = (reportMatch?.[1] || "Minor updates.")
       .replace(/\*\*/g, "")
+      .replace(/REPORT:?/gi, "")
+      .trim();
+
+    let title = (
+      (commitMatch?.[1] || "feat: update files")
+        .replace(/\*\*/g, "")
+        .split("\n")[0] ?? "feat: update files"
+    )
       .replace(/^\[(\w+)\]:?\s*/, "$1: ")
       .replace(/^(\w+)\([^)]+\):?\s*/, "$1: ")
       .replace(/\.$/, "")
       .trim();
 
-    // 3. Final Validation of "type: description"
-    const finalTitle = titlePart.includes(":")
-      ? titlePart
-      : `feat: ${titlePart || "update project files"}`;
+    // Ensure title has the colon format
+    if (!title.includes(":")) {
+      title = `feat: ${title}`;
+    }
 
     console.log(`\n${chalk.bold.cyan("─── AI SUGGESTION ───")}`);
-    console.log(chalk.white(`REPORT:\n${cleanedReport}`));
-    console.log(chalk.white(`\nCOMMIT_MESSAGE: ${finalTitle}`));
+    console.log(chalk.white(`REPORT:\n${report}`));
+    console.log(chalk.white(`\nCOMMIT_MESSAGE: ${title}`));
     console.log(`${chalk.bold.cyan("─────────────────────")}\n`);
 
     if (options.commit) {
@@ -169,8 +172,8 @@ program.action(async (options) => {
 
       if (shouldCommit) {
         await git.add(".");
-        await git.commit([finalTitle, cleanedReport]);
-        log.success(`Changes committed: ${chalk.dim(finalTitle)}`);
+        await git.commit([title, report]);
+        log.success(`Changes committed: ${chalk.dim(title)}`);
       } else {
         log.warn("Commit aborted.");
       }
