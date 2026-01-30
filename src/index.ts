@@ -16,10 +16,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-/**
- * Custom Logger
- * Format: [Origin] [Type]: Message
- */
 const origin = chalk.bold.magenta("[Commit-AI]");
 
 const log = {
@@ -69,7 +65,7 @@ program
 program.action(async (options) => {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    log.error("GROQ_API_KEY is missing from your environment variables.");
+    log.error("GROQ_API_KEY is missing.");
     process.exit(1);
   }
 
@@ -78,7 +74,7 @@ program.action(async (options) => {
   try {
     const isRepo = await git.checkIsRepo();
     if (!isRepo) {
-      log.error("Current directory is not a Git repository.");
+      log.error("Not a Git repository.");
       return;
     }
 
@@ -99,24 +95,10 @@ program.action(async (options) => {
       return;
     }
 
-    const MAX_CHAR = 5000;
+    const MAX_CHAR = 6000;
     if (diff.length > MAX_CHAR) {
       diff = diff.substring(0, MAX_CHAR) + "\n\n...[TRUNCATED]...";
     }
-
-    const prompt = `
-      Analyze this Git diff.
-      1. Provide a bulleted "REPORT" of changes.
-      2. Provide a "COMMIT_MESSAGE" in [type]: description format.
-      
-      RULES:
-      - Format: [type]: description (example: [feat]: add login)
-      - Use imperative mood.
-      - No period at the end.
-
-      Diff:
-      ${diff}
-    `;
 
     log.ai("Generating commit suggestion...");
 
@@ -124,30 +106,50 @@ program.action(async (options) => {
       messages: [
         {
           role: "system",
-          content: "You are a professional Git workflow assistant.",
+          content:
+            "You are a Git assistant. Respond ONLY with a raw JSON object. Keep the report brief.",
         },
-        { role: "user", content: prompt },
+        {
+          role: "user",
+          content: `Analyze this diff and return JSON:
+          {
+            "report": "bulleted summary",
+            "title": "type: description"
+          }
+          
+          Diff:
+          ${diff}`,
+        },
       ],
       model: "llama-3.1-8b-instant",
-      temperature: 0.2,
+      temperature: 0.1,
+      max_tokens: 1024, // Increased to prevent the 'cut-off' error
+      response_format: { type: "json_object" },
     });
 
-    const response = chatCompletion.choices[0]?.message?.content || "";
-    const reportPart =
-      response
-        .split(/COMMIT_MESSAGE:/i)[0]
-        ?.replace(/REPORT:/i, "")
-        .trim() || "";
-    let titlePart = response.split(/COMMIT_MESSAGE:/i)[1]?.trim() || "";
+    const rawContent = chatCompletion.choices[0]?.message?.content || "{}";
+    const parsed = JSON.parse(rawContent);
 
-    // Force [type]: message format
-    titlePart = titlePart.replace(/^(\w+):/, "[$1]:").replace(/\.$/, "");
+    const reportPart = parsed.report || "No report generated.";
+    let titlePart = parsed.title || "";
+
+    // Final clean-up of title (removes brackets just in case)
+    titlePart = titlePart
+      .replace(/^\[(\w+)\]:?/, "$1:")
+      .replace(/\.$/, "")
+      .trim();
 
     console.log(`\n${chalk.bold.cyan("─── AI SUGGESTION ───")}`);
-    console.log(chalk.white(response));
+    console.log(chalk.white(`REPORT:\n${reportPart}\n`));
+    console.log(chalk.white(`COMMIT_MESSAGE: ${titlePart}`));
     console.log(`${chalk.bold.cyan("─────────────────────")}\n`);
 
-    if (options.commit && titlePart) {
+    if (options.commit) {
+      if (!titlePart) {
+        log.error("AI failed to suggest a valid commit message.");
+        return;
+      }
+
       let shouldCommit = false;
       if (options.yes) {
         shouldCommit = true;
@@ -161,14 +163,12 @@ program.action(async (options) => {
       if (shouldCommit) {
         await git.add(".");
         await git.commit([titlePart, reportPart]);
-        log.success("Changes committed to history.");
+        log.success(`Changes committed: ${chalk.green(titlePart)}`);
       } else {
         log.warn("Commit aborted.");
       }
-    } else if (!options.commit) {
-      log.info(
-        `Tip: Use ${chalk.bold("'-c'")} to commit directly from this tool.`,
-      );
+    } else {
+      log.info(`Run with ${chalk.bold("-c")} to commit changes.`);
     }
   } catch (error: any) {
     log.error(`Critical Failure: ${error.message}`);
@@ -177,4 +177,9 @@ program.action(async (options) => {
   }
 });
 
-program.parse(process.argv);
+// Use parseAsync for proper async handling in Bun/Commander
+async function run() {
+  await program.parseAsync(process.argv);
+}
+
+run();
