@@ -2,11 +2,14 @@
   "name": "commit-ai",
   "version": "1.1.0",
   "type": "module",
+  "main": "dist/index.js",
   "bin": {
-    "commit-ai": "./index.ts"
+    "commit-ai": "dist/index.js",
+    "git-commit-ai": "src/index.ts"
   },
   "scripts": {
     "start": "bun run index.ts",
+    "build": "tsc",
     "link-cmd": "bun link && bun link commit-ai"
   },
   "dependencies": {
