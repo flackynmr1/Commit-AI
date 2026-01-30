@@ -5,6 +5,8 @@ import { Command } from "commander";
 import Groq from "groq-sdk";
 import { simpleGit, type SimpleGit } from "simple-git";
 import * as readline from "node:readline/promises";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 dotenv.config();
 
@@ -15,16 +17,49 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+/**
+ * Reads .gitignore and converts lines to Git pathspec exclusion format (:!pattern)
+ */
+async function getIgnorePatterns(): Promise<string[]> {
+  const defaultExcludes = [
+    "package-lock.json",
+    "bun.lockb",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "node_modules",
+    "dist",
+    "*.log",
+  ];
+
+  try {
+    const gitignorePath = join(process.cwd(), ".gitignore");
+    const content = await readFile(gitignorePath, "utf-8");
+
+    const gitignoreLines = content
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith("#"));
+
+    const combined = Array.from(
+      new Set([...defaultExcludes, ...gitignoreLines]),
+    );
+
+    // Use the explicit :(exclude) syntax which is more robust for patterns with wildcards (*)
+    return combined.map((pattern) => `:(exclude)${pattern}`);
+  } catch {
+    return defaultExcludes.map((pattern) => `:(exclude)${pattern}`);
+  }
+}
+
 program
   .name("commit-ai")
   .description("AI-powered git analysis and auto-committer")
-  .version("1.2.2")
+  .version("1.2.3")
   .option("-c, --commit", "enable commit mode (prompts to commit changes)")
   .option("-y, --yes", "skip confirmation prompt (requires -c)");
 
 program.action(async (options) => {
   const apiKey = process.env.GROQ_API_KEY;
-
   if (!apiKey) {
     console.error("❌ Error: GROQ_API_KEY is not set.");
     process.exit(1);
@@ -42,15 +77,8 @@ program.action(async (options) => {
     console.log("🔍 commit-ai is scanning your changes...");
     await git.add(["--intent-to-add", "."]);
 
-    const excludePatterns = [
-      ":!package-lock.json",
-      ":!bun.lockb",
-      ":!yarn.lock",
-      ":!pnpm-lock.yaml",
-      ":!node_modules",
-      ":!dist",
-      ":!*.log",
-    ];
+    // Dynamically fetch ignore patterns
+    const excludePatterns = await getIgnorePatterns();
 
     let diff: string = "";
     try {
@@ -61,7 +89,7 @@ program.action(async (options) => {
     }
 
     if (!diff || diff.trim() === "") {
-      console.log("✅ No changes found.");
+      console.log("✅ No changes found (after filtering ignores).");
       return;
     }
 
@@ -105,8 +133,6 @@ program.action(async (options) => {
     });
 
     const response = chatCompletion.choices[0]?.message?.content || "";
-
-    // Parse the Response
     const reportPart =
       response
         .split(/COMMIT_MESSAGE:/i)[0]
@@ -114,13 +140,9 @@ program.action(async (options) => {
         .trim() || "";
     let titlePart = response.split(/COMMIT_MESSAGE:/i)[1]?.trim() || "";
 
-    // Cleanup title (remove scope/period if AI failed instructions)
     titlePart = titlePart
       .replace(/^(\w+)\s*\([^)]+\):/, "$1:")
       .replace(/\.$/, "");
-
-    // Combine for Git (Title \n\n Body)
-    const fullCommitMessage = `${titlePart}\n\n${reportPart}`;
 
     console.log("\n--- 📝 commit-ai: PROFESSIONAL REPORT ---");
     console.log(response);
@@ -139,7 +161,6 @@ program.action(async (options) => {
 
       if (shouldCommit) {
         await git.add(".");
-        // We pass the array to commit to handle the multi-line body correctly
         await git.commit([titlePart, reportPart]);
         console.log("✅ Changes committed with full report!");
       }
