@@ -1,0 +1,314 @@
+[
+  {
+    "time": "20:18:46",
+    "agent": "Jarvis",
+    "status": "STARTING",
+    "detail": "Agent mode activated"
+  },
+  {
+    "time": "20:18:46",
+    "agent": "Trend Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:46",
+    "agent": "Script Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:46",
+    "agent": "Visual Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Voice Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Character Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Video Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Analytics Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Learning Agent",
+    "status": "ONLINE",
+    "detail": "Agent initialized"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Jarvis",
+    "status": "MISSION",
+    "detail": "Creating video 1/5"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Trend Agent",
+    "status": "DONE",
+    "detail": "AI content agency for restaurants"
+  },
+  {
+    "time": "20:18:47",
+    "agent": "Script Agent",
+    "status": "DONE",
+    "detail": "This business idea is actually genius #Shorts"
+  },
+  {
+    "time": "20:18:48",
+    "agent": "Visual Agent",
+    "status": "DONE",
+    "detail": "8 mockups created"
+  },
+  {
+    "time": "20:18:58",
+    "agent": "Voice Agent",
+    "status": "DONE",
+    "detail": "8 voice parts created"
+  },
+  {
+    "time": "20:18:59",
+    "agent": "Character Agent",
+    "status": "DONE",
+    "detail": "Character layout created"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Video Agent",
+    "status": "DONE",
+    "detail": "ready_to_post/layout_style_20260603_201859.mp4"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Upload Agent",
+    "status": "SKIPPED",
+    "detail": "Upload disabled for testing"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Jarvis",
+    "status": "MISSION",
+    "detail": "Creating video 2/5"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Trend Agent",
+    "status": "DONE",
+    "detail": "AI product video agency"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Script Agent",
+    "status": "DONE",
+    "detail": "This business idea is actually genius #Shorts"
+  },
+  {
+    "time": "20:19:07",
+    "agent": "Visual Agent",
+    "status": "DONE",
+    "detail": "8 mockups created"
+  },
+  {
+    "time": "20:19:17",
+    "agent": "Voice Agent",
+    "status": "DONE",
+    "detail": "8 voice parts created"
+  },
+  {
+    "time": "20:19:17",
+    "agent": "Character Agent",
+    "status": "DONE",
+    "detail": "Character layout created"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Video Agent",
+    "status": "DONE",
+    "detail": "ready_to_post/layout_style_20260603_201917.mp4"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Upload Agent",
+    "status": "SKIPPED",
+    "detail": "Upload disabled for testing"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Jarvis",
+    "status": "MISSION",
+    "detail": "Creating video 3/5"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Trend Agent",
+    "status": "DONE",
+    "detail": "short form content agency for real estate agents"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Script Agent",
+    "status": "DONE",
+    "detail": "This business idea is actually genius #Shorts"
+  },
+  {
+    "time": "20:19:25",
+    "agent": "Visual Agent",
+    "status": "DONE",
+    "detail": "8 mockups created"
+  },
+  {
+    "time": "20:19:36",
+    "agent": "Voice Agent",
+    "status": "DONE",
+    "detail": "8 voice parts created"
+  },
+  {
+    "time": "20:19:36",
+    "agent": "Character Agent",
+    "status": "DONE",
+    "detail": "Character layout created"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Video Agent",
+    "status": "DONE",
+    "detail": "ready_to_post/layout_style_20260603_201936.mp4"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Upload Agent",
+    "status": "SKIPPED",
+    "detail": "Upload disabled for testing"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Jarvis",
+    "status": "MISSION",
+    "detail": "Creating video 4/5"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Trend Agent",
+    "status": "DONE",
+    "detail": "local business website redesign side hustle"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Script Agent",
+    "status": "DONE",
+    "detail": "This business idea is actually genius #Shorts"
+  },
+  {
+    "time": "20:19:44",
+    "agent": "Visual Agent",
+    "status": "DONE",
+    "detail": "8 mockups created"
+  },
+  {
+    "time": "20:19:54",
+    "agent": "Voice Agent",
+    "status": "DONE",
+    "detail": "8 voice parts created"
+  },
+  {
+    "time": "20:19:54",
+    "agent": "Character Agent",
+    "status": "DONE",
+    "detail": "Character layout created"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Video Agent",
+    "status": "DONE",
+    "detail": "ready_to_post/layout_style_20260603_201954.mp4"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Upload Agent",
+    "status": "SKIPPED",
+    "detail": "Upload disabled for testing"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Jarvis",
+    "status": "MISSION",
+    "detail": "Creating video 5/5"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Trend Agent",
+    "status": "DONE",
+    "detail": "AI landing page business"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Script Agent",
+    "status": "DONE",
+    "detail": "This business idea is actually genius #Shorts"
+  },
+  {
+    "time": "20:20:02",
+    "agent": "Visual Agent",
+    "status": "DONE",
+    "detail": "8 mockups created"
+  },
+  {
+    "time": "20:20:13",
+    "agent": "Voice Agent",
+    "status": "DONE",
+    "detail": "8 voice parts created"
+  },
+  {
+    "time": "20:20:13",
+    "agent": "Character Agent",
+    "status": "DONE",
+    "detail": "Character layout created"
+  },
+  {
+    "time": "20:20:21",
+    "agent": "Video Agent",
+    "status": "DONE",
+    "detail": "ready_to_post/layout_style_20260603_202013.mp4"
+  },
+  {
+    "time": "20:20:21",
+    "agent": "Upload Agent",
+    "status": "SKIPPED",
+    "detail": "Upload disabled for testing"
+  },
+  {
+    "time": "20:20:21",
+    "agent": "Analytics Agent",
+    "status": "READY",
+    "detail": "Analytics connection next step"
+  },
+  {
+    "time": "20:20:21",
+    "agent": "Learning Agent",
+    "status": "READY",
+    "detail": "Will learn from views later"
+  },
+  {
+    "time": "20:20:21",
+    "agent": "Jarvis",
+    "status": "FINISHED",
+    "detail": "Created 5 videos"
+  }
+]

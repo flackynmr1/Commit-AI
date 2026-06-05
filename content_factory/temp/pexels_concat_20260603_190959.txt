@@ -1,0 +1,8 @@
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_1.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_2.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_3.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_4.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_5.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_6.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_7.mp4'
+file 'C:\Users\46730\Desktop\JARVIS\content_factory\temp\pexels_scene_20260603_190959_8.mp4'

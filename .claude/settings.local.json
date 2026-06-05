@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"/c/Users/46730/Desktop/JARVIS_SaaS\")",
+      "Read(//c/Users/46730/Desktop/**)",
+      "Bash(python -c \"from saas_app import create_app; app = create_app\\(\\); print\\('App created successfully'\\)\")"
+    ]
+  }
+}

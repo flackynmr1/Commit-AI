@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS V35</title>
+
+    <!-- IMPORTANT FIX -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="hud-bg"></div>
+<div class="scanline"></div>
+
+<!-- TOP NUMBERS -->
+<div class="top-numbers">
+    <span>01</span>
+    <span>02</span>
+    <span>03</span>
+    <span>04</span>
+    <span>05</span>
+    <span>06</span>
+    <span>07</span>
+    <span>08</span>
+    <span>09</span>
+    <span>10</span>
+    <span>11</span>
+    <span>12</span>
+    <span>13</span>
+    <span>14</span>
+    <span>15</span>
+    <span>16</span>
+    <span>17</span>
+    <span>18</span>
+    <span>19</span>
+    <span>20</span>
+
+    <span class="active">21</span>
+
+    <span>22</span>
+    <span>23</span>
+    <span>24</span>
+    <span>25</span>
+    <span>26</span>
+    <span>27</span>
+    <span>28</span>
+    <span>29</span>
+    <span>30</span>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="brand">
+        STARK INDUSTRIES // JARVIS V35
+    </div>
+
+    <div id="clock">
+        --:--:--
+    </div>
+</header>
+
+<!-- LEFT CIRCLES -->
+<div class="circle date">
+    <div>JUNE</div>
+    <strong>21</strong>
+</div>
+
+<div class="circle cpu-circle">
+    CPU
+    <br>
+    <span id="cpu">0</span>%
+</div>
+
+<div class="circle ram-circle">
+    RAM
+    <br>
+    <span id="ram">0</span>%
+</div>
+
+<div class="circle power-circle">
+    POWER
+    <br>
+    100%
+</div>
+
+<!-- CENTER CORE -->
+<div class="core">
+
+    <div class="ring ring1"></div>
+
+    <div class="ring ring2"></div>
+
+    <div class="ring ring3"></div>
+
+    <div class="center-dot"></div>
+
+</div>
+
+<div class="stark">
+    STARK INDUSTRIES
+</div>
+
+<!-- LEFT PANEL -->
+<div class="panel left-panel">
+
+    <h2>SYSTEM</h2>
+
+    <p>VOICE: ACTIVE</p>
+
+    <p>
+        MODE:
+        <span id="awake">IDLE</span>
+    </p>
+
+    <p>CPU LOAD</p>
+
+    <div class="bar">
+        <div class="fill"></div>
+    </div>
+
+    <p>LOCAL DISK: 100G</p>
+
+    <p>FREE SPACE: 2G</p>
+
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="panel right-panel">
+
+    <h2>LIVE LOG</h2>
+
+    <div id="logs"></div>
+
+</div>
+
+<!-- WEATHER -->
+<div class="weather">
+
+    <h1>13°C</h1>
+
+    <p>Malmö, Sweden</p>
+
+    <p>Clear sky</p>
+
+    <p>Wind: 3km/h</p>
+
+    <p>Pressure: 1013hPa</p>
+
+</div>
+
+<!-- CHAT -->
+<div class="chat">
+
+    <div id="chatlog"></div>
+
+    <input
+        id="msg"
+        placeholder="Ask JARVIS..."
+        autocomplete="off"
+    >
+
+</div>
+
+<script>
+
+function add(role, text){
+
+    let chatlog = document.getElementById("chatlog");
+
+    chatlog.innerHTML += `
+        <div class="line">
+            <b>${role}:</b> ${text}
+        </div>
+    `;
+
+    chatlog.scrollTop = chatlog.scrollHeight;
+}
+
+async function send(){
+
+    let msg = document.getElementById("msg");
+
+    let value = msg.value.trim();
+
+    if(!value) return;
+
+    msg.value = "";
+
+    add("YOU", value);
+
+    let response = await fetch("/chat", {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            message:value
+        })
+    });
+
+    let data = await response.json();
+
+    add("JARVIS", data.response || "");
+}
+
+document.getElementById("msg").addEventListener("keydown", e=>{
+
+    if(e.key === "Enter"){
+        send();
+    }
+
+});
+
+async function update(){
+
+    document.getElementById("clock").innerText =
+        new Date().toLocaleTimeString();
+
+    try{
+
+        let sys = await fetch("/sys")
+        .then(r=>r.json());
+
+        document.getElementById("cpu").innerText = sys.cpu;
+
+        document.getElementById("ram").innerText = sys.ram;
+
+        document.getElementById("awake").innerText =
+            sys.awake ? "ONLINE" : "IDLE";
+
+    }catch(e){}
+
+    try{
+
+        let logData = await fetch("/logs")
+        .then(r=>r.json());
+
+        document.getElementById("logs").innerHTML =
+            logData
+            .slice(-14)
+            .map(x=>`<div>${x}</div>`)
+            .join("");
+
+    }catch(e){}
+}
+
+setInterval(update,1000);
+
+update();
+
+</script>
+
+</body>
+</html>

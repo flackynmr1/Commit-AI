@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Jarvis Agents</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1d2b64, #050510 65%);
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .boot {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    h1 {
+      font-size: 54px;
+      letter-spacing: 4px;
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00eaff; }
+      to { text-shadow: 0 0 35px #00eaff; }
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      width: 85%;
+      margin-top: 40px;
+    }
+    .agent {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,234,255,0.4);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,234,255,0.15);
+    }
+    .pulse {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00ff9d;
+      margin: 10px auto;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: .5; }
+      100% { transform: scale(1.6); opacity: 1; }
+    }
+    #tasks {
+      position: absolute;
+      bottom: 30px;
+      left: 50px;
+      right: 50px;
+      height: 220px;
+      overflow: auto;
+      background: rgba(0,0,0,0.35);
+      border-radius: 18px;
+      padding: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="boot">
+    <h1>JARVIS AGENT MODE</h1>
+    <p>YT Shorts Factory Online</p>
+
+    <div class="grid">
+      <div class="agent">Trend Agent<div class="pulse"></div></div>
+      <div class="agent">Script Agent<div class="pulse"></div></div>
+      <div class="agent">Visual Agent<div class="pulse"></div></div>
+      <div class="agent">Voice Agent<div class="pulse"></div></div>
+      <div class="agent">Character Agent<div class="pulse"></div></div>
+      <div class="agent">Video Agent<div class="pulse"></div></div>
+      <div class="agent">Analytics Agent<div class="pulse"></div></div>
+      <div class="agent">Learning Agent<div class="pulse"></div></div>
+    </div>
+
+    <div id="tasks">Loading tasks...</div>
+  </div>
+
+<script>
+async function loadTasks() {
+  try {
+    const res = await fetch("../content_factory/logs/tasks.json?x=" + Date.now());
+    const data = await res.json();
+    document.getElementById("tasks").innerHTML = data.slice(-8).map(t =>
+      `<div>[${t.time}] <b>${t.agent}</b> — ${t.status}: ${t.detail}</div>`
+    ).join("");
+  } catch(e) {
+    document.getElementById("tasks").innerHTML = "Waiting for agents...";
+  }
+}
+setInterval(loadTasks, 1000);
+loadTasks();
+</script>
+</body>
+</html>

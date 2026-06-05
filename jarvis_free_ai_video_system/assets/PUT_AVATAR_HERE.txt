@@ -1,0 +1,8 @@
+Lägg din avatarbild här och döp den till:
+
+avatar.png
+
+Exempel:
+assets/avatar.png
+
+Den används bara om du installerar SadTalker.

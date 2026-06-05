@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JARVIS</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="orb"></div>
+
+    <h1>JARVIS ACTIVE</h1>
+
+    <input id="input" placeholder="Säg något..." />
+    <button onclick="send()">Send</button>
+
+    <div id="output"></div>
+
+</div>
+
+<script>
+
+async function send(){
+
+    let msg = document.getElementById("input").value;
+
+    let res = await fetch("/ask", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({message: msg})
+    });
+
+    let data = await res.json();
+
+    document.getElementById("output").innerText = data.response;
+}
+
+</script>
+<script>
+
+function speak(text){
+    let msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "sv-SE";
+    window.speechSynthesis.speak(msg);
+}
+
+// 🎤 voice input
+function startVoice(){
+
+    let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    recognition.lang = "sv-SE";
+    recognition.start();
+
+    recognition.onresult = async function(event){
+
+        let text = event.results[0][0].transcript;
+        document.getElementById("cmd").value = text;
+
+        let res = await fetch("/ask", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({message: text})
+        });
+
+        let data = await res.json();
+
+        document.getElementById("output").innerText = data.response;
+        speak(data.response);
+    }
+}
+
+</script>
+</body>
+</html><button onclick="startVoice()">🎤 Talk</button>
