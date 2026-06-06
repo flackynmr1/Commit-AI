@@ -74,17 +74,26 @@ function copyAllMails(){
 
   <main class="main">
 
-    <div class="header">
-      <div>
-        <h1>Lead Agent</h1>
-        <p>Hitta leads, hitta email, skapa pitchar och förbered Gmail-utkast.</p>
-      </div>
-
-      <div class="header-actions">
-        <a class="btn" href="/leads/gmail/connect">Anslut Gmail</a>
-        <a class="btn dark" href="/dashboard">Till dashboard</a>
-      </div>
+  <div class="header">
+    <div>
+      <h1>Lead Agent</h1>
+      <p>Hitta leads, hitta email, skapa pitchar och förbered Gmail-utkast.</p>
     </div>
+
+    <div class="bulk-actions">
+      <form method="POST" action="/leads/pitch-all">
+        <button class="btn" type="submit">
+          Skapa pitch för alla
+        </button>
+      </form>
+
+      <form method="POST" action="/leads/gmail/draft-all">
+        <button class="btn green" type="submit">
+          Skapa Gmail-utkast för alla
+        </button>
+      </form>
+    </div>
+  </div>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}

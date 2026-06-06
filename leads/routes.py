@@ -67,7 +67,6 @@ def find_leads():
 @leads.route("/pitch/<int:lead_id>", methods=["POST"])
 def create_pitch(lead_id):
     lead = Lead.query.get_or_404(lead_id)
-
     subject, body = create_pitch_for_lead(lead)
 
     lead.email_subject = subject
@@ -92,6 +91,39 @@ def pitch_all():
 
     db.session.commit()
     flash(f"Skapade pitchar för {created_count} leads.", "success")
+    return redirect(url_for("leads.lead_dashboard"))
+
+
+@leads.route("/gmail/draft-all", methods=["POST"])
+def gmail_draft_all():
+    if create_gmail_draft is None:
+        flash("Gmail service är inte konfigurerad.", "warning")
+        return redirect(url_for("leads.lead_dashboard"))
+
+    if "gmail_token" not in session:
+        return redirect(url_for("leads.gmail_connect"))
+
+    all_leads = Lead.query.all()
+    created = 0
+    skipped = 0
+
+    for lead in all_leads:
+        if not lead.email or not lead.email_body:
+            skipped += 1
+            continue
+
+        create_gmail_draft(
+            session["gmail_token"],
+            lead.email,
+            lead.email_subject or f"Fler kunder till {lead.company_name}",
+            lead.email_body,
+        )
+
+        lead.status = "Gmail-utkast skapat"
+        created += 1
+
+    db.session.commit()
+    flash(f"Skapade {created} Gmail-utkast. Hoppade över {skipped} leads utan email eller pitch.", "success")
     return redirect(url_for("leads.lead_dashboard"))
 
 
