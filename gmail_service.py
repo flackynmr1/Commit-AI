@@ -23,6 +23,7 @@ def get_gmail_flow():
         },
         scopes=SCOPES,
         redirect_uri=os.getenv("GMAIL_REDIRECT_URI"),
+        autogenerate_code_verifier=False,
     )
 
 

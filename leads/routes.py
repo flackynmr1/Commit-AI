@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, session, flash
+
 from email_finder import find_email_from_website
 from db import db
 from lead_models import Lead
@@ -44,7 +45,6 @@ def find_leads():
 
     for item in found_leads:
         exists = Lead.query.filter_by(company_name=item.get("company_name")).first()
-
         if exists:
             continue
 
@@ -62,7 +62,6 @@ def find_leads():
         db.session.add(lead)
 
     db.session.commit()
-
     return redirect(url_for("leads.lead_dashboard"))
 
 
@@ -77,7 +76,6 @@ def create_pitch(lead_id):
     lead.status = "Pitch skapad"
 
     db.session.commit()
-
     return redirect(url_for("leads.lead_dashboard"))
 
 
@@ -131,6 +129,26 @@ def delete_lead(lead_id):
     return redirect(url_for("leads.lead_dashboard"))
 
 
+@leads.route("/find-email/<int:lead_id>", methods=["POST"])
+def find_email(lead_id):
+    lead = Lead.query.get_or_404(lead_id)
+
+    if not lead.website:
+        flash("Lead saknar hemsida.", "warning")
+        return redirect(url_for("leads.lead_dashboard"))
+
+    email = find_email_from_website(lead.website)
+
+    if email:
+        lead.email = email
+        db.session.commit()
+        flash(f"Hittade email: {email}", "success")
+    else:
+        flash("Kunde inte hitta email på hemsidan.", "warning")
+
+    return redirect(url_for("leads.lead_dashboard"))
+
+
 @leads.route("/gmail/connect")
 def gmail_connect():
     if get_gmail_flow is None:
@@ -168,7 +186,6 @@ def gmail_callback():
     }
 
     flash("Gmail kopplat.", "success")
-
     return redirect(url_for("leads.lead_dashboard"))
 
 
@@ -202,23 +219,4 @@ def gmail_draft(lead_id):
     db.session.commit()
 
     flash("Gmail-utkast skapat.", "success")
-
-    return redirect(url_for("leads.lead_dashboard"))
-@leads.route("/find-email/<int:lead_id>", methods=["POST"])
-def find_email(lead_id):
-    lead = Lead.query.get_or_404(lead_id)
-
-    if not lead.website:
-        flash("Lead saknar hemsida.", "warning")
-        return redirect(url_for("leads.lead_dashboard"))
-
-    email = find_email_from_website(lead.website)
-
-    if email:
-        lead.email = email
-        db.session.commit()
-        flash(f"Hittade email: {email}", "success")
-    else:
-        flash("Kunde inte hitta email på hemsidan.", "warning")
-
     return redirect(url_for("leads.lead_dashboard"))
