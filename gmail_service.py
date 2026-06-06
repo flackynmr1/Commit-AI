@@ -39,7 +39,7 @@ def create_gmail_draft(token_data, to_email, subject, body):
 
     draft = service.users().drafts().create(
         userId="me",
-        body={"message": {"raw": raw}}
+        body={"message": {"raw": raw}},
     ).execute()
 
     return draft

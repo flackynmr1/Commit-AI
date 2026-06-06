@@ -56,9 +56,8 @@ def find_leads():
             phone=item.get("phone", ""),
             email=item.get("email", ""),
             source=item.get("source", "Google Places"),
-            status="Ny Lead"
+            status="Ny Lead",
         )
-
         db.session.add(lead)
 
     db.session.commit()
@@ -93,7 +92,6 @@ def pitch_all():
 
     db.session.commit()
     flash(f"Skapade pitchar för {created_count} leads.", "success")
-
     return redirect(url_for("leads.lead_dashboard"))
 
 
@@ -159,9 +157,8 @@ def gmail_connect():
     auth_url, _ = flow.authorization_url(
         prompt="consent",
         access_type="offline",
-        include_granted_scopes="true"
+        include_granted_scopes="true",
     )
-
     return redirect(auth_url)
 
 
@@ -212,7 +209,7 @@ def gmail_draft(lead_id):
         session["gmail_token"],
         lead.email,
         lead.email_subject or f"Fler kunder till {lead.company_name}",
-        lead.email_body
+        lead.email_body,
     )
 
     lead.status = "Gmail-utkast skapat"
