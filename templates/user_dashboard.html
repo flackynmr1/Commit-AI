@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard â€“ FlerKunder</title>
+<title>Dashboard – FlerKunder</title>
 
 <style>
 *{box-sizing:border-box}
@@ -403,7 +403,7 @@ h1{
   <div class="nav-links">
     <a href="/dashboard">Dashboard</a>
     <a class="nav-cta" href="/lead-agent">Lead Agent</a>
-    <a href="/leads/profile/setup">Företagsprofil</a>
+    <a href="/leads/profile/setup">Fretagsprofil</a>
     <a href="/auth/logout">Logga ut</a>
   </div>
 </nav>
@@ -416,24 +416,24 @@ h1{
       <div class="badge">Premium Lead Dashboard</div>
 
       <h1>
-        Välkommen tillbaka.<br>
-        <span class="grad">Dina leads jobbar åt dig.</span>
+        Vlkommen tillbaka.<br>
+        <span class="grad">Dina leads jobbar t dig.</span>
       </h1>
 
       <p>
-        Här får du överblick över dina leads, pitchar och mailflöden.
-        Öppna Lead Agent för att hitta nya företag, skapa personliga pitchar
-        och förbereda Gmail-utkast.
+        Hr fr du verblick ver dina leads, pitchar och mailflden.
+        ppna Lead Agent fr att hitta nya fretag, skapa personliga pitchar
+        och frbereda Gmail-utkast.
       </p>
 
       
 <div style="margin-top:18px;padding:18px;border-radius:22px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;font-weight:850">
-  🔒 Gratisläge: Gmail-utkast via API är låst. Du kan fortfarande kopiera pitch och öppna Gmail manuellt i Lead Agent.
+   Gratislge: Gmail-utkast via API r lst. Du kan fortfarande kopiera pitch och ppna Gmail manuellt i Lead Agent.
 </div>
 
 <div class="actions">
-        <a class="btn" href="/lead-agent">🚀€ Öppna Lead Agent</a>
-        <a class="btn secondary" href="/leads/profile/setup">⚙️ Företagsprofil</a>
+        <a class="btn" href="/lead-agent"> ppna Lead Agent</a>
+        <a class="btn secondary" href="/leads/profile/setup"> Fretagsprofil</a>
       </div>
     </div>
 
@@ -448,7 +448,7 @@ h1{
           <div class="feed-item">
             <div>
               <strong>Ny lead hittad</strong>
-              <span>Google Places Â· matchad mot din bransch</span>
+              <span>Google Places · matchad mot din bransch</span>
             </div>
             <div class="score">92</div>
           </div>
@@ -456,7 +456,7 @@ h1{
           <div class="feed-item">
             <div>
               <strong>Pitch skapad</strong>
-              <span>AI-text redo för granskning</span>
+              <span>AI-text redo fr granskning</span>
             </div>
             <div class="score">88</div>
           </div>
@@ -464,7 +464,7 @@ h1{
           <div class="feed-item">
             <div>
               <strong>Email hittad</strong>
-              <span>Kontaktadress redo för Gmail-utkast</span>
+              <span>Kontaktadress redo fr Gmail-utkast</span>
             </div>
             <div class="score">81</div>
           </div>
@@ -479,19 +479,19 @@ h1{
     <div class="stat">
       <h3>Leads kvar</h3>
       <strong>{{ usage.remaining_leads if usage else 0 }}</strong>
-      <small>av {{ usage.leads_limit if usage else 0 }} denna månad</small>
+      <small>av {{ usage.leads_limit if usage else 0 }} denna mnad</small>
     </div>
 
     <div class="stat">
       <h3>Din plan</h3>
       <strong>{{ "Gratis Testperiod" if usage and usage.plan == "free_trial" else usage.plan|capitalize }}</strong>
-      <small>Aktuell nivå</small>
+      <small>Aktuell niv</small>
     </div>
 
     <div class="stat">
-      <h3>Max per sökning</h3>
+      <h3>Max per skning</h3>
       <strong>{{ usage.max_leads_per_search if usage else 5 }}</strong>
-      <small>leads per körning</small>
+      <small>leads per krning</small>
     </div>
 
     <div class="stat">
@@ -505,25 +505,25 @@ h1{
   <section class="panel-grid">
 
     <div class="panel">
-      <h2>Kom igång</h2>
+      <h2>Kom igng</h2>
 
       <div class="check">
-        <div class="check-dot">✓</div>
-        <div>Fyll i företagsprofilen så pitcharna blir personliga.</div>
+        <div class="check-dot"></div>
+        <div>Fyll i fretagsprofilen s pitcharna blir personliga.</div>
       </div>
 
       <div class="check">
-        <div class="check-dot">✓</div>
-        <div>Hitta leads baserat på stad och bransch.</div>
+        <div class="check-dot"></div>
+        <div>Hitta leads baserat p stad och bransch.</div>
       </div>
 
       <div class="check">
-        <div class="check-dot">✓</div>
+        <div class="check-dot"></div>
         <div>Skapa pitchar och kontrollera texten innan utskick.</div>
       </div>
 
       <div class="check">
-        <div class="check-dot">✓</div>
+        <div class="check-dot"></div>
         <div>Koppla Gmail och skapa utkast automatiskt.</div>
       </div>
     </div>
@@ -534,22 +534,22 @@ h1{
       <div class="timeline">
         <div class="step">
           <strong>1. Hitta leads</strong>
-          <span>Sök efter relevanta företag i din stad.</span>
+          <span>Sk efter relevanta fretag i din stad.</span>
         </div>
 
         <div class="step">
           <strong>2. Skapa pitch</strong>
-          <span>AI skriver utkast baserat på din företagsprofil.</span>
+          <span>AI skriver utkast baserat p din fretagsprofil.</span>
         </div>
 
         <div class="step">
           <strong>3. Hitta email</strong>
-          <span>Systemet söker efter kontaktmail på hemsidan.</span>
+          <span>Systemet sker efter kontaktmail p hemsidan.</span>
         </div>
 
         <div class="step">
           <strong>4. Skapa Gmail-utkast</strong>
-          <span>Förbered mail utan att skicka automatiskt.</span>
+          <span>Frbered mail utan att skicka automatiskt.</span>
         </div>
       </div>
     </div>
@@ -559,7 +559,7 @@ h1{
 </div>
 
 <footer class="footer">
-  <span>FlerKunder © 2026</span>
+  <span>FlerKunder  2026</span>
   <span>Lead Agent Dashboard</span>
 </footer>
 
