@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
@@ -10,14 +10,14 @@
 
 <section class="section">
   <h2>Admin Login</h2>
-  <p>Skriv lösenordet för att komma in i adminportalen.</p>
+  <p>Skriv lÃ¶senordet fÃ¶r att komma in i adminportalen.</p>
 
   {% if error %}
   <p style="color:#ef4444;font-weight:800;">{{ error }}</p>
   {% endif %}
 
   <form method="POST" action="/admin-login" class="lead-form">
-    <input type="password" name="password" placeholder="Lösenord" required>
+    <input type="password" name="password" placeholder="LÃ¶senord" required>
     <button class="btn" type="submit">Logga in</button>
   </form>
 
@@ -28,4 +28,5 @@
 
 </body>
 </html>
+
 

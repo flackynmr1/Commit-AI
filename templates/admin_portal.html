@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
@@ -76,7 +76,7 @@ function copyMail(id){
     <div class="admin-top">
       <div>
         <h1>Adminportal</h1>
-        <p>Kontrollrum för bokningar, leads, mailutkast och nästa actions.</p>
+        <p>Kontrollrum fÃ¶r bokningar, leads, mailutkast och nÃ¤sta actions.</p>
       </div>
       <div class="admin-badge">Admin inloggad</div>
     </div>
@@ -95,7 +95,7 @@ function copyMail(id){
         <strong>0</strong>
       </div>
       <div class="admin-card">
-        <span>Mål denna vecka</span>
+        <span>MÃ¥l denna vecka</span>
         <strong>20k</strong>
       </div>
     </section>
@@ -104,7 +104,7 @@ function copyMail(id){
 
   <p style="color:#94a3b8;margin-bottom:20px">
     Kunden swishar och skriver sin email i meddelandet.
-    Därefter aktiverar du planen här.
+    DÃ¤refter aktiverar du planen hÃ¤r.
   </p>
 
   <div class="admin-table-wrap">
@@ -164,7 +164,7 @@ function copyMail(id){
             <a
               class="action-btn red"
               href="/admin/deactivate/{{ user.id }}">
-              Stäng av
+              StÃ¤ng av
             </a>
 
           </div>
@@ -187,32 +187,32 @@ function copyMail(id){
     <section class="admin-section">
       <h2>Snabbverktyg</h2>
       <div class="admin-tools">
-        <a class="tool-card" href="/leads/"><strong>Lead Agent</strong><span>Hitta riktiga leads, skapa pitchar och förbered mail.</span></a>
-        <a class="tool-card" href="/dashboard"><strong>Dashboard</strong><span>Se mål, fokus och projektstatus.</span></a>
-        <a class="tool-card" href="/checklist"><strong>Checklista</strong><span>Dagens plan, veckomål och agentlogg.</span></a>
-        <a class="tool-card" href="/booking/"><strong>Bokningssida</strong><span>Visa formuläret kunder använder för demo.</span></a>
+        <a class="tool-card" href="/leads/"><strong>Lead Agent</strong><span>Hitta riktiga leads, skapa pitchar och fÃ¶rbered mail.</span></a>
+        <a class="tool-card" href="/dashboard"><strong>Dashboard</strong><span>Se mÃ¥l, fokus och projektstatus.</span></a>
+        <a class="tool-card" href="/checklist"><strong>Checklista</strong><span>Dagens plan, veckomÃ¥l och agentlogg.</span></a>
+        <a class="tool-card" href="/booking/"><strong>Bokningssida</strong><span>Visa formulÃ¤ret kunder anvÃ¤nder fÃ¶r demo.</span></a>
       </div>
     </section>
 
     <section class="admin-section">
-      <h2>Gör idag</h2>
+      <h2>GÃ¶r idag</h2>
       <div class="today-grid">
-        <div class="today-item"><strong>1. Sök 20 leads</strong><br><span style="color:#94a3b8">Använd Lead Agent med en tydlig bransch och stad.</span></div>
-        <div class="today-item"><strong>2. Skapa 10 pitchar</strong><br><span style="color:#94a3b8">Prioritera företag med telefon och hemsida.</span></div>
-        <div class="today-item"><strong>3. Kontakta 5 varma leads</strong><br><span style="color:#94a3b8">Kopiera mail eller ring manuellt tills Gmail API är kopplat.</span></div>
-        <div class="today-item"><strong>4. Boka 2 demos</strong><br><span style="color:#94a3b8">Målet är samtal, inte mer design.</span></div>
+        <div class="today-item"><strong>1. SÃ¶k 20 leads</strong><br><span style="color:#94a3b8">AnvÃ¤nd Lead Agent med en tydlig bransch och stad.</span></div>
+        <div class="today-item"><strong>2. Skapa 10 pitchar</strong><br><span style="color:#94a3b8">Prioritera fÃ¶retag med telefon och hemsida.</span></div>
+        <div class="today-item"><strong>3. Kontakta 5 varma leads</strong><br><span style="color:#94a3b8">Kopiera mail eller ring manuellt tills Gmail API Ã¤r kopplat.</span></div>
+        <div class="today-item"><strong>4. Boka 2 demos</strong><br><span style="color:#94a3b8">MÃ¥let Ã¤r samtal, inte mer design.</span></div>
       </div>
     </section>
 
     <section class="admin-section">
-      <h2>Bokningsförfrågningar</h2>
+      <h2>BokningsfÃ¶rfrÃ¥gningar</h2>
 
       {% if bookings %}
       <div class="admin-table-wrap">
         <table class="admin-table">
           <tr>
             <th>Namn</th>
-            <th>Företag</th>
+            <th>FÃ¶retag</th>
             <th>Bransch</th>
             <th>Telefon</th>
             <th>Email</th>
@@ -233,7 +233,7 @@ function copyMail(id){
             <td>
               <div class="actions">
                 <a class="action-btn blue" href="#">Kontaktad</a>
-                <a class="action-btn green" href="#">Möte bokat</a>
+                <a class="action-btn green" href="#">MÃ¶te bokat</a>
                 <a class="action-btn pink" href="mailto:{{ b.email }}">Maila</a>
                 <a class="action-btn dark" href="/leads/">Skapa lead</a>
               </div>
@@ -244,7 +244,7 @@ function copyMail(id){
       </div>
       {% else %}
       <div class="empty-state">
-        Inga bokningsförfrågningar än. När någon bokar demo kommer de synas här.
+        Inga bokningsfÃ¶rfrÃ¥gningar Ã¤n. NÃ¤r nÃ¥gon bokar demo kommer de synas hÃ¤r.
       </div>
       {% endif %}
     </section>
@@ -266,7 +266,7 @@ function copyMail(id){
 
         {% if lead.email_subject %}
         <p>
-          <strong>Ämne:</strong> {{ lead.email_subject }}
+          <strong>Ã„mne:</strong> {{ lead.email_subject }}
         </p>
         {% endif %}
 
@@ -283,7 +283,7 @@ function copyMail(id){
           <a
             class="action-btn green"
             href="mailto:{{ lead.email }}?subject={{ lead.email_subject }}">
-            Öppna mail
+            Ã–ppna mail
           </a>
           {% endif %}
         </div>
@@ -292,19 +292,19 @@ function copyMail(id){
   {% endfor %}
 {% else %}
   <div class="empty-state">
-    Inga pitchar skapade ännu. Gå till Lead Agent och klicka “Skapa pitch”.
+    Inga pitchar skapade Ã¤nnu. GÃ¥ till Lead Agent och klicka â€œSkapa pitchâ€.
   </div>
 {% endif %}
 
 </section>
 
     <section class="admin-section">
-      <h2>Nästa tekniska steg</h2>
+      <h2>NÃ¤sta tekniska steg</h2>
       <div class="admin-tools">
-        <div class="tool-card"><strong>Gmail API</strong><span>Skapa/godkänn/skicka mail från leads.</span></div>
-        <div class="tool-card"><strong>Google Places API</strong><span>Redan igång för riktiga företag. Nästa: bättre filtrering.</span></div>
-        <div class="tool-card"><strong>Stripe</strong><span>Abonnemang: 499, 999 och 1999 kr/mån.</span></div>
-        <div class="tool-card"><strong>Calendar API</strong><span>Automatisk bokning när lead svarar positivt.</span></div>
+        <div class="tool-card"><strong>Gmail API</strong><span>Skapa/godkÃ¤nn/skicka mail frÃ¥n leads.</span></div>
+        <div class="tool-card"><strong>Google Places API</strong><span>Redan igÃ¥ng fÃ¶r riktiga fÃ¶retag. NÃ¤sta: bÃ¤ttre filtrering.</span></div>
+        <div class="tool-card"><strong>Stripe</strong><span>Abonnemang: 499, 999 och 1999 kr/mÃ¥n.</span></div>
+        <div class="tool-card"><strong>Calendar API</strong><span>Automatisk bokning nÃ¤r lead svarar positivt.</span></div>
       </div>
     </section>
 
@@ -312,4 +312,5 @@ function copyMail(id){
 </div>
 </body>
 </html>
+
 

@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Företagsprofil - FlerKunder</title>
+<title>FÃ¶retagsprofil - FlerKunder</title>
 <style>
 body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
 .main{max-width:850px;margin:60px auto;padding:30px}
@@ -16,24 +16,24 @@ p{color:#94a3b8}
 <body>
 <div class="main">
   <div class="panel">
-    <h1>Din företagsprofil</h1>
-    <p>Detta används för att skapa personliga emails som säljer ditt företag, inte FlerKunder.</p>
+    <h1>Din fÃ¶retagsprofil</h1>
+    <p>Detta anvÃ¤nds fÃ¶r att skapa personliga emails som sÃ¤ljer ditt fÃ¶retag, inte FlerKunder.</p>
 
     <form method="POST">
       <label>Ditt namn</label>
       <input name="sender_name" value="{{ profile.sender_name or '' }}" placeholder="Ex: Elias">
 
-      <label>Företagsnamn</label>
-      <input name="company_name" value="{{ profile.company_name or '' }}" placeholder="Ex: Malmö Flytthjälp AB">
+      <label>FÃ¶retagsnamn</label>
+      <input name="company_name" value="{{ profile.company_name or '' }}" placeholder="Ex: MalmÃ¶ FlytthjÃ¤lp AB">
 
       <label>Vad erbjuder ni?</label>
-      <textarea name="offer" rows="4" placeholder="Ex: hjälpa företag och privatpersoner med snabb, trygg och prisvärd flytt">{{ profile.offer or '' }}</textarea>
+      <textarea name="offer" rows="4" placeholder="Ex: hjÃ¤lpa fÃ¶retag och privatpersoner med snabb, trygg och prisvÃ¤rd flytt">{{ profile.offer or '' }}</textarea>
 
-      <label>Vem hjälper ni?</label>
-      <input name="target_customer" value="{{ profile.target_customer or '' }}" placeholder="Ex: privatpersoner och företag i Malmö">
+      <label>Vem hjÃ¤lper ni?</label>
+      <input name="target_customer" value="{{ profile.target_customer or '' }}" placeholder="Ex: privatpersoner och fÃ¶retag i MalmÃ¶">
 
       <label>Proof / tidigare resultat</label>
-      <textarea name="proof" rows="3" placeholder="Ex: 100+ nöjda kunder, 4.8 i betyg, snabb offert inom 24h">{{ profile.proof or '' }}</textarea>
+      <textarea name="proof" rows="3" placeholder="Ex: 100+ nÃ¶jda kunder, 4.8 i betyg, snabb offert inom 24h">{{ profile.proof or '' }}</textarea>
 
       <label>Telefon</label>
       <input name="phone" value="{{ profile.phone or '' }}" placeholder="Ex: 070...">
@@ -48,4 +48,5 @@ p{color:#94a3b8}
 </div>
 </body>
 </html>
+
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
@@ -77,19 +77,19 @@ function copyAllMails(){
   <div class="header">
     <div>
       <h1>Lead Agent</h1>
-      <p>Hitta leads, hitta email, skapa pitchar och förbered Gmail-utkast.</p>
+      <p>Hitta leads, hitta email, skapa pitchar och fÃ¶rbered Gmail-utkast.</p>
     </div>
 
     <div class="bulk-actions">
       <form method="POST" action="/leads/pitch-all">
         <button class="btn" type="submit">
-          Skapa pitch för alla
+          Skapa pitch fÃ¶r alla
         </button>
       </form>
 
       <form method="POST" action="/leads/gmail/draft-all">
         <button class="btn green" type="submit">
-          Skapa Gmail-utkast för alla
+          Skapa Gmail-utkast fÃ¶r alla
         </button>
       </form>
     </div>
@@ -107,38 +107,38 @@ function copyAllMails(){
       <h2>Hitta nya leads</h2>
 
       <form action="/leads/find" method="POST" class="lead-form">
-        <input name="city" placeholder="Stad, t.ex. Malmö" value="Malmö">
+        <input name="city" placeholder="Stad, t.ex. MalmÃ¶" value="MalmÃ¶">
         <input name="industry" placeholder="Bransch, t.ex. flyttfirma" value="flyttfirma">
 
         <label class="checkline">
           <input type="checkbox" name="must_have_phone">
-          Måste ha telefon
+          MÃ¥ste ha telefon
         </label>
 
         <label class="checkline">
           <input type="checkbox" name="must_have_website">
-          Måste ha hemsida
+          MÃ¥ste ha hemsida
         </label>
 
         <button class="btn" type="submit">Hitta leads</button>
       </form>
 
       <div class="api-banner">
-        Google Places är kopplat. Nästa viktiga steg är att hitta email från företagens hemsidor.
+        Google Places Ã¤r kopplat. NÃ¤sta viktiga steg Ã¤r att hitta email frÃ¥n fÃ¶retagens hemsidor.
       </div>
     </section>
 
 <div class="bulk-actions">
   <form method="POST" action="/leads/pitch-all">
-    <button class="btn" type="submit">Skapa pitch för alla</button>
+    <button class="btn" type="submit">Skapa pitch fÃ¶r alla</button>
   </form>
 
   <form method="POST" action="/leads/find-email-all">
-    <button class="btn pink" type="submit">Hitta email för alla</button>
+    <button class="btn pink" type="submit">Hitta email fÃ¶r alla</button>
   </form>
 
   <form method="POST" action="/leads/gmail/draft-all-and-archive">
-    <button class="btn green" type="submit">Skapa Gmail-utkast för alla & rensa</button>
+    <button class="btn green" type="submit">Skapa Gmail-utkast fÃ¶r alla & rensa</button>
   </form>
 
   <a class="btn dark" href="/leads/history">Historik</a>
@@ -153,13 +153,13 @@ function copyAllMails(){
         <table>
           <tr>
             <th>Score</th>
-            <th>Företag</th>
+            <th>FÃ¶retag</th>
             <th>Bransch</th>
             <th>Stad</th>
             <th>Telefon</th>
             <th>Email</th>
             <th>Hemsida</th>
-            <th>Källa</th>
+            <th>KÃ¤lla</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -202,7 +202,7 @@ function copyAllMails(){
                 </form>
 
                 <form method="POST" action="/leads/ready-mail/{{ lead.id }}">
-                  <button class="mini green" type="submit">Redo för mail</button>
+                  <button class="mini green" type="submit">Redo fÃ¶r mail</button>
                 </form>
 
                 <form method="POST" action="/leads/mark-sent/{{ lead.id }}">
@@ -213,7 +213,7 @@ function copyAllMails(){
                   <button class="mini blue" type="submit">Skapa Gmail-utkast</button>
                 </form>
 
-                <a class="mini blue" href="/leads/meeting/{{ lead.id }}" target="_blank">Boka möte</a>
+                <a class="mini blue" href="/leads/meeting/{{ lead.id }}" target="_blank">Boka mÃ¶te</a>
 
                 <form method="POST" action="/leads/delete/{{ lead.id }}">
                   <button class="mini red" type="submit">Ta bort</button>
@@ -226,7 +226,7 @@ function copyAllMails(){
           <tr>
             <td colspan="10">
               <details class="email-box">
-                <summary>Visa mail – {{ lead.email_subject }}</summary>
+                <summary>Visa mail â€“ {{ lead.email_subject }}</summary>
 
                 <pre id="mail-{{ lead.id }}" data-mail-body>{{ lead.email_body }}</pre>
 
@@ -241,7 +241,7 @@ function copyAllMails(){
                 </form>
 
                 <p class="note">
-                  Gmail-utkast kräver att leaden har email. Klicka “Hitta email” först om email saknas.
+                  Gmail-utkast krÃ¤ver att leaden har email. Klicka â€œHitta emailâ€ fÃ¶rst om email saknas.
                 </p>
               </details>
             </td>
@@ -252,14 +252,14 @@ function copyAllMails(){
         </table>
       </div>
       {% else %}
-      <p class="note">Inga leads än. Sök på stad och bransch för att skapa leads.</p>
+      <p class="note">Inga leads Ã¤n. SÃ¶k pÃ¥ stad och bransch fÃ¶r att skapa leads.</p>
       {% endif %}
     </section>
 
     <section class="panel">
-      <h2>Nästa steg</h2>
+      <h2>NÃ¤sta steg</h2>
       <div class="api-banner">
-        1. Hitta email från hemsidor. 2. Skapa Gmail-utkast. 3. Godkänn/skicka. 4. Koppla Stripe. 5. Koppla Calendar API.
+        1. Hitta email frÃ¥n hemsidor. 2. Skapa Gmail-utkast. 3. GodkÃ¤nn/skicka. 4. Koppla Stripe. 5. Koppla Calendar API.
       </div>
     </section>
 
@@ -267,4 +267,5 @@ function copyAllMails(){
 </div>
 </body>
 </html>
+
 
