@@ -1,3 +1,4 @@
+from email_history_models import EmailHistory
 from flask import render_template, request, redirect, url_for, session, flash
 
 from email_finder import find_email_from_website
@@ -249,3 +250,82 @@ def gmail_draft(lead_id):
 
     flash("Gmail-utkast skapat.", "success")
     return redirect(url_for("leads.lead_dashboard"))
+@leads.route("/find-email-all", methods=["POST"])
+def find_email_all():
+    all_leads = Lead.query.all()
+    found = 0
+    skipped = 0
+
+    for lead in all_leads:
+        if lead.email:
+            skipped += 1
+            continue
+
+        if not lead.website:
+            skipped += 1
+            continue
+
+        email = find_email_from_website(lead.website)
+
+        if email:
+            lead.email = email
+            found += 1
+        else:
+            skipped += 1
+
+    db.session.commit()
+    flash(f"Hittade {found} emails. Hoppade över {skipped}.", "success")
+    return redirect(url_for("leads.lead_dashboard"))
+
+
+@leads.route("/gmail/draft-all-and-archive", methods=["POST"])
+def gmail_draft_all_and_archive():
+    if create_gmail_draft is None:
+        flash("Gmail service är inte konfigurerad.", "warning")
+        return redirect(url_for("leads.lead_dashboard"))
+
+    if "gmail_token" not in session:
+        return redirect(url_for("leads.gmail_connect"))
+
+    all_leads = Lead.query.all()
+    created = 0
+    skipped = 0
+
+    for lead in all_leads:
+        if not lead.email or not lead.email_body:
+            skipped += 1
+            continue
+
+        create_gmail_draft(
+            session["gmail_token"],
+            lead.email,
+            lead.email_subject or f"Fler kunder till {lead.company_name}",
+            lead.email_body,
+        )
+
+        history = EmailHistory(
+            company_name=lead.company_name,
+            industry=lead.industry,
+            city=lead.city,
+            website=lead.website,
+            phone=lead.phone,
+            email=lead.email,
+            source=lead.source,
+            email_subject=lead.email_subject,
+            email_body=lead.email_body,
+            action="Gmail-utkast skapat",
+        )
+
+        db.session.add(history)
+        db.session.delete(lead)
+        created += 1
+
+    db.session.commit()
+    flash(f"Skapade {created} Gmail-utkast och flyttade dem till historik. Hoppade över {skipped}.", "success")
+    return redirect(url_for("leads.lead_dashboard"))
+
+
+@leads.route("/history", methods=["GET"])
+def email_history():
+    history = EmailHistory.query.order_by(EmailHistory.created_at.desc()).all()
+    return render_template("email_history.html", history=history)

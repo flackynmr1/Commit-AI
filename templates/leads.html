@@ -128,14 +128,20 @@ function copyAllMails(){
       </div>
     </section>
 
-  <div class="bulk-actions">
+<div class="bulk-actions">
   <form method="POST" action="/leads/pitch-all">
     <button class="btn" type="submit">Skapa pitch för alla</button>
   </form>
 
-  <form method="POST" action="/leads/gmail/draft-all">
-    <button class="btn green" type="submit">Skapa Gmail-utkast för alla</button>
+  <form method="POST" action="/leads/find-email-all">
+    <button class="btn pink" type="submit">Hitta email för alla</button>
   </form>
+
+  <form method="POST" action="/leads/gmail/draft-all-and-archive">
+    <button class="btn green" type="submit">Skapa Gmail-utkast för alla & rensa</button>
+  </form>
+
+  <a class="btn dark" href="/leads/history">Historik</a>
 
   <button class="btn dark" type="button" onclick="copyAllMails()">Kopiera alla mail</button>
 </div>
