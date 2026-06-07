@@ -16,13 +16,10 @@ body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
 .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:16px}
 .header h1{font-size:50px;margin:0;letter-spacing:-2px}
 .header p{color:#94a3b8;margin-top:8px}
+.header-actions{display:flex;gap:10px;flex-wrap:wrap}
 .panel{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:26px;margin-bottom:24px;backdrop-filter:blur(20px);box-shadow:0 25px 70px rgba(0,0,0,.28)}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:14px;margin-bottom:18px}
-.stat{background:rgba(2,6,23,.65);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
-.stat small{color:#94a3b8;font-weight:800;text-transform:uppercase;font-size:11px}
-.stat strong{display:block;font-size:25px;margin-top:6px}
 .lead-form{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.lead-form input,.lead-form select{padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(5,7,15,.7);color:white;min-width:180px}
+.lead-form input{padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(5,7,15,.7);color:white;min-width:220px}
 .checkline{display:flex;align-items:center;gap:8px;color:#cbd5e1}
 .btn,.mini{border:0;border-radius:13px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;font-weight:900;padding:13px 16px;text-decoration:none;display:inline-block;cursor:pointer}
 .mini{font-size:13px;padding:9px 11px}
@@ -41,8 +38,7 @@ th{color:#94a3b8;text-transform:uppercase;font-size:12px;letter-spacing:.08em}
 .api-banner{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);border-radius:18px;padding:16px;color:#cbd5e1;margin-top:16px}
 .bulk-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .flash{padding:14px 16px;border-radius:16px;background:rgba(35,213,255,.12);border:1px solid rgba(35,213,255,.25);color:#b9f3ff;margin-bottom:14px}
-.warning{color:#fecaca;background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.header{display:block}.main{padding:20px}.stats{grid-template-columns:1fr}}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.header{display:block}.main{padding:20px}}
 </style>
 
 <script>
@@ -52,6 +48,7 @@ function copyText(id){
   navigator.clipboard.writeText(el.innerText);
   alert("Mail kopierat");
 }
+
 function copyAllMails(){
   const mails=[...document.querySelectorAll("[data-mail-body]")].map(el=>el.innerText).join("\n\n--------------------\n\n");
   if(!mails){ alert("Inga mail att kopiera"); return; }
@@ -68,7 +65,6 @@ function copyAllMails(){
     <div class="logo">FlerKunder</div>
     <a href="/dashboard">Dashboard</a>
     <a class="active" href="/leads/">Lead Agent</a>
-    <a href="/pricing">Priser</a>
     <a href="/admin-portal">Adminportal</a>
     <a href="/checklist">Checklista</a>
     <a href="/booking/">Boka demo</a>
@@ -78,22 +74,26 @@ function copyAllMails(){
 
   <main class="main">
 
-    <div class="header">
-      <div>
-        <h1>Lead Agent</h1>
-        <p>Hitta leads, hitta email, skapa pitchar och fˆrbered Gmail-utkast.</p>
-      </div>
-
-      <div class="bulk-actions">
-        <form method="POST" action="/leads/pitch-all">
-          <button class="btn" type="submit">Skapa pitch fˆr alla</button>
-        </form>
-
-        <form method="POST" action="/leads/gmail/draft-all">
-          <button class="btn green" type="submit">Skapa Gmail-utkast fˆr alla</button>
-        </form>
-      </div>
+  <div class="header">
+    <div>
+      <h1>Lead Agent</h1>
+      <p>Hitta leads, hitta email, skapa pitchar och f√∂rbered Gmail-utkast.</p>
     </div>
+
+    <div class="bulk-actions">
+      <form method="POST" action="/leads/pitch-all">
+        <button class="btn" type="submit">
+          Skapa pitch f√∂r alla
+        </button>
+      </form>
+
+      <form method="POST" action="/leads/gmail/draft-all">
+        <button class="btn green" type="submit">
+          Skapa Gmail-utkast f√∂r alla
+        </button>
+      </form>
+    </div>
+  </div>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -104,94 +104,48 @@ function copyAllMails(){
     {% endwith %}
 
     <section class="panel">
-      <h2>Ditt abonnemang</h2>
-
-      <div class="stats">
-        <div class="stat">
-          <small>Plan</small>
-          <strong>{{ usage.plan|upper if usage else "STARTER" }}</strong>
-        </div>
-
-        <div class="stat">
-          <small>Leads anv‰nda</small>
-          <strong>{{ usage.leads_used if usage else 0 }}</strong>
-        </div>
-
-        <div class="stat">
-          <small>Leads kvar</small>
-          <strong>{{ usage.remaining_leads if usage else 100 }}</strong>
-        </div>
-
-        <div class="stat">
-          <small>Max per sˆkning</small>
-          <strong>{{ usage.max_leads_per_search if usage else 50 }}</strong>
-        </div>
-      </div>
-
-      <div class="api-banner">
-        Starter: 100 leads/mÂn, Growth: 600 leads/mÂn, Agency: 2000 leads/mÂn.
-        Systemet stoppar automatiskt n‰r kundens limit ‰r slut.
-      </div>
-
-      {% if usage and usage.remaining_leads <= 0 %}
-      <div class="api-banner warning">
-        Din lead-limit ‰r slut fˆr denna mÂnad. Uppgradera plan eller v‰nta tills n‰sta period.
-      </div>
-      {% endif %}
-    </section>
-
-    <section class="panel">
       <h2>Hitta nya leads</h2>
 
       <form action="/leads/find" method="POST" class="lead-form">
-        <input name="city" placeholder="Stad, t.ex. Malmˆ" value="Malmˆ">
+        <input name="city" placeholder="Stad, t.ex. Malm√∂" value="Malm√∂">
         <input name="industry" placeholder="Bransch, t.ex. flyttfirma" value="flyttfirma">
-
-        <select name="lead_limit">
-          <option value="20">20 leads</option>
-          <option value="50">50 leads</option>
-          <option value="100">100 leads</option>
-          <option value="200">200 leads</option>
-          <option value="500">500 leads</option>
-        </select>
 
         <label class="checkline">
           <input type="checkbox" name="must_have_phone">
-          MÂste ha telefon
+          M√•ste ha telefon
         </label>
 
         <label class="checkline">
           <input type="checkbox" name="must_have_website">
-          MÂste ha hemsida
+          M√•ste ha hemsida
         </label>
 
         <button class="btn" type="submit">Hitta leads</button>
       </form>
 
       <div class="api-banner">
-        Google Places kˆrs via FlerKunders API-nyckel. Kunden v‰ljer bara antal leads.
+        Google Places √§r kopplat. N√§sta viktiga steg √§r att hitta email fr√•n f√∂retagens hemsidor.
       </div>
     </section>
 
-    <div class="bulk-actions">
-      <form method="POST" action="/leads/pitch-all">
-        <button class="btn" type="submit">Skapa pitch fˆr alla</button>
-      </form>
+<div class="bulk-actions">
+  <form method="POST" action="/leads/pitch-all">
+    <button class="btn" type="submit">Skapa pitch f√∂r alla</button>
+  </form>
 
-      <form method="POST" action="/leads/find-email-all">
-        <button class="btn pink" type="submit">Hitta email fˆr alla</button>
-      </form>
+  <form method="POST" action="/leads/find-email-all">
+    <button class="btn pink" type="submit">Hitta email f√∂r alla</button>
+  </form>
 
-      <form method="POST" action="/leads/gmail/draft-all-and-archive">
-        <button class="btn green" type="submit">Skapa Gmail-utkast fˆr alla & rensa</button>
-      </form>
+  <form method="POST" action="/leads/gmail/draft-all-and-archive">
+    <button class="btn green" type="submit">Skapa Gmail-utkast f√∂r alla & rensa</button>
+  </form>
 
-      <a class="btn dark" href="/leads/history">Historik</a>
+  <a class="btn dark" href="/leads/history">Historik</a>
 
-      <button class="btn dark" type="button" onclick="copyAllMails()">Kopiera alla mail</button>
-    </div>
+  <button class="btn dark" type="button" onclick="copyAllMails()">Kopiera alla mail</button>
+</div>
 
-    <section class="panel">
       <p class="note">{{ leads|length if leads else 0 }} leads totalt</p>
 
       {% if leads %}
@@ -199,18 +153,19 @@ function copyAllMails(){
         <table>
           <tr>
             <th>Score</th>
-            <th>Fˆretag</th>
+            <th>F√∂retag</th>
             <th>Bransch</th>
             <th>Stad</th>
             <th>Telefon</th>
             <th>Email</th>
             <th>Hemsida</th>
-            <th>K‰lla</th>
+            <th>K√§lla</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
 
           {% for lead in leads %}
+
           {% set lead_score = 40 %}
           {% if lead.phone %}{% set lead_score = lead_score + 20 %}{% endif %}
           {% if lead.website %}{% set lead_score = lead_score + 20 %}{% endif %}
@@ -247,7 +202,7 @@ function copyAllMails(){
                 </form>
 
                 <form method="POST" action="/leads/ready-mail/{{ lead.id }}">
-                  <button class="mini green" type="submit">Redo fˆr mail</button>
+                  <button class="mini green" type="submit">Redo f√∂r mail</button>
                 </form>
 
                 <form method="POST" action="/leads/mark-sent/{{ lead.id }}">
@@ -258,7 +213,7 @@ function copyAllMails(){
                   <button class="mini blue" type="submit">Skapa Gmail-utkast</button>
                 </form>
 
-                <a class="mini blue" href="/leads/meeting/{{ lead.id }}" target="_blank">Boka mˆte</a>
+                <a class="mini blue" href="/leads/meeting/{{ lead.id }}" target="_blank">Boka m√∂te</a>
 
                 <form method="POST" action="/leads/delete/{{ lead.id }}">
                   <button class="mini red" type="submit">Ta bort</button>
@@ -271,7 +226,7 @@ function copyAllMails(){
           <tr>
             <td colspan="10">
               <details class="email-box">
-                <summary>Visa mail ñ {{ lead.email_subject }}</summary>
+                <summary>Visa mail ‚Äì {{ lead.email_subject }}</summary>
 
                 <pre id="mail-{{ lead.id }}" data-mail-body>{{ lead.email_body }}</pre>
 
@@ -280,28 +235,31 @@ function copyAllMails(){
                 </button>
 
                 <form method="POST" action="/leads/gmail/draft/{{ lead.id }}" style="display:inline;">
-                  <button class="mini blue" type="submit">Skapa Gmail-utkast</button>
+                  <button class="mini blue" type="submit">
+                    Skapa Gmail-utkast
+                  </button>
                 </form>
 
                 <p class="note">
-                  Gmail-utkast kr‰ver att leaden har email. Klicka ìHitta emailî fˆrst om email saknas.
+                  Gmail-utkast kr√§ver att leaden har email. Klicka ‚ÄúHitta email‚Äù f√∂rst om email saknas.
                 </p>
               </details>
             </td>
           </tr>
           {% endif %}
+
           {% endfor %}
         </table>
       </div>
       {% else %}
-      <p class="note">Inga leads ‰n. Sˆk pÂ stad och bransch fˆr att skapa leads.</p>
+      <p class="note">Inga leads √§n. S√∂k p√• stad och bransch f√∂r att skapa leads.</p>
       {% endif %}
     </section>
 
     <section class="panel">
-      <h2>N‰sta steg</h2>
+      <h2>N√§sta steg</h2>
       <div class="api-banner">
-        1. Kund v‰ljer antal leads. 2. Credits dras. 3. Email hittas. 4. AI-pitch skapas. 5. Gmail-utkast skapas.
+        1. Hitta email fr√•n hemsidor. 2. Skapa Gmail-utkast. 3. Godk√§nn/skicka. 4. Koppla Stripe. 5. Koppla Calendar API.
       </div>
     </section>
 

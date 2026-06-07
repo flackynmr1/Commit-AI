@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Logga in - FlerKunder</title>
+<style>
+body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
+.box{max-width:440px;margin:90px auto;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:34px}
+h1{margin-top:0}
+input{width:100%;padding:15px;margin:10px 0;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:#020617;color:white}
+button,a{display:block;text-align:center;width:100%;box-sizing:border-box;border:0;border-radius:14px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;font-weight:900;padding:14px;text-decoration:none;margin-top:12px}
+p{color:#94a3b8}
+.flash{background:rgba(255,45,147,.15);padding:12px;border-radius:14px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>Logga in</h1>
+  <p>Logga in för att använda Lead Agent.</p>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <input name="email" placeholder="Email">
+    <input name="password" type="password" placeholder="Lösenord">
+    <button type="submit">Logga in</button>
+  </form>
+
+  <a href="/auth/register-page">Skapa konto</a>
+</div>
+</body>
+</html>
+

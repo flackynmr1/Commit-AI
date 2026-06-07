@@ -99,7 +99,91 @@ function copyMail(id){
         <strong>20k</strong>
       </div>
     </section>
+<section class="admin-section">
+  <h2>Swish-abonnemang</h2>
 
+  <p style="color:#94a3b8;margin-bottom:20px">
+    Kunden swishar och skriver sin email i meddelandet.
+    Därefter aktiverar du planen här.
+  </p>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+
+      <tr>
+        <th>Email</th>
+        <th>Plan</th>
+        <th>Leads</th>
+        <th>Actions</th>
+      </tr>
+
+      {% for user in users %}
+      <tr>
+
+        <td>{{ user.email }}</td>
+
+        <td>
+          <span class="status">
+            {{ user.plan if user.plan else "Gratis Testperiod" }}
+          </span>
+        </td>
+
+        <td>
+          {{ user.leads_used if user.leads_used else 0 }}
+          /
+          {{ user.leads_limit if user.leads_limit else 5 }}
+        </td>
+
+        <td>
+          <div class="actions">
+
+            <a
+              class="action-btn green"
+              href="/admin/activate/{{ user.id }}/starter">
+              Starter 299kr
+            </a>
+
+            <a
+              class="action-btn blue"
+              href="/admin/activate/{{ user.id }}/growth">
+              Growth 699kr
+            </a>
+
+            <a
+              class="action-btn pink"
+              href="/admin/activate/{{ user.id }}/agency">
+              Agency 1499kr
+            </a>
+
+            <a
+              class="action-btn dark"
+              href="/admin/reset-leads/{{ user.id }}">
+              Reset Leads
+            </a>
+
+            <a
+              class="action-btn red"
+              href="/admin/deactivate/{{ user.id }}">
+              Stäng av
+            </a>
+
+          </div>
+        </td>
+
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+
+  <div style="margin-top:20px">
+    <strong>Swish:</strong> 0730281619<br>
+    <span style="color:#94a3b8">
+      Kunden skriver sin email som meddelande.
+    </span>
+  </div>
+
+</section>
     <section class="admin-section">
       <h2>Snabbverktyg</h2>
       <div class="admin-tools">
@@ -228,3 +312,4 @@ function copyMail(id){
 </div>
 </body>
 </html>
+

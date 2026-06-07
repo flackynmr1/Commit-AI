@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Agent – FlerKunder</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f8ff;color:#07111f;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 15% 10%,rgba(0,140,255,.22),transparent 30%),radial-gradient(circle at 85% 10%,rgba(255,53,168,.18),transparent 30%),linear-gradient(180deg,#fbfdff,#edf7ff)}
+.nav{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:16px 7%;background:rgba(255,255,255,.82);backdrop-filter:blur(20px);border-bottom:1px solid rgba(15,23,42,.08)}
+.logo{font-size:25px;font-weight:950;background:linear-gradient(135deg,#008cff,#ff35a8);-webkit-background-clip:text;color:transparent}
+.nav-links{display:flex;gap:8px;font-weight:850;align-items:center}
+.nav-links a{padding:10px 13px;border-radius:14px;color:#334155;font-size:14px}
+.nav-links a:hover,.nav-links .active{background:white;color:#008cff}
+.page{padding:36px 7% 70px}
+.hero{max-width:1300px;margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
+.card,.table-card{background:rgba(255,255,255,.86);border:1px solid white;border-radius:30px;padding:26px;box-shadow:0 22px 65px rgba(15,23,42,.08)}
+.badge{display:inline-flex;padding:8px 13px;border-radius:999px;background:rgba(0,140,255,.1);color:#006bbd;font-weight:950;margin-bottom:14px}
+h1{font-size:46px;line-height:.96;letter-spacing:-2px;margin:0 0 14px}
+.grad{background:linear-gradient(135deg,#07111f,#008cff,#ff35a8);-webkit-background-clip:text;color:transparent}
+p{color:#64748b;line-height:1.6}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 150px;gap:12px;margin-top:18px}
+input,select{width:100%;border:1px solid rgba(15,23,42,.1);background:white;border-radius:16px;padding:14px;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.stat{background:white;border-radius:20px;padding:17px;border:1px solid rgba(15,23,42,.07)}
+.stat small{color:#64748b;font-weight:900}
+.stat strong{display:block;font-size:27px;margin-top:7px}
+.notice{margin-top:16px;padding:15px;border-radius:18px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:850;line-height:1.45}
+.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:13px 17px;border-radius:15px;font-weight:950;background:linear-gradient(135deg,#008cff,#ff35a8);color:white;transition:.15s transform,.15s box-shadow;box-shadow:0 14px 34px rgba(0,140,255,.18)}
+.btn:hover{transform:translateY(-1px)}
+.btn.secondary{background:white;color:#07111f;border:1px solid rgba(15,23,42,.1);box-shadow:none}
+.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #fecdd3;box-shadow:none}
+.btn.dark{background:#07111f;color:white;box-shadow:none}
+.actions,.bulk,.row-actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions{margin-top:16px}
+.bulk{max-width:1300px;margin:22px auto}
+.locked-gmail{position:relative;display:inline-flex;opacity:.65;filter:grayscale(1);pointer-events:none}
+.locked-gmail:after{content:"🔒 LÅST";position:absolute;inset:-7px;border:2px solid #be123c;border-radius:15px;display:flex;align-items:center;justify-content:center;background:rgba(255,241,242,.88);color:#be123c;font-weight:950;transform:rotate(-8deg);font-size:12px}
+.table-card{max-width:1300px;margin:22px auto;overflow:auto}
+.table-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.table-head h2{margin:0;font-size:24px}
+.empty{padding:38px;text-align:center;color:#64748b;background:white;border-radius:22px;border:1px dashed rgba(15,23,42,.18)}
+table{width:100%;border-collapse:separate;border-spacing:0 12px;min-width:1080px}
+th{text-align:left;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:0 12px}
+td{background:white;padding:14px 12px;border-top:1px solid rgba(15,23,42,.06);border-bottom:1px solid rgba(15,23,42,.06);vertical-align:top}
+td:first-child{border-radius:18px 0 0 18px;border-left:1px solid rgba(15,23,42,.06)}
+td:last-child{border-radius:0 18px 18px 0;border-right:1px solid rgba(15,23,42,.06)}
+.score,.status{display:inline-flex;padding:8px 10px;border-radius:999px;font-weight:950;font-size:13px}
+.score{background:rgba(22,163,74,.13);color:#15803d}
+.status{background:rgba(0,140,255,.1);color:#006bbd}
+.row-actions form{display:inline}.mini{padding:8px 10px;border-radius:12px;font-size:12px}
+.pitch-box{margin-top:12px;background:#f8fafc;border:1px solid rgba(15,23,42,.08);border-radius:16px;padding:14px;color:#334155;white-space:pre-wrap;line-height:1.55;max-width:520px}
+details summary{cursor:pointer;font-weight:900;color:#008cff;margin-top:10px}
+.mobile-list{display:none}
+.lead-card{background:white;border:1px solid rgba(15,23,42,.08);border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:0 16px 40px rgba(15,23,42,.06)}
+.lead-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.lead-top h3{margin:0;font-size:18px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;color:#475569;font-size:14px}
+.meta div{background:#f8fafc;border-radius:14px;padding:10px}
+.footer{padding:28px 7%;display:flex;justify-content:space-between;color:#64748b}
+
+@media(max-width:950px){
+  .nav{align-items:flex-start;gap:12px;flex-direction:column;padding:15px 5%}
+  .nav-links{width:100%;overflow-x:auto;padding-bottom:4px}
+  .nav-links a{white-space:nowrap;font-size:13px}
+  .page{padding:24px 5% 60px}
+  .hero,.stats,.form-grid{grid-template-columns:1fr}
+  h1{font-size:36px;letter-spacing:-1.3px}
+  .card,.table-card{border-radius:24px;padding:20px}
+  .bulk{display:grid;grid-template-columns:1fr;gap:10px}
+  .bulk form,.bulk a,.bulk .locked-gmail{width:100%}
+  .btn{width:100%;min-height:48px}
+  .desktop-table{display:none}
+  .mobile-list{display:block}
+  .table-card{overflow:visible}
+  .table-head{align-items:flex-start;flex-direction:column}
+  .row-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .row-actions form,.row-actions a,.row-actions .locked-gmail{width:100%}
+  .mini{width:100%;font-size:13px}
+  .meta{grid-template-columns:1fr}
+  .footer{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+
+<body>
+<div class="bg"></div>
+
+<nav class="nav">
+  <div class="logo">FlerKunder</div>
+  <div class="nav-links">
+    <a href="/dashboard">Dashboard</a>
+    <a class="active" href="/lead-agent">Lead Agent</a>
+    <a href="/leads/profile/setup">Företagsprofil</a>
+    <a href="/auth/logout">Logga ut</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<section class="hero">
+  <div class="card">
+    <div class="badge">Lead Agent</div>
+    <h1><span class="grad">Hitta leads.</span><br>Skapa pitchar. Förbered mail.</h1>
+    <p>Sök efter företag, hitta kontaktmail, skapa personliga pitchar och bygg färdiga mailutkast.</p>
+
+    <form method="POST" action="/leads/find">
+      <div class="form-grid">
+        <input name="city" placeholder="Stad, t.ex Malmö" value="Malmö">
+        <input name="industry" placeholder="Bransch, t.ex flyttfirma" value="flyttfirma">
+        <select name="lead_limit">
+          {% for option in lead_options %}
+          <option value="{{ option }}">{{ option }} leads</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit">🚀 Hitta leads</button>
+        <a class="btn secondary" href="/leads/profile/setup">⚙️ Företagsprofil</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="badge">Abonnemang</div>
+    <div class="stats">
+      <div class="stat">
+        <small>Plan</small>
+        <strong>{{ "Gratis Testperiod" if usage.plan == "free_trial" else usage.plan|capitalize }}</strong>
+      </div>
+      <div class="stat">
+        <small>Leads kvar</small>
+        <strong>{{ usage.remaining_leads }}</strong>
+      </div>
+      <div class="stat">
+        <small>Max/sökning</small>
+        <strong>{{ usage.max_leads_per_search }}</strong>
+      </div>
+    </div>
+
+    {% if usage.free_trial %}
+    <div class="notice">🔒 Gratisläge: Gmail-utkast via API är låst. Kopiera pitch eller öppna Gmail manuellt. Gmail-utkast aktiveras efter köp.</div>
+    {% else %}
+    <div class="notice">Gmail-utkast är aktiverat för ditt konto.</div>
+    {% endif %}
+  </div>
+</section>
+
+<div class="bulk">
+  <form method="POST" action="/leads/pitch-all">
+    <button class="btn" type="submit">✨ Skapa pitch för alla</button>
+  </form>
+
+  <form method="POST" action="/leads/find-email-all">
+    <button class="btn secondary" type="submit">📩 Hitta email för alla</button>
+  </form>
+
+  {% if usage.free_trial %}
+    <div class="locked-gmail"><button class="btn secondary" type="button">Gmail-utkast låst</button></div>
+    <div class="locked-gmail"><button class="btn dark" type="button">Gmail + arkivera låst</button></div>
+  {% else %}
+    <form method="POST" action="/leads/gmail/draft-all">
+      <button class="btn secondary" type="submit">📨 Skapa Gmail-utkast</button>
+    </form>
+    <form method="POST" action="/leads/gmail/draft-all-and-archive">
+      <button class="btn dark" type="submit">✅ Gmail + arkivera</button>
+    </form>
+  {% endif %}
+
+  <a class="btn secondary" href="/leads/history">Historik</a>
+
+  <form method="POST" action="/leads/delete-all" onsubmit="return confirm('Är du säker? Detta rensar alla aktiva leads.');">
+    <button class="btn danger" type="submit">Rensa alla leads</button>
+  </form>
+</div>
+
+<div class="table-card">
+  <div class="table-head">
+    <h2>{{ leads|length }} leads totalt</h2>
+    <span class="status">Aktiva leads</span>
+  </div>
+
+  {% if leads|length == 0 %}
+    <div class="empty">
+      <h3>Inga leads ännu</h3>
+      <p>Skriv in stad och bransch ovan, välj antal leads och tryck “Hitta leads”.</p>
+    </div>
+  {% else %}
+
+  <div class="desktop-table">
+  <table>
+    <thead>
+      <tr>
+        <th>Score</th><th>Företag</th><th>Bransch</th><th>Stad</th><th>Telefon</th><th>Email</th><th>Hemsida</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for lead in leads %}
+      <tr>
+        <td><span class="score">{{ lead.score if lead.score else 70 }}</span></td>
+        <td><strong>{{ lead.company_name }}</strong></td>
+        <td>{{ lead.industry }}</td>
+        <td>{{ lead.city }}</td>
+        <td>{{ lead.phone or "-" }}</td>
+        <td>{{ lead.email or "-" }}</td>
+        <td>{% if lead.website %}<a href="{{ lead.website }}" target="_blank">Visa</a>{% else %}-{% endif %}</td>
+        <td><span class="status">{{ lead.status }}</span></td>
+        <td>
+          <div class="row-actions">
+            <form method="POST" action="/leads/pitch/{{ lead.id }}"><button class="btn mini" type="submit">Pitch</button></form>
+            <form method="POST" action="/leads/find-email/{{ lead.id }}"><button class="btn secondary mini" type="submit">Email</button></form>
+
+            {% if usage.free_trial %}
+              <div class="locked-gmail"><button class="btn secondary mini" type="button">Gmail låst</button></div>
+            {% else %}
+              <form method="POST" action="/leads/gmail/draft/{{ lead.id }}"><button class="btn secondary mini" type="submit">Gmail</button></form>
+            {% endif %}
+
+            {% if lead.email and lead.email_body %}
+              <a class="btn secondary mini" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&to={{ lead.email }}&su={{ lead.email_subject|urlencode }}&body={{ lead.email_body|urlencode }}">Öppna Gmail</a>
+            {% endif %}
+
+            <form method="POST" action="/leads/ready-mail/{{ lead.id }}"><button class="btn secondary mini" type="submit">Redo</button></form>
+            <form method="POST" action="/leads/mark-sent/{{ lead.id }}"><button class="btn secondary mini" type="submit">Skickad</button></form>
+            <a class="btn secondary mini" href="/leads/meeting/{{ lead.id }}">Möte</a>
+            <form method="POST" action="/leads/delete/{{ lead.id }}"><button class="btn danger mini" type="submit">Rensa</button></form>
+          </div>
+
+          {% if lead.email_body %}
+            <details>
+              <summary>Visa pitch/mail</summary>
+              <button class="btn secondary mini" type="button" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Kopiera pitch</button>
+              <div class="pitch-box">Ämne: {{ lead.email_subject or "Snabb fråga" }}
+
+{{ lead.email_body }}</div>
+            </details>
+          {% else %}
+            <div style="margin-top:10px;color:#94a3b8;font-size:13px;">Ingen pitch skapad ännu.</div>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <div class="mobile-list">
+    {% for lead in leads %}
+    <div class="lead-card">
+      <div class="lead-top">
+        <h3>{{ lead.company_name }}</h3>
+        <span class="score">{{ lead.score if lead.score else 70 }}</span>
+      </div>
+
+      <div class="meta">
+        <div><strong>Bransch</strong><br>{{ lead.industry }}</div>
+        <div><strong>Stad</strong><br>{{ lead.city }}</div>
+        <div><strong>Telefon</strong><br>{{ lead.phone or "-" }}</div>
+        <div><strong>Email</strong><br>{{ lead.email or "-" }}</div>
+      </div>
+
+      <p><span class="status">{{ lead.status }}</span></p>
+
+      <div class="row-actions">
+        <form method="POST" action="/leads/pitch/{{ lead.id }}"><button class="btn mini" type="submit">Pitch</button></form>
+        <form method="POST" action="/leads/find-email/{{ lead.id }}"><button class="btn secondary mini" type="submit">Email</button></form>
+
+        {% if usage.free_trial %}
+          <div class="locked-gmail"><button class="btn secondary mini" type="button">Gmail låst</button></div>
+        {% else %}
+          <form method="POST" action="/leads/gmail/draft/{{ lead.id }}"><button class="btn secondary mini" type="submit">Gmail</button></form>
+        {% endif %}
+
+        {% if lead.email and lead.email_body %}
+          <a class="btn secondary mini" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&to={{ lead.email }}&su={{ lead.email_subject|urlencode }}&body={{ lead.email_body|urlencode }}">Öppna Gmail</a>
+        {% endif %}
+
+        {% if lead.website %}<a class="btn secondary mini" target="_blank" href="{{ lead.website }}">Hemsida</a>{% endif %}
+        <form method="POST" action="/leads/delete/{{ lead.id }}"><button class="btn danger mini" type="submit">Rensa</button></form>
+      </div>
+
+      {% if lead.email_body %}
+        <details>
+          <summary>Visa pitch/mail</summary>
+          <button class="btn secondary mini" type="button" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)">Kopiera pitch</button>
+          <div class="pitch-box">Ämne: {{ lead.email_subject or "Snabb fråga" }}
+
+{{ lead.email_body }}</div>
+        </details>
+      {% else %}
+        <p style="color:#94a3b8;font-size:13px;">Ingen pitch skapad ännu.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% endif %}
+</div>
+
+</div>
+
+<footer class="footer">
+  <span>FlerKunder © 2026</span>
+  <span>Lead Agent</span>
+</footer>
+
+</body>
+</html>

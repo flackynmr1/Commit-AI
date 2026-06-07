@@ -56,6 +56,11 @@ def create_app(config_name=None):
         app.register_blueprint(leads_blueprint, url_prefix="/leads")
     except Exception as e:
         print("Leads disabled:", e)
+    try:
+        from leads import leads as leads_blueprint
+        app.register_blueprint(leads_blueprint, url_prefix="/leads")
+    except Exception as e:
+        print("Leads disabled:", e)
 
     try:
         from booking import booking as booking_blueprint
@@ -65,14 +70,15 @@ def create_app(config_name=None):
 
     with app.app_context():
         db.create_all()
-
     def admin_required(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             if session.get("admin_logged_in") is True:
                 return f(*args, **kwargs)
             return redirect("/admin-login")
+
         return wrapper
+
 
     def approved_required(f):
         @wraps(f)
@@ -80,20 +86,54 @@ def create_app(config_name=None):
             if session.get("admin_logged_in") is True:
                 return f(*args, **kwargs)
 
-            if session.get("subscription_tier") == "approved":
+            if session.get("user_id"):
                 return f(*args, **kwargs)
 
-            return redirect("/booking/")
+            return redirect("/auth/login-page")
+
         return wrapper
 
     @app.route("/")
     def index():
-        return render_template("index.html")
+        return render_template("flerkunder_home.html")
+
+    @app.route("/pricing")
+    def pricing():
+        return render_template("flerkunder_home.html")
+
+    @app.route("/checkout/<plan>")
+    def checkout(plan):
+        plans = {
+            "starter": {"name": "Starter", "price": "299", "leads": "100"},
+            "growth": {"name": "Growth", "price": "699", "leads": "600"},
+            "agency": {"name": "Agency", "price": "1499", "leads": "2000"},
+        }
+
+        selected = plans.get(plan, plans["starter"])
+        return render_template("checkout.html", plan=selected)
 
     @app.route("/dashboard")
-    @approved_required
     def dashboard():
-        return render_template("dashboard.html")
+        from leads.routes import get_usage_context
+
+        return render_template(
+            "user_dashboard.html",
+            usage=get_usage_context()
+        )
+
+    @app.route("/lead-agent")
+    def user_lead_agent():
+        from leads.routes import get_usage_context, LEAD_OPTIONS
+        from lead_models import Lead
+
+        all_leads = Lead.query.order_by(Lead.created_at.desc()).all()
+
+        return render_template(
+            "user_lead_agent.html",
+            usage=get_usage_context(),
+            lead_options=LEAD_OPTIONS,
+            leads=all_leads
+        )
 
     @app.route("/checklist")
     @approved_required

@@ -1,0 +1,570 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard â€“ FlerKunder</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:#eef7ff;
+  color:#07111f;
+  overflow-x:hidden;
+}
+
+a{text-decoration:none;color:inherit}
+
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(0,140,255,.25),transparent 32%),
+    radial-gradient(circle at 90% 15%,rgba(255,53,168,.22),transparent 34%),
+    radial-gradient(circle at 50% 90%,rgba(82,255,198,.25),transparent 40%),
+    linear-gradient(180deg,#f8fdff,#eaf7ff);
+}
+
+.orb{
+  position:fixed;
+  border-radius:999px;
+  filter:blur(55px);
+  opacity:.35;
+  z-index:-1;
+  animation:float 9s ease-in-out infinite;
+}
+
+.o1{width:340px;height:340px;background:#3bd5ff;top:120px;left:-90px}
+.o2{width:420px;height:420px;background:#ff5cc8;top:260px;right:-130px;animation-delay:2s}
+.o3{width:300px;height:300px;background:#52ffc6;bottom:-100px;left:35%;animation-delay:4s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-35px)}
+}
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 7%;
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(7,17,31,.08);
+}
+
+.logo{
+  font-size:26px;
+  font-weight:950;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.nav-links{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  font-weight:850;
+  color:#334155;
+}
+
+.nav-links a{
+  padding:10px 14px;
+  border-radius:14px;
+  transition:.25s;
+}
+
+.nav-links a:hover{
+  background:rgba(255,255,255,.8);
+}
+
+.nav-cta{
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  color:white!important;
+  box-shadow:0 14px 38px rgba(0,140,255,.22);
+}
+
+.page{
+  padding:55px 7% 80px;
+}
+
+.hero{
+  max-width:1250px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr .85fr;
+  gap:30px;
+  align-items:stretch;
+}
+
+.welcome{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:36px;
+  padding:38px;
+  box-shadow:0 30px 90px rgba(0,70,120,.12);
+  backdrop-filter:blur(24px);
+}
+
+.badge{
+  display:inline-flex;
+  padding:9px 14px;
+  border-radius:999px;
+  background:rgba(0,140,255,.10);
+  color:#006bbd;
+  font-weight:950;
+  margin-bottom:18px;
+}
+
+h1{
+  font-size:52px;
+  line-height:.95;
+  letter-spacing:-2.5px;
+  margin:0 0 16px;
+}
+
+.grad{
+  background:linear-gradient(135deg,#07111f,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.welcome p{
+  color:#64748b;
+  font-size:18px;
+  line-height:1.65;
+  max-width:720px;
+}
+
+.actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:26px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px 22px;
+  border-radius:17px;
+  font-weight:950;
+  color:white;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  box-shadow:0 18px 48px rgba(0,140,255,.22);
+}
+
+.btn.secondary{
+  background:rgba(255,255,255,.82);
+  color:#07111f;
+  border:1px solid rgba(7,17,31,.1);
+  box-shadow:none;
+}
+
+.live-card{
+  position:relative;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:36px;
+  padding:28px;
+  box-shadow:0 30px 90px rgba(0,70,120,.12);
+  backdrop-filter:blur(24px);
+  overflow:hidden;
+}
+
+.live-card:before{
+  content:"";
+  position:absolute;
+  inset:-80px;
+  background:conic-gradient(from 180deg,transparent,#008cff33,#ff35a833,transparent);
+  animation:spin 8s linear infinite;
+  z-index:0;
+}
+
+.live-card-inner{
+  position:relative;
+  z-index:1;
+  background:rgba(255,255,255,.78);
+  border-radius:28px;
+  padding:22px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.live-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.live-pill{
+  padding:8px 11px;
+  border-radius:999px;
+  background:rgba(22,163,74,.13);
+  color:#15803d;
+  font-size:12px;
+  font-weight:950;
+}
+
+.lead-feed{
+  display:grid;
+  gap:12px;
+}
+
+.feed-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:14px;
+  border-radius:18px;
+  background:white;
+  border:1px solid rgba(15,23,42,.08);
+  animation:slideIn 4s infinite;
+}
+
+.feed-item:nth-child(2){animation-delay:.7s}
+.feed-item:nth-child(3){animation-delay:1.4s}
+
+@keyframes slideIn{
+  0%,100%{transform:translateX(0);opacity:1}
+  50%{transform:translateX(8px);opacity:.86}
+}
+
+.feed-item span{
+  display:block;
+  color:#64748b;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.score{
+  padding:8px 11px;
+  border-radius:999px;
+  background:rgba(22,163,74,.13);
+  color:#15803d;
+  font-weight:950;
+}
+
+.stats{
+  max-width:1250px;
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.stat{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:30px;
+  padding:26px;
+  box-shadow:0 22px 70px rgba(0,70,120,.1);
+  backdrop-filter:blur(24px);
+  transition:.25s;
+}
+
+.stat:hover{
+  transform:translateY(-7px);
+}
+
+.stat h3{
+  margin:0;
+  font-size:15px;
+  color:#64748b;
+}
+
+.stat strong{
+  display:block;
+  font-size:42px;
+  letter-spacing:-2px;
+  margin-top:12px;
+}
+
+.stat small{
+  display:block;
+  color:#64748b;
+  margin-top:8px;
+  font-weight:800;
+}
+
+.panel-grid{
+  max-width:1250px;
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.panel{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:32px;
+  padding:30px;
+  box-shadow:0 25px 80px rgba(0,70,120,.11);
+  backdrop-filter:blur(24px);
+}
+
+.panel h2{
+  margin:0 0 16px;
+  font-size:28px;
+  letter-spacing:-1px;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  color:#334155;
+  font-weight:850;
+}
+
+.check-dot{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#008cff,#52ffc6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:13px;
+  font-weight:950;
+}
+
+.timeline{
+  display:grid;
+  gap:14px;
+}
+
+.step{
+  padding:16px;
+  border-radius:20px;
+  background:white;
+  border:1px solid rgba(15,23,42,.08);
+}
+
+.step strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.step span{
+  color:#64748b;
+  font-size:14px;
+}
+
+.footer{
+  padding:28px 7%;
+  display:flex;
+  justify-content:space-between;
+  color:#64748b;
+}
+
+@media(max-width:1000px){
+  .hero,.stats,.panel-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:42px;
+  }
+
+  .nav-links{
+    gap:6px;
+    font-size:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="bg"></div>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+
+<nav class="nav">
+  <div class="logo">FlerKunder</div>
+
+  <div class="nav-links">
+    <a href="/dashboard">Dashboard</a>
+    <a class="nav-cta" href="/lead-agent">Lead Agent</a>
+    <a href="/leads/profile/setup">Företagsprofil</a>
+    <a href="/auth/logout">Logga ut</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <section class="hero">
+
+    <div class="welcome">
+      <div class="badge">Premium Lead Dashboard</div>
+
+      <h1>
+        Välkommen tillbaka.<br>
+        <span class="grad">Dina leads jobbar åt dig.</span>
+      </h1>
+
+      <p>
+        Här får du överblick över dina leads, pitchar och mailflöden.
+        Öppna Lead Agent för att hitta nya företag, skapa personliga pitchar
+        och förbereda Gmail-utkast.
+      </p>
+
+      
+<div style="margin-top:18px;padding:18px;border-radius:22px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;font-weight:850">
+  🔒 Gratisläge: Gmail-utkast via API är låst. Du kan fortfarande kopiera pitch och öppna Gmail manuellt i Lead Agent.
+</div>
+
+<div class="actions">
+        <a class="btn" href="/lead-agent">🚀€ Öppna Lead Agent</a>
+        <a class="btn secondary" href="/leads/profile/setup">⚙️ Företagsprofil</a>
+      </div>
+    </div>
+
+    <div class="live-card">
+      <div class="live-card-inner">
+        <div class="live-top">
+          <strong>Live Lead Feed</strong>
+          <div class="live-pill">ACTIVE</div>
+        </div>
+
+        <div class="lead-feed">
+          <div class="feed-item">
+            <div>
+              <strong>Ny lead hittad</strong>
+              <span>Google Places Â· matchad mot din bransch</span>
+            </div>
+            <div class="score">92</div>
+          </div>
+
+          <div class="feed-item">
+            <div>
+              <strong>Pitch skapad</strong>
+              <span>AI-text redo för granskning</span>
+            </div>
+            <div class="score">88</div>
+          </div>
+
+          <div class="feed-item">
+            <div>
+              <strong>Email hittad</strong>
+              <span>Kontaktadress redo för Gmail-utkast</span>
+            </div>
+            <div class="score">81</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="stats">
+
+    <div class="stat">
+      <h3>Leads kvar</h3>
+      <strong>{{ usage.remaining_leads if usage else 0 }}</strong>
+      <small>av {{ usage.leads_limit if usage else 0 }} denna månad</small>
+    </div>
+
+    <div class="stat">
+      <h3>Din plan</h3>
+      <strong>{{ "Gratis Testperiod" if usage and usage.plan == "free_trial" else usage.plan|capitalize }}</strong>
+      <small>Aktuell nivå</small>
+    </div>
+
+    <div class="stat">
+      <h3>Max per sökning</h3>
+      <strong>{{ usage.max_leads_per_search if usage else 5 }}</strong>
+      <small>leads per körning</small>
+    </div>
+
+    <div class="stat">
+      <h3>Gmail</h3>
+      <strong>{% if usage and usage.gmail_connected %}On{% else %}Off{% endif %}</strong>
+      <small>koppling till utkast</small>
+    </div>
+
+  </section>
+
+  <section class="panel-grid">
+
+    <div class="panel">
+      <h2>Kom igång</h2>
+
+      <div class="check">
+        <div class="check-dot">✓</div>
+        <div>Fyll i företagsprofilen så pitcharna blir personliga.</div>
+      </div>
+
+      <div class="check">
+        <div class="check-dot">✓</div>
+        <div>Hitta leads baserat på stad och bransch.</div>
+      </div>
+
+      <div class="check">
+        <div class="check-dot">✓</div>
+        <div>Skapa pitchar och kontrollera texten innan utskick.</div>
+      </div>
+
+      <div class="check">
+        <div class="check-dot">✓</div>
+        <div>Koppla Gmail och skapa utkast automatiskt.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Pipeline</h2>
+
+      <div class="timeline">
+        <div class="step">
+          <strong>1. Hitta leads</strong>
+          <span>Sök efter relevanta företag i din stad.</span>
+        </div>
+
+        <div class="step">
+          <strong>2. Skapa pitch</strong>
+          <span>AI skriver utkast baserat på din företagsprofil.</span>
+        </div>
+
+        <div class="step">
+          <strong>3. Hitta email</strong>
+          <span>Systemet söker efter kontaktmail på hemsidan.</span>
+        </div>
+
+        <div class="step">
+          <strong>4. Skapa Gmail-utkast</strong>
+          <span>Förbered mail utan att skicka automatiskt.</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<footer class="footer">
+  <span>FlerKunder © 2026</span>
+  <span>Lead Agent Dashboard</span>
+</footer>
+
+</body>
+</html>
+
+
+

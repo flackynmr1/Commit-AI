@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Företagsprofil - FlerKunder</title>
+<style>
+body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
+.main{max-width:850px;margin:60px auto;padding:30px}
+.panel{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:30px}
+input,textarea{width:100%;padding:15px;margin:10px 0 18px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:#020617;color:white}
+button,a{border:0;border-radius:14px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;font-weight:900;padding:14px 18px;text-decoration:none;cursor:pointer}
+label{color:#cbd5e1;font-weight:900}
+p{color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="panel">
+    <h1>Din företagsprofil</h1>
+    <p>Detta används för att skapa personliga emails som säljer ditt företag, inte FlerKunder.</p>
+
+    <form method="POST">
+      <label>Ditt namn</label>
+      <input name="sender_name" value="{{ profile.sender_name or '' }}" placeholder="Ex: Elias">
+
+      <label>Företagsnamn</label>
+      <input name="company_name" value="{{ profile.company_name or '' }}" placeholder="Ex: Malmö Flytthjälp AB">
+
+      <label>Vad erbjuder ni?</label>
+      <textarea name="offer" rows="4" placeholder="Ex: hjälpa företag och privatpersoner med snabb, trygg och prisvärd flytt">{{ profile.offer or '' }}</textarea>
+
+      <label>Vem hjälper ni?</label>
+      <input name="target_customer" value="{{ profile.target_customer or '' }}" placeholder="Ex: privatpersoner och företag i Malmö">
+
+      <label>Proof / tidigare resultat</label>
+      <textarea name="proof" rows="3" placeholder="Ex: 100+ nöjda kunder, 4.8 i betyg, snabb offert inom 24h">{{ profile.proof or '' }}</textarea>
+
+      <label>Telefon</label>
+      <input name="phone" value="{{ profile.phone or '' }}" placeholder="Ex: 070...">
+
+      <label>Hemsida</label>
+      <input name="website" value="{{ profile.website or '' }}" placeholder="https://...">
+
+      <button type="submit">Spara profil</button>
+      <a href="/leads/">Till Lead Agent</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>
+

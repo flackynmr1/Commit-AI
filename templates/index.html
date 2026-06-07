@@ -1,248 +1,260 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlerKunder - Fyll kalendern med fler kundmöten</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS V35</title>
+
+    <!-- IMPORTANT FIX -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body class="landing-page">
+<body>
 
-  <div class="noise"></div>
-  <div class="orb orb-cyan"></div>
-  <div class="orb orb-pink"></div>
+<div class="hud-bg"></div>
+<div class="scanline"></div>
 
-  <nav class="landing-nav">
-    <a class="brand" href="/">
-      <span class="brand-mark"></span>
-      FlerKunder
-    </a>
+<!-- TOP NUMBERS -->
+<div class="top-numbers">
+    <span>01</span>
+    <span>02</span>
+    <span>03</span>
+    <span>04</span>
+    <span>05</span>
+    <span>06</span>
+    <span>07</span>
+    <span>08</span>
+    <span>09</span>
+    <span>10</span>
+    <span>11</span>
+    <span>12</span>
+    <span>13</span>
+    <span>14</span>
+    <span>15</span>
+    <span>16</span>
+    <span>17</span>
+    <span>18</span>
+    <span>19</span>
+    <span>20</span>
 
-    <div class="nav-links">
-      <a href="#product">Produkt</a>
-      <a href="#flow">Så fungerar det</a>
-      <a href="#pricing">Priser</a>
-      <a href="/booking/">Boka demo</a>
+    <span class="active">21</span>
+
+    <span>22</span>
+    <span>23</span>
+    <span>24</span>
+    <span>25</span>
+    <span>26</span>
+    <span>27</span>
+    <span>28</span>
+    <span>29</span>
+    <span>30</span>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="brand">
+        STARK INDUSTRIES // JARVIS V35
     </div>
 
-    <a class="nav-button" href="/booking/">Boka demo</a>
-  </nav>
+    <div id="clock">
+        --:--:--
+    </div>
+</header>
 
-  <main>
+<!-- LEFT CIRCLES -->
+<div class="circle date">
+    <div>JUNE</div>
+    <strong>21</strong>
+</div>
 
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="eyebrow">För svenska tjänsteföretag</div>
+<div class="circle cpu-circle">
+    CPU
+    <br>
+    <span id="cpu">0</span>%
+</div>
 
-        <h1>Fyll kalendern med fler kundmöten.</h1>
+<div class="circle ram-circle">
+    RAM
+    <br>
+    <span id="ram">0</span>%
+</div>
 
-        <p>
-          FlerKunder hjälper dig hitta relevanta leads, skapa personliga mailutkast
-          och hålla koll på varje steg fram till bokat möte.
-        </p>
+<div class="circle power-circle">
+    POWER
+    <br>
+    100%
+</div>
 
-        <div class="hero-actions">
-          <a class="primary-button" href="/booking/">Boka gratis demo</a>
-          <a class="secondary-button" href="#product">Se produkten</a>
+<!-- CENTER CORE -->
+<div class="core">
+
+    <div class="ring ring1"></div>
+
+    <div class="ring ring2"></div>
+
+    <div class="ring ring3"></div>
+
+    <div class="center-dot"></div>
+
+</div>
+
+<div class="stark">
+    STARK INDUSTRIES
+</div>
+
+<!-- LEFT PANEL -->
+<div class="panel left-panel">
+
+    <h2>SYSTEM</h2>
+
+    <p>VOICE: ACTIVE</p>
+
+    <p>
+        MODE:
+        <span id="awake">IDLE</span>
+    </p>
+
+    <p>CPU LOAD</p>
+
+    <div class="bar">
+        <div class="fill"></div>
+    </div>
+
+    <p>LOCAL DISK: 100G</p>
+
+    <p>FREE SPACE: 2G</p>
+
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="panel right-panel">
+
+    <h2>LIVE LOG</h2>
+
+    <div id="logs"></div>
+
+</div>
+
+<!-- WEATHER -->
+<div class="weather">
+
+    <h1>13°C</h1>
+
+    <p>Malmö, Sweden</p>
+
+    <p>Clear sky</p>
+
+    <p>Wind: 3km/h</p>
+
+    <p>Pressure: 1013hPa</p>
+
+</div>
+
+<!-- CHAT -->
+<div class="chat">
+
+    <div id="chatlog"></div>
+
+    <input
+        id="msg"
+        placeholder="Ask JARVIS..."
+        autocomplete="off"
+    >
+
+</div>
+
+<script>
+
+function add(role, text){
+
+    let chatlog = document.getElementById("chatlog");
+
+    chatlog.innerHTML += `
+        <div class="line">
+            <b>${role}:</b> ${text}
         </div>
+    `;
 
-        <div class="trust-row">
-          <span>Manuell kontroll före utskick</span>
-          <span>Redo för Gmail & Places API</span>
-          <span>Byggt för B2B</span>
-        </div>
-      </div>
+    chatlog.scrollTop = chatlog.scrollHeight;
+}
 
-      <div class="hero-visual" id="product">
-        <div class="mockup-shell">
-          <div class="mockup-topbar">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <span>FlerKunder Command Center</span>
-          </div>
+async function send(){
 
-          <div class="mockup-grid">
-            <div class="mock-card kpi">
-              <span>Nya leads</span>
-              <strong>37</strong>
-              <small>+12 denna vecka</small>
-            </div>
+    let msg = document.getElementById("msg");
 
-            <div class="mock-card kpi">
-              <span>Mail redo</span>
-              <strong>18</strong>
-              <small>Väntar på godkännande</small>
-            </div>
+    let value = msg.value.trim();
 
-            <div class="mock-card pipeline">
-              <div class="card-title">Pipeline</div>
-              <div class="pipeline-row"><span>Ny lead</span><b></b></div>
-              <div class="pipeline-row"><span>Pitch skapad</span><b></b></div>
-              <div class="pipeline-row"><span>Demo bokad</span><b></b></div>
-            </div>
+    if(!value) return;
 
-            <div class="mock-card mail-preview">
-              <div class="card-title">Mailutkast</div>
-              <p>Hej Svensson VVS, jag såg att ni hjälper kunder i Malmö...</p>
-              <button>Redo att skickas</button>
-            </div>
-          </div>
-        </div>
+    msg.value = "";
 
-        <div class="floating-card float-a">
-          <span>Bokat möte</span>
-          <strong>Tis 14:30</strong>
-        </div>
+    add("YOU", value);
 
-        <div class="floating-card float-b">
-          <span>Lead score</span>
-          <strong>92%</strong>
-        </div>
+    let response = await fetch("/chat", {
 
-        <div class="floating-ring ring-one"></div>
-        <div class="floating-ring ring-two"></div>
-      </div>
-    </section>
+        method:"POST",
 
-    <section class="section split-section">
-      <div>
-        <div class="eyebrow">Problemet</div>
-        <h2>De flesta företag tappar kunder innan första kontakten.</h2>
-      </div>
+        headers:{
+            "Content-Type":"application/json"
+        },
 
-      <div class="problem-grid">
-        <div class="glass-card">Leads ligger utspridda i olika listor.</div>
-        <div class="glass-card">Uppföljning sker för sent eller inte alls.</div>
-        <div class="glass-card">Mail blir generiska och får låg svarsfrekvens.</div>
-      </div>
-    </section>
+        body:JSON.stringify({
+            message:value
+        })
+    });
 
-    <section id="flow" class="section">
-      <div class="section-heading">
-        <div class="eyebrow">Flödet</div>
-        <h2>Från lead till bokat möte.</h2>
-        <p>En enkel process som gör kundanskaffning tydlig, kontrollerad och skalbar.</p>
-      </div>
+    let data = await response.json();
 
-      <div class="flow-grid">
-        <div class="flow-card">
-          <span>01</span>
-          <h3>Hitta leads</h3>
-          <p>Sök på stad och bransch. Systemet bygger en strukturerad leadlista.</p>
-        </div>
+    add("JARVIS", data.response || "");
+}
 
-        <div class="flow-card">
-          <span>02</span>
-          <h3>Skapa pitch</h3>
-          <p>Varje lead får ett personligt mailutkast redo att granskas.</p>
-        </div>
+document.getElementById("msg").addEventListener("keydown", e=>{
 
-        <div class="flow-card">
-          <span>03</span>
-          <h3>Godkänn</h3>
-          <p>Du behåller kontrollen innan något skickas ut.</p>
-        </div>
+    if(e.key === "Enter"){
+        send();
+    }
 
-        <div class="flow-card">
-          <span>04</span>
-          <h3>Boka möte</h3>
-          <p>Förvandla varma leads till demos och kundsamtal.</p>
-        </div>
-      </div>
-    </section>
+});
 
-    <section class="section product-section">
-      <div class="section-heading">
-        <div class="eyebrow">Plattformen</div>
-        <h2>Allt samlat i ett modernt kontrollrum.</h2>
-      </div>
+async function update(){
 
-      <div class="wide-product">
-        <div class="wide-sidebar">
-          <span></span>
-          <p>Dashboard</p>
-          <p>Leads</p>
-          <p>Mailutkast</p>
-          <p>Checklista</p>
-        </div>
+    document.getElementById("clock").innerText =
+        new Date().toLocaleTimeString();
 
-        <div class="wide-content">
-          <div class="wide-row">
-            <div class="wide-card"><span>Bokningar</span><strong>12</strong></div>
-            <div class="wide-card"><span>Pitchar</span><strong>44</strong></div>
-            <div class="wide-card"><span>Veckomål</span><strong>72%</strong></div>
-          </div>
+    try{
 
-          <div class="lead-table">
-            <div class="lead-head">
-              <span>Företag</span>
-              <span>Status</span>
-              <span>Action</span>
-            </div>
-            <div class="lead-line">
-              <span>Malmö Flyttservice</span>
-              <span class="status-pill">Pitch redo</span>
-              <span>Boka möte</span>
-            </div>
-            <div class="lead-line">
-              <span>Nordic Städ AB</span>
-              <span class="status-pill blue">Ny lead</span>
-              <span>Skapa pitch</span>
-            </div>
-            <div class="lead-line">
-              <span>Svensson VVS</span>
-              <span class="status-pill green">Demo bokad</span>
-              <span>Visa</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        let sys = await fetch("/sys")
+        .then(r=>r.json());
 
-    <section id="pricing" class="section">
-      <div class="section-heading">
-        <div class="eyebrow">Priser</div>
-        <h2>Starta enkelt. Skala när det fungerar.</h2>
-      </div>
+        document.getElementById("cpu").innerText = sys.cpu;
 
-      <div class="pricing-grid">
-        <div class="price-card">
-          <h3>Start</h3>
-          <strong>499 kr/mån</strong>
-          <p>För dig som vill testa leadflödet.</p>
-          <a href="/booking/">Boka demo</a>
-        </div>
+        document.getElementById("ram").innerText = sys.ram;
 
-        <div class="price-card featured">
-          <h3>Tillväxt</h3>
-          <strong>999 kr/mån</strong>
-          <p>För företag som vill boka fler möten varje vecka.</p>
-          <a href="/booking/">Boka demo</a>
-        </div>
+        document.getElementById("awake").innerText =
+            sys.awake ? "ONLINE" : "IDLE";
 
-        <div class="price-card">
-          <h3>Skala</h3>
-          <strong>1999 kr/mån</strong>
-          <p>För team som vill hantera flera flöden.</p>
-          <a href="/booking/">Boka demo</a>
-        </div>
-      </div>
-    </section>
+    }catch(e){}
 
-    <section class="final-cta">
-      <h2>Vill du se hur FlerKunder kan fungera för ditt företag?</h2>
-      <p>Boka en demo så visar vi hur flödet kan se ut från lead till bokat möte.</p>
-      <a class="primary-button" href="/booking/">Boka demo</a>
-    </section>
+    try{
 
-  </main>
+        let logData = await fetch("/logs")
+        .then(r=>r.json());
 
-  <footer class="footer">
-    <span>FlerKunder © 2026</span>
-    <a href="/admin-login">Admin</a>
-  </footer>
+        document.getElementById("logs").innerHTML =
+            logData
+            .slice(-14)
+            .map(x=>`<div>${x}</div>`)
+            .join("");
+
+    }catch(e){}
+}
+
+setInterval(update,1000);
+
+update();
+
+</script>
 
 </body>
 </html>
+
