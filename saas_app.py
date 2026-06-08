@@ -1,4 +1,4 @@
-import os
+﻿import os
 from functools import wraps
 from flask import Flask, render_template, session, redirect, request
 
@@ -151,7 +151,7 @@ def create_app(config_name=None):
             session["admin_logged_in"] = True
             return redirect("/admin-portal")
 
-        return render_template("admin_login.html", error="Fel lösenord")
+        return render_template("admin_login.html", error="Fel lÃ¶senord")
 
     @app.route("/admin-portal")
     @admin_required
@@ -185,6 +185,20 @@ def create_app(config_name=None):
     def admin_logout():
         session.clear()
         return redirect("/")
+    # SAFE_REDIRECT_ROUTES
+    @app.route("/leads-old")
+    def leads_old_redirect():
+        return redirect("/lead-agent")
+
+    @app.route("/home")
+    def home_redirect():
+        return redirect("/")
+
+    @app.route("/start")
+    def start_redirect():
+        return redirect("/")
+
+
 
     return app
 
@@ -197,3 +211,4 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5050)),
         debug=False
     )
+
