@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
@@ -226,7 +226,7 @@ function copyAllMails(){
           <tr>
             <td colspan="10">
               <details class="email-box">
-                <summary>Visa mail – {{ lead.email_subject }}</summary>
+                <summary>Visa mail ”€“ {{ lead.email_subject }}</summary>
 
                 <pre id="mail-{{ lead.id }}" data-mail-body>{{ lead.email_body }}</pre>
 
@@ -241,7 +241,7 @@ function copyAllMails(){
                 </form>
 
                 <p class="note">
-                  Gmail-utkast kräver att leaden har email. Klicka “Hitta email först om email saknas.
+                  Gmail-utkast kräver att leaden har email. Klicka ”€œHitta email först om email saknas.
                 </p>
               </details>
             </td>
@@ -267,5 +267,7 @@ function copyAllMails(){
 </div>
 </body>
 </html>
+
+
 
 

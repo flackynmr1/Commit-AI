@@ -12,6 +12,155 @@ button,a{display:block;text-align:center;width:100%;box-sizing:border-box;border
 p{color:#94a3b8}
 .flash{background:rgba(255,45,147,.15);padding:12px;border-radius:14px;margin-bottom:12px}
 </style>
+<style id="mobile-ui-final-fix">
+html,body{
+  width:100%!important;
+  min-height:100%!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+}
+
+@media(max-width:768px){
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    zoom:1!important;
+  }
+
+  body{
+    display:block!important;
+  }
+
+  .page,
+  .container,
+  .main,
+  main,
+  section,
+  .auth,
+  .auth-page,
+  .login-page,
+  .register-page,
+  .checkout,
+  .dashboard,
+  .wrapper{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:18px!important;
+  }
+
+  .card,
+  .panel,
+  .box,
+  .form-card,
+  .login-card,
+  .register-card,
+  .checkout-card,
+  .table-card,
+  .hero-card,
+  .live-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0 0 16px!important;
+    padding:20px!important;
+    border-radius:22px!important;
+  }
+
+  .hero,
+  .grid,
+  .cards,
+  .stats,
+  .form-grid,
+  .checkout,
+  .dashboard-grid,
+  .two-col,
+  .columns{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+
+  nav,
+  .nav,
+  .navbar{
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:10px!important;
+    padding:14px 18px!important;
+  }
+
+  .nav-links{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:4px!important;
+  }
+
+  .nav-links a{
+    white-space:nowrap!important;
+    font-size:13px!important;
+    flex:0 0 auto!important;
+  }
+
+  h1{
+    font-size:32px!important;
+    line-height:1.08!important;
+    letter-spacing:-1px!important;
+  }
+
+  h2{
+    font-size:24px!important;
+    line-height:1.15!important;
+  }
+
+  p{
+    font-size:15px!important;
+  }
+
+  input,
+  select,
+  textarea{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    font-size:16px!important;
+  }
+
+  button,
+  .btn{
+    width:100%!important;
+    max-width:100%!important;
+    min-height:48px!important;
+    justify-content:center!important;
+  }
+
+  img,
+  video,
+  iframe{
+    max-width:100%!important;
+    height:auto!important;
+  }
+
+  table{
+    min-width:900px!important;
+  }
+
+  .table-card{
+    overflow-x:auto!important;
+  }
+}
+</style>
 </head>
 <body>
 <div class="box">
@@ -36,5 +185,8 @@ p{color:#94a3b8}
 </div>
 </body>
 </html>
+
+
+
 
 
