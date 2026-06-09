@@ -224,6 +224,10 @@ def create_app(config_name=None):
 
 app = create_app()
 
+
+@app.route("/google4d43ec67c07761aa.html")
+def google_verify():
+    return "google-site-verification: google4d43ec67c07761aa.html", 200, {"Content-Type": "text/plain"}
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
@@ -240,4 +244,9 @@ if __name__ == "__main__":
 
 
 
+
+
+@app.route("/google4d43ec67c07761aa.html")
+def google_verify():
+    return "google-site-verification: google4d43ec67c07761aa.html", 200, {"Content-Type": "text/plain"}
 
