@@ -180,3 +180,122 @@ table {
     gap: 10px !important;
   }
 }
+
+/* FIX MOBILE TEXT BUGS */
+@media (max-width: 768px) {
+  * {
+    letter-spacing: normal !important;
+    word-spacing: normal !important;
+  }
+
+  h1, h2, h3, p, a, button, label, input, select, textarea {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+
+  .hero h1,
+  h1 {
+    font-size: clamp(34px, 10vw, 46px) !important;
+    line-height: 1.08 !important;
+    max-width: 100% !important;
+  }
+
+  .hero p {
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+  }
+
+  .badge,
+  .pill {
+    white-space: normal !important;
+  }
+}
+
+/* LEAD AGENT MOBILE POLISH - keeps old functionality */
+@media (max-width: 768px) {
+  .lead-agent,
+  .lead-page,
+  .dashboard,
+  .content {
+    padding: 16px !important;
+  }
+
+  form {
+    width: 100% !important;
+  }
+
+  form input,
+  form select,
+  form button {
+    margin-bottom: 10px !important;
+  }
+
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    border-radius: 16px !important;
+    background: white !important;
+  }
+
+  td,
+  th {
+    font-size: 13px !important;
+    padding: 10px !important;
+  }
+
+  td a,
+  td button,
+  .actions a,
+  .actions button {
+    display: block !important;
+    width: 100% !important;
+    margin: 6px 0 !important;
+    text-align: center !important;
+  }
+
+  .btn,
+  button {
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    font-weight: 800 !important;
+  }
+}
+
+/* REMOVE BROKEN QUESTION MARK ICONS */
+.pricing li::before,
+.price-card li::before,
+.plan li::before,
+.features li::before,
+.feature-list li::before {
+    content: "" !important;
+    display: none !important;
+}
+
+.pricing li,
+.price-card li,
+.plan li,
+.features li,
+.feature-list li {
+    list-style: none !important;
+    padding-left: 0 !important;
+}
+
+.pricing ul,
+.price-card ul,
+.plan ul,
+.features ul,
+.feature-list ul {
+    padding-left: 0 !important;
+}
+
+.pricing .icon,
+.price-card .icon,
+.plan .icon,
+.features .icon,
+.feature-list .icon,
+.check,
+.cross,
+.emoji {
+    display: none !important;
+}
