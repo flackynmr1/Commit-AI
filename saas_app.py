@@ -151,7 +151,7 @@ def create_app(config_name=None):
             session["admin_logged_in"] = True
             return redirect("/admin-portal")
 
-        return render_template("admin_login.html", error="Fel lÃ¶senord")
+        return render_template("admin_login.html", error="Fel lösenord")
 
     @app.route("/admin-portal")
     @admin_required
@@ -211,4 +211,5 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5050)),
         debug=False
     )
+
 
