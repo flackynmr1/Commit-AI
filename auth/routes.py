@@ -71,7 +71,7 @@ def register_page():
     if request.method == "GET":
         return render_template("register.html")
 
-    email = request.form.get("email")
+    email = (request.form.get("email") or "").strip().lower()
     password = request.form.get("password")
 
     if not email or not password:
@@ -101,23 +101,30 @@ def register_page():
 
 @auth.route("/login-page", methods=["GET", "POST"])
 def login_page():
-    session.pop("_flashes", None)
     if request.method == "GET":
         return render_template("login.html")
 
-    email = request.form.get("email")
-    password = request.form.get("password")
+    email = (request.form.get("email") or "").strip().lower()
+    password = request.form.get("password") or ""
+
+    if not email or not password:
+        flash("Fyll i email och lösenord.", "warning")
+        return render_template("login.html")
 
     user = User.query.filter_by(email=email).first()
 
-    if not user or not user.check_password(password):
-        flash("Fel email eller lösenord.", "warning")
-        return redirect("/auth/login-page")
+    if not user:
+        flash("Konto finns inte här. Skapa konto igen.", "warning")
+        return render_template("login.html")
+
+    if not user.check_password(password):
+        flash("Fel lösenord.", "warning")
+        return render_template("login.html")
 
     login_user_session(user)
+    session.modified = True
 
     return redirect("/leads/")
-
 
 @auth.route("/logout")
 def logout():
@@ -216,6 +223,7 @@ def profile(current_user):
             "created_at": current_user.created_at.isoformat() if current_user.created_at else None,
         }
     }), 200
+
 
 
 
