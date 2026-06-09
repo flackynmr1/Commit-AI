@@ -1,4 +1,4 @@
-﻿from service_profiles import SERVICE_PROFILES, detect_service_type, get_service_profile
+from service_profiles import SERVICE_PROFILES, detect_service_type, get_service_profile
 import os
 from functools import wraps
 from flask import Flask, render_template, session, redirect, request
@@ -246,7 +246,4 @@ if __name__ == "__main__":
 
 
 
-@app.route("/google4d43ec67c07761aa.html")
-def google_verify():
-    return "google-site-verification: google4d43ec67c07761aa.html", 200, {"Content-Type": "text/plain"}
 
