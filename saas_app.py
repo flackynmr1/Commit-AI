@@ -18,7 +18,7 @@ def create_app(config_name=None):
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    app.secret_key = "flerkunder-secret-key"
+    app.secret_key = os.getenv("SECRET_KEY", "flerkunder-dev-secret")
 
     db.init_app(app)
 
@@ -230,6 +230,7 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5050)),
         debug=False
     )
+
 
 
 
