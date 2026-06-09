@@ -58,7 +58,8 @@ def apply_free_trial(user):
 
 
 def login_user_session(user):
-    session.permanent = True`r`n    session["user_id"] = user.id
+    session.permanent = True
+    session["user_id"] = user.id
     session["email"] = user.email
     session["role"] = user.role
     session["subscription_tier"] = getattr(user, "subscription_tier", "free_trial")
@@ -215,6 +216,7 @@ def profile(current_user):
             "created_at": current_user.created_at.isoformat() if current_user.created_at else None,
         }
     }), 200
+
 
 
 
