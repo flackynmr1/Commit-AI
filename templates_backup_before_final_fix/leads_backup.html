@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Lead Agent - FlerKunder</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:rgba(255,255,255,.055);border-right:1px solid rgba(255,255,255,.1);padding:28px;backdrop-filter:blur(18px)}
+.logo{font-size:26px;font-weight:900;margin-bottom:35px;background:linear-gradient(135deg,#23d5ff,#ff2d93);-webkit-background-clip:text;color:transparent}
+.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:14px 16px;border-radius:14px;margin-bottom:8px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,.1);color:white}
+.main{padding:34px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:16px}
+.header h1{font-size:50px;margin:0;letter-spacing:-2px}
+.header p{color:#94a3b8;margin-top:8px}
+.header-actions{display:flex;gap:10px;flex-wrap:wrap}
+.panel{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:26px;margin-bottom:24px;backdrop-filter:blur(20px);box-shadow:0 25px 70px rgba(0,0,0,.28)}
+.lead-form{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.lead-form input{padding:15px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(5,7,15,.7);color:white;min-width:220px}
+.checkline{display:flex;align-items:center;gap:8px;color:#cbd5e1}
+.btn,.mini{border:0;border-radius:13px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;font-weight:900;padding:13px 16px;text-decoration:none;display:inline-block;cursor:pointer}
+.mini{font-size:13px;padding:9px 11px}
+.dark{background:#334155}.green{background:#16a34a}.red{background:#ef4444}.blue{background:#2563eb}.pink{background:#db2777}
+table{width:100%;border-collapse:collapse;min-width:1180px}
+th,td{padding:15px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;vertical-align:top}
+th{color:#94a3b8;text-transform:uppercase;font-size:12px;letter-spacing:.08em}
+.wrap{overflow-x:auto}
+.status{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(35,213,255,.14);color:#b9f3ff;font-weight:900;font-size:13px}
+.score{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(22,163,74,.16);color:#bbf7d0;font-weight:900;font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.email-box{background:#020617;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin:12px 0;color:#cbd5e1}
+.email-box summary{cursor:pointer;font-weight:900;color:white}
+.email-box pre{white-space:pre-wrap;font-family:Arial,sans-serif;color:#cbd5e1;line-height:1.6;margin-top:16px}
+.note{color:#94a3b8;margin-top:12px}
+.api-banner{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);border-radius:18px;padding:16px;color:#cbd5e1;margin-top:16px}
+.bulk-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.flash{padding:14px 16px;border-radius:16px;background:rgba(35,213,255,.12);border:1px solid rgba(35,213,255,.25);color:#b9f3ff;margin-bottom:14px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.header{display:block}.main{padding:20px}}
+</style>
+
+<script>
+function copyText(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.innerText);
+  alert("Mail kopierat");
+}
+
+function copyAllMails(){
+  const mails=[...document.querySelectorAll("[data-mail-body]")].map(el=>el.innerText).join("\n\n--------------------\n\n");
+  if(!mails){ alert("Inga mail att kopiera"); return; }
+  navigator.clipboard.writeText(mails);
+  alert("Alla mail kopierade");
+}
+</script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">FlerKunder</div>
+    <a href="/dashboard">Dashboard</a>
+    <a class="active" href="/lead-agent">Lead Agent</a>
+    <a href="/admin-portal">Adminportal</a>
+    <a href="/checklist">Checklista</a>
+    <a href="/booking/">Boka demo</a>
+    <a href="/dashboard">Startsida</a>
+    <a href="/admin-logout">Logga ut</a>
+  </aside>
+
+  <main class="main">
+
+  <div class="header">
+    <div>
+      <h1>Lead Agent</h1>
+      <p>Hitta leads, hitta email, skapa pitchar och förbered Gmail-utkast.</p>
+    </div>
+
+    <div class="bulk-actions">
+      <form method="POST" action="/leads/pitch-all">
+        <button class="btn" type="submit">
+          Skapa pitch för alla
+        </button>
+      </form>
+
+      <form method="POST" action="/leads/gmail/draft-all">
+        <button class="btn green" type="submit">
+          Skapa Gmail-utkast för alla
+        </button>
+      </form>
+    </div>
+  </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <h2>Hitta nya leads</h2>
+
+      <form action="/leads/find" method="POST" class="lead-form">
+        <input name="city" placeholder="Stad, t.ex. Malmö" value="Malmö">
+        <input name="industry" placeholder="Bransch, t.ex. flyttfirma" value="flyttfirma">
+
+        <label class="checkline">
+          <input type="checkbox" name="must_have_phone">
+          Måste ha telefon
+        </label>
+
+        <label class="checkline">
+          <input type="checkbox" name="must_have_website">
+          Måste ha hemsida
+        </label>
+
+        <button class="btn" type="submit">Hitta leads</button>
+      </form>
+
+      <div class="api-banner">
+        Google Places är kopplat. Nästa viktiga steg är att hitta email från företagens hemsidor.
+      </div>
+    </section>
+
+<div class="bulk-actions">
+  <form method="POST" action="/leads/pitch-all">
+    <button class="btn" type="submit">Skapa pitch för alla</button>
+  </form>
+
+  <form method="POST" action="/leads/find-email-all">
+    <button class="btn pink" type="submit">Hitta email för alla</button>
+  </form>
+
+  <form method="POST" action="/leads/gmail/draft-all-and-archive">
+    <button class="btn green" type="submit">Skapa Gmail-utkast för alla & rensa</button>
+  </form>
+
+  <a class="btn dark" href="/leads/history">Historik</a>
+
+  <button class="btn dark" type="button" onclick="copyAllMails()">Kopiera alla mail</button>
+</div>
+
+      <p class="note">{{ leads|length if leads else 0 }} leads totalt</p>
+
+      {% if leads %}
+      <div class="wrap">
+        <table>
+          <tr>
+            <th>Score</th>
+            <th>Företag</th>
+            <th>Bransch</th>
+            <th>Stad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Hemsida</th>
+            <th>Källa</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+          {% for lead in leads %}
+
+          {% set lead_score = 40 %}
+          {% if lead.phone %}{% set lead_score = lead_score + 20 %}{% endif %}
+          {% if lead.website %}{% set lead_score = lead_score + 20 %}{% endif %}
+          {% if lead.email %}{% set lead_score = lead_score + 20 %}{% endif %}
+          {% if lead.source == "Google Places" %}{% set lead_score = lead_score + 10 %}{% endif %}
+
+          <tr>
+            <td><span class="score">{{ lead_score }}</span></td>
+            <td>{{ lead.company_name }}</td>
+            <td>{{ lead.industry or "-" }}</td>
+            <td>{{ lead.city or "-" }}</td>
+            <td>{{ lead.phone or "-" }}</td>
+            <td>{{ lead.email or "-" }}</td>
+
+            <td>
+              {% if lead.website %}
+                <a class="mini dark" href="{{ lead.website }}" target="_blank">Visa</a>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+
+            <td>{{ lead.source or "-" }}</td>
+            <td><span class="status">{{ lead.status }}</span></td>
+
+            <td>
+              <div class="actions">
+                <form method="POST" action="/leads/pitch/{{ lead.id }}">
+                  <button class="mini" type="submit">Skapa pitch</button>
+                </form>
+
+                <form method="POST" action="/leads/find-email/{{ lead.id }}">
+                  <button class="mini pink" type="submit">Hitta email</button>
+                </form>
+
+                <form method="POST" action="/leads/ready-mail/{{ lead.id }}">
+                  <button class="mini green" type="submit">Redo för mail</button>
+                </form>
+
+                <form method="POST" action="/leads/mark-sent/{{ lead.id }}">
+                  <button class="mini green" type="submit">Markera skickad</button>
+                </form>
+
+                <form method="POST" action="/leads/gmail/draft/{{ lead.id }}">
+                  <button class="mini blue" type="submit">Skapa Gmail-utkast</button>
+                </form>
+
+                <a class="mini blue" href="/leads/meeting/{{ lead.id }}" target="_blank">Boka möte</a>
+
+                <form method="POST" action="/leads/delete/{{ lead.id }}">
+                  <button class="mini red" type="submit">Ta bort</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+
+          {% if lead.email_body %}
+          <tr>
+            <td colspan="10">
+              <details class="email-box">
+                <summary>Visa mail ”€“ {{ lead.email_subject }}</summary>
+
+                <pre id="mail-{{ lead.id }}" data-mail-body>{{ lead.email_body }}</pre>
+
+                <button class="mini dark" onclick="copyText('mail-{{ lead.id }}')" type="button">
+                  Kopiera mail
+                </button>
+
+                <form method="POST" action="/leads/gmail/draft/{{ lead.id }}" style="display:inline;">
+                  <button class="mini blue" type="submit">
+                    Skapa Gmail-utkast
+                  </button>
+                </form>
+
+                <p class="note">
+                  Gmail-utkast kräver att leaden har email. Klicka ”€œHitta email först om email saknas.
+                </p>
+              </details>
+            </td>
+          </tr>
+          {% endif %}
+
+          {% endfor %}
+        </table>
+      </div>
+      {% else %}
+      <p class="note">Inga leads än. Sök på stad och bransch för att skapa leads.</p>
+      {% endif %}
+    </section>
+
+    <section class="panel">
+      <h2>Nästa steg</h2>
+      <div class="api-banner">
+        1. Hitta email från hemsidor. 2. Skapa Gmail-utkast. 3. Godkänn/skicka. 4. Koppla Stripe. 5. Koppla Calendar API.
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

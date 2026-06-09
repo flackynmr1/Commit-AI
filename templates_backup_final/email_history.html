@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Emailhistorik - FlerKunder</title>
+<link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+<body>
+<div class="main">
+  <h1>Emailhistorik</h1>
+  <p>Leads som fått Gmail-utkast och rensats från aktiva listan.</p>
+
+  <a class="btn" href="/lead-agent">Tillbaka till Lead Agent</a>
+
+  <table>
+    <tr>
+      <th>Företag</th>
+      <th>Email</th>
+      <th>Bransch</th>
+      <th>Stad</th>
+      <th>Status</th>
+      <th>Datum</th>
+    </tr>
+
+    {% for item in history %}
+    <tr>
+      <td>{{ item.company_name }}</td>
+      <td>{{ item.email }}</td>
+      <td>{{ item.industry }}</td>
+      <td>{{ item.city }}</td>
+      <td>{{ item.action }}</td>
+      <td>{{ item.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

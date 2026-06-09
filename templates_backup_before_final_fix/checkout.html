@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Köp {{ plan.name }} - FlerKunder</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden;font-family:Inter,Arial,sans-serif;background:#f4f8ff;color:#07111f}
+a{text-decoration:none;color:inherit}
+
+.bg{
+  position:fixed;inset:0;z-index:-1;
+  background:
+  radial-gradient(circle at 15% 10%,rgba(0,140,255,.22),transparent 30%),
+  radial-gradient(circle at 85% 15%,rgba(255,53,168,.18),transparent 30%),
+  linear-gradient(180deg,#fbfdff,#eef7ff);
+}
+
+.page{
+  width:100%;
+  min-height:100vh;
+  padding:34px 7%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.checkout{
+  width:100%;
+  max-width:1120px;
+  display:grid;
+  grid-template-columns:1fr .85fr;
+  gap:24px;
+}
+
+.card{
+  background:rgba(255,255,255,.88);
+  border:1px solid white;
+  border-radius:32px;
+  padding:30px;
+  box-shadow:0 24px 70px rgba(15,23,42,.08);
+}
+
+.logo{
+  font-size:28px;
+  font-weight:950;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+  margin-bottom:22px;
+}
+
+.badge{
+  display:inline-flex;
+  padding:9px 14px;
+  border-radius:999px;
+  background:rgba(0,140,255,.1);
+  color:#006bbd;
+  font-weight:950;
+  margin-bottom:14px;
+}
+
+h1{
+  font-size:46px;
+  line-height:1;
+  letter-spacing:-2px;
+  margin:0 0 12px;
+}
+
+p{color:#64748b;line-height:1.6}
+
+.price{
+  font-size:54px;
+  font-weight:950;
+  margin:18px 0 8px;
+  background:linear-gradient(135deg,#07111f,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.leads{
+  font-size:18px;
+  font-weight:900;
+  color:#334155;
+  margin-bottom:20px;
+}
+
+.list{
+  display:grid;
+  gap:12px;
+  margin-top:22px;
+}
+
+.item{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  background:white;
+  border:1px solid rgba(15,23,42,.07);
+  border-radius:18px;
+  padding:14px;
+  color:#334155;
+  font-weight:750;
+}
+
+.check{
+  width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#15803d;
+  font-weight:950;
+  flex:0 0 auto;
+}
+
+.swish-box{
+  background:#07111f;
+  color:white;
+  border-radius:26px;
+  padding:24px;
+  margin-top:16px;
+}
+
+.swish-number{
+  font-size:34px;
+  font-weight:950;
+  letter-spacing:.5px;
+  margin:12px 0;
+  word-break:break-word;
+}
+
+.info{
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:20px;
+  padding:16px;
+  margin-top:16px;
+  color:#475569;
+  line-height:1.55;
+}
+
+.form{
+  display:grid;
+  gap:12px;
+  margin-top:18px;
+}
+
+input,select,textarea{
+  width:100%;
+  border:1px solid rgba(15,23,42,.12);
+  background:white;
+  border-radius:16px;
+  padding:14px;
+  font-size:15px;
+}
+
+.btn{
+  border:0;
+  cursor:pointer;
+  width:100%;
+  min-height:52px;
+  border-radius:16px;
+  font-weight:950;
+  font-size:16px;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  color:white;
+  box-shadow:0 16px 36px rgba(0,140,255,.18);
+}
+
+.btn.secondary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:white;
+  color:#07111f;
+  border:1px solid rgba(15,23,42,.1);
+  box-shadow:none;
+  margin-top:10px;
+}
+
+.small{
+  font-size:13px;
+  color:#64748b;
+  margin-top:12px;
+}
+
+@media(max-width:850px){
+  .page{
+    display:block;
+    min-height:auto;
+    padding:18px 5% 34px;
+  }
+
+  .checkout{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  .card{
+    border-radius:24px;
+    padding:20px;
+  }
+
+  .logo{
+    font-size:24px;
+    margin-bottom:16px;
+  }
+
+  h1{
+    font-size:34px;
+    letter-spacing:-1.2px;
+  }
+
+  .price{
+    font-size:42px;
+  }
+
+  .swish-box{
+    border-radius:22px;
+    padding:20px;
+  }
+
+  .swish-number{
+    font-size:29px;
+  }
+
+  .item{
+    padding:13px;
+  }
+
+  input,select,textarea{
+    font-size:16px;
+  }
+}
+</style>
+<style id="mobile-ui-final-fix">
+html,body{
+  width:100%!important;
+  min-height:100%!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+}
+
+@media(max-width:768px){
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    zoom:1!important;
+  }
+
+  body{
+    display:block!important;
+  }
+
+  .page,
+  .container,
+  .main,
+  main,
+  section,
+  .auth,
+  .auth-page,
+  .login-page,
+  .register-page,
+  .checkout,
+  .dashboard,
+  .wrapper{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:18px!important;
+  }
+
+  .card,
+  .panel,
+  .box,
+  .form-card,
+  .login-card,
+  .register-card,
+  .checkout-card,
+  .table-card,
+  .hero-card,
+  .live-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0 0 16px!important;
+    padding:20px!important;
+    border-radius:22px!important;
+  }
+
+  .hero,
+  .grid,
+  .cards,
+  .stats,
+  .form-grid,
+  .checkout,
+  .dashboard-grid,
+  .two-col,
+  .columns{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+
+  nav,
+  .nav,
+  .navbar{
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:10px!important;
+    padding:14px 18px!important;
+  }
+
+  .nav-links{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:4px!important;
+  }
+
+  .nav-links a{
+    white-space:nowrap!important;
+    font-size:13px!important;
+    flex:0 0 auto!important;
+  }
+
+  h1{
+    font-size:32px!important;
+    line-height:1.08!important;
+    letter-spacing:-1px!important;
+  }
+
+  h2{
+    font-size:24px!important;
+    line-height:1.15!important;
+  }
+
+  p{
+    font-size:15px!important;
+  }
+
+  input,
+  select,
+  textarea{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    font-size:16px!important;
+  }
+
+  button,
+  .btn{
+    width:100%!important;
+    max-width:100%!important;
+    min-height:48px!important;
+    justify-content:center!important;
+  }
+
+  img,
+  video,
+  iframe{
+    max-width:100%!important;
+    height:auto!important;
+  }
+
+  table{
+    min-width:900px!important;
+  }
+
+  .table-card{
+    overflow-x:auto!important;
+  }
+}
+</style>
+<style id="final-mobile-fix">
+html,body{width:100%!important;min-height:100%!important;overflow-x:hidden!important}
+@media(max-width:768px){
+ body{margin:0!important;padding:0!important;overflow-y:auto!important}
+ .page,.container,main,section{width:100%!important;max-width:100%!important;padding:18px!important;margin:0!important}
+ .card,.panel,.box,.login-card,.register-card,.checkout-card,.table-card,.live-card{
+   width:100%!important;max-width:100%!important;min-width:0!important;
+   padding:20px!important;margin:0 0 16px!important;border-radius:22px!important
+ }
+ .hero,.grid,.cards,.stats,.form-grid,.checkout,.dashboard-grid{
+   display:grid!important;grid-template-columns:1fr!important;gap:16px!important
+ }
+ nav,.nav,.navbar{width:100%!important;flex-direction:column!important;align-items:flex-start!important;padding:14px 18px!important}
+ .nav-links{width:100%!important;display:flex!important;overflow-x:auto!important;gap:8px!important}
+ .nav-links a{white-space:nowrap!important;font-size:13px!important}
+ h1{font-size:32px!important;line-height:1.08!important}
+ h2{font-size:24px!important}
+ input,select,textarea{width:100%!important;font-size:16px!important}
+ button,.btn{width:100%!important;min-height:48px!important;justify-content:center!important}
+ img,video,iframe{max-width:100%!important;height:auto!important}
+ .table-card{overflow-x:auto!important}
+ table{min-width:850px!important}
+}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="bg"></div>
+
+<div class="page">
+  <div class="checkout">
+
+    <section class="card">
+      <div class="logo">FlerKunder</div>
+      <div class="badge">Vald plan</div>
+
+      <h1>{{ plan.name }}</h1>
+
+      <div class="price">{{ plan.price }} kr</div>
+      <div class="leads">{{ plan.leads }} leads per månad</div>
+
+      <p>
+        Efter betalning aktiveras din plan manuellt. Gmail-utkast kan aktiveras
+        när din Gmail är godkänd som test user tills Google-verifiering är klar.
+      </p>
+
+      <div class="list">
+        <div class="item"><span class="check">✓</span><span>Fler leads varje månad</span></div>
+        <div class="item"><span class="check">✓</span><span>Personliga pitchar till företag</span></div>
+        <div class="item"><span class="check">✓</span><span>Historik och pipeline i dashboarden</span></div>
+        <div class="item"><span class="check">✓</span><span>Kopiera pitch och öppna Gmail manuellt direkt</span></div>
+      </div>
+
+      <a class="btn secondary" href="/">Tillbaka till startsida</a>
+    </section>
+
+    <section class="card">
+      <div class="badge">Swish betalning</div>
+      <h1 style="font-size:34px">Betala med Swish</h1>
+
+      <div class="swish-box">
+        <div>Swisha till:</div>
+        <div class="swish-number">0730-28 16 19</div>
+        <div>Skriv din email i meddelandet.</div>
+      </div>
+
+      <div class="info">
+        När du har swishat, fyll i formuläret nedan så kan planen aktiveras.
+        Använd samma email som du skapade konto med.
+      </div>
+
+      <form class="form" method="POST" action="/booking/">
+        <input name="email" type="email" placeholder="Din email" required>
+        <input name="plan" value="{{ plan.name }}" readonly>
+        <textarea name="message" rows="4" placeholder="Skriv t.ex: Jag har swishat för {{ plan.name }}"></textarea>
+        <button class="btn" type="submit">Jag har swishat</button>
+      </form>
+
+      <div class="small">
+        Tips: Om du vill ha Gmail-utkast via API, skriv vilken Gmail-adress du vill koppla.
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

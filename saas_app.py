@@ -1,4 +1,5 @@
-﻿import os
+﻿from service_profiles import SERVICE_PROFILES, detect_service_type, get_service_profile
+import os
 from functools import wraps
 from flask import Flask, render_template, session, redirect, request
 
@@ -58,7 +59,7 @@ def create_app(config_name=None):
         print("Leads disabled:", e)
     try:
         from leads import leads as leads_blueprint
-        app.register_blueprint(leads_blueprint, url_prefix="/leads")
+        # DUPLICATE REMOVED: app.register_blueprint(leads_blueprint, url_prefix="/leads")
     except Exception as e:
         print("Leads disabled:", e)
 
@@ -123,6 +124,9 @@ def create_app(config_name=None):
 
     @app.route("/lead-agent")
     def user_lead_agent():
+        if not session.get("user_id"):
+            return redirect("/auth/login-page")
+
         from leads.routes import get_usage_context, LEAD_OPTIONS
         from lead_models import Lead
 
@@ -134,6 +138,21 @@ def create_app(config_name=None):
             lead_options=LEAD_OPTIONS,
             leads=all_leads
         )
+    @app.route("/profile-setup", methods=["GET", "POST"])
+    @app.route("/company-profile", methods=["GET", "POST"])
+    @app.route("/foretagsprofil", methods=["GET", "POST"])
+    def profile_setup():
+        if request.method == "POST":
+            session["company_name"] = request.form.get("company_name")
+            session["service_type"] = request.form.get("service_type")
+            session["target_area"] = request.form.get("target_area")
+            return redirect("/dashboard")
+
+        return render_template(
+            "profile_setup.html",
+            services=SERVICE_PROFILES
+        )
+
 
     @app.route("/checklist")
     @approved_required
@@ -211,5 +230,13 @@ if __name__ == "__main__":
         port=int(os.environ.get("PORT", 5050)),
         debug=False
     )
+
+
+
+
+
+
+
+
 
 

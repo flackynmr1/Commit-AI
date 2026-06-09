@@ -1,265 +1,101 @@
-from relevance_engine import (
-    build_relevance_sentence,
-    build_pitch_angle,
-    build_cta,
-)
-
-
-def clean(value, fallback=""):
-    if value is None:
-        return fallback
-
-    value = str(value).strip()
-    return value if value else fallback
+﻿from relevance_engine import analyze_lead, clean, fix_text, build_ai_profile
 
 
 def get_attr(obj, name, fallback=""):
-    return clean(getattr(obj, name, fallback), fallback)
+    return getattr(obj, name, fallback) or fallback
 
 
-def build_profile(profile=None):
-    if profile is None:
-        profile = {}
-
-    return {
-        "sender_name": clean(profile.get("sender_name"), "Ditt namn"),
-        "company_name": clean(profile.get("company_name"), "Ditt företag"),
-        "offer": clean(profile.get("offer"), "våra tjänster"),
-        "target_customer": clean(
-            profile.get("target_customer"),
-            "företag och privatpersoner"
-        ),
-        "proof": clean(profile.get("proof"), ""),
-        "phone": clean(profile.get("phone"), ""),
-        "website": clean(profile.get("website"), ""),
-    }
+def ensure_profile(profile):
+    profile = profile or {}
+    if "service_type" not in profile:
+        return build_ai_profile(profile)
+    return profile
 
 
-def make_lead_obj(lead_company, lead_industry, lead_city, lead_website):
-    return type("LeadObj", (), {
-        "company_name": lead_company,
-        "industry": lead_industry,
-        "city": lead_city,
-        "website": lead_website,
-    })()
+def describe_offer(profile):
+    service_type = clean(profile.get("service_type", "other"))
+    offer = fix_text(profile.get("offer", ""))
+    problem = fix_text(profile.get("problem_solved", ""))
+    result = fix_text(profile.get("customer_result", ""))
+    target = fix_text(profile.get("target_customer", ""))
+
+    if service_type == "website":
+        return f"bygga tydligare och mer förtroendeingivande hemsidor för {target or 'lokala företag'}"
+    if service_type == "seo":
+        return f"hjälpa {target or 'företag'} att synas bättre på Google och få fler relevanta besökare"
+    if service_type == "ads":
+        return f"hjälpa {target or 'företag'} att få fler kunder genom annonsering"
+    if service_type == "ai_chatbot":
+        return f"hjälpa {target or 'företag'} att svara snabbare på kunder och samla in fler förfrågningar"
+    if service_type == "vvs":
+        return offer or "hjälpa företag med VVS-installationer och projektstöd"
+
+    if offer:
+        return offer
+    return f"hjälpa {target or 'företag'} med {result or 'bättre kundflöde'}"
 
 
 def create_pitch_for_lead(lead, profile=None, custom_message=None):
-    profile = build_profile(profile)
+    profile = ensure_profile(profile)
 
-    lead_company = get_attr(lead, "company_name", "ert företag")
-    lead_industry = get_attr(lead, "industry", "er bransch")
-    lead_city = get_attr(lead, "city", "Sverige")
-    lead_website = get_attr(lead, "website", "")
+    lead_company = clean(get_attr(lead, "company_name", "ert företag"))
+    sender_name = clean(profile.get("sender_name"), "Elias")
+    sender_company = clean(profile.get("company_name"), "FlerKunder")
+    proof = clean(profile.get("proof", ""))
+    phone = clean(profile.get("phone", ""))
+    website = clean(profile.get("website", ""))
 
-    lead_obj = make_lead_obj(
-        lead_company,
-        lead_industry,
-        lead_city,
-        lead_website,
-    )
+    analysis = analyze_lead(lead, profile)
+    offer_sentence = describe_offer(profile)
 
-    if custom_message and clean(custom_message):
-        return rewrite_custom_email(
-            lead_obj=lead_obj,
-            profile=profile,
-            custom_message=custom_message,
-        )
+    subject = f"En idé för {lead_company}"
 
-    return create_default_email(
-        lead_obj=lead_obj,
-        profile=profile,
-    )
+    contact_line = ""
+    if phone:
+        contact_line += f"\nTelefon: {phone}"
+    if website:
+        contact_line += f"\nHemsida: {website}"
 
+    proof_line = f"\n\nKort bakgrund: {proof}" if proof else ""
 
-def create_default_email(lead_obj, profile):
-    lead_company = clean(lead_obj.company_name, "ert företag")
+    if not analysis["is_relevant"]:
+        body = f"""Hej {lead_company},
 
-    sender_name = profile["sender_name"]
-    sender_company = profile["company_name"]
-    offer = profile["offer"]
-    target_customer = profile["target_customer"]
-    proof = profile["proof"]
-    phone = profile["phone"]
-    website = profile["website"]
+{analysis["insight"]}
 
-    subject = create_subject(lead_obj, profile)
+Jag vill vara transparent: jag är inte helt säker på att det här är en perfekt matchning, eftersom {analysis["warnings"][0] if analysis["warnings"] else "kopplingen mellan våra verksamheter inte är helt självklar"}.
 
-    relevance_sentence = build_relevance_sentence(lead_obj, profile)
-    angle = build_pitch_angle(lead_obj, profile)
-    cta = build_cta(lead_obj, profile)
+Vi på {sender_company} arbetar med att {offer_sentence}. Om ni någon gång har behov av detta, eller samarbetar med företag där det kan vara relevant, tar jag gärna en kort kontakt.{proof_line}
 
-    proof_line = ""
-    if proof:
-        proof_line = f"\n\nKort om oss: {proof}"
+Är det okej om jag skickar lite mer information?
 
-    contact_lines = build_contact_lines(phone, website)
+Vänliga hälsningar,
+{sender_name}
+{sender_company}{contact_line}
+"""
+        return subject, body.strip()
 
     body = f"""Hej {lead_company},
 
-{relevance_sentence}
+{analysis["insight"]}
 
-Jag heter {sender_name} och representerar {sender_company}. Vi arbetar med {offer} för {target_customer}.{proof_line}
+I er bransch är det ofta viktigt att {analysis["problem"]}. Därför tror jag att det kan finnas en relevant möjlighet kopplat till {analysis["angle"]}.
 
-Jag tänkte därför höra om {angle} är något som kan vara aktuellt för er, antingen nu eller längre fram.
+Vi på {sender_company} arbetar med att {offer_sentence}. För ett företag som ert kan det framför allt hjälpa med att {analysis["value"]}.{proof_line}
 
-{cta.capitalize()}
+Vill du att jag skickar ett kort exempel på hur det skulle kunna se ut för er?
 
-Med vänliga hälsningar
+Vänliga hälsningar,
 {sender_name}
-{sender_company}{contact_lines}
+{sender_company}{contact_line}
 """
 
-    return subject, body
-
-
-def rewrite_custom_email(lead_obj, profile, custom_message):
-    lead_company = clean(lead_obj.company_name, "ert företag")
-    lead_industry = clean(lead_obj.industry, "er bransch")
-    lead_city = clean(lead_obj.city, "Sverige")
-
-    sender_name = profile["sender_name"]
-    sender_company = profile["company_name"]
-    offer = profile["offer"]
-    target_customer = profile["target_customer"]
-    proof = profile["proof"]
-    phone = profile["phone"]
-    website = profile["website"]
-
-    subject = create_subject(lead_obj, profile)
-
-    relevance_sentence = build_relevance_sentence(lead_obj, profile)
-
-    proof_line = ""
-    if proof:
-        proof_line = f"\n\nKort om oss: {proof}"
-
-    contact_lines = build_contact_lines(phone, website)
-
-    improved_message = improve_custom_message(
-        message=custom_message,
-        lead_company=lead_company,
-        lead_industry=lead_industry,
-        lead_city=lead_city,
-        sender_company=sender_company,
-        offer=offer,
-        target_customer=target_customer,
-    )
-
-    body = f"""Hej {lead_company},
-
-{relevance_sentence}
-
-Jag heter {sender_name} och representerar {sender_company}. Vi arbetar med {offer} för {target_customer}.{proof_line}
-
-{improved_message}
-
-Är ni öppna för att jag skickar mer information eller bokar in ett kort samtal?
-
-Med vänliga hälsningar
-{sender_name}
-{sender_company}{contact_lines}
-"""
-
-    return subject, body
-
-
-def create_subject(lead_obj, profile):
-    company = clean(lead_obj.company_name, "ert företag")
-    angle = build_pitch_angle(lead_obj, profile)
-
-    if angle:
-        return f"Snabb fråga om {angle}"
-
-    return f"Snabb fråga till {company}"
+    return subject, body.strip()
 
 
 def create_pitch_for_many(leads, profile=None, custom_message=None):
     results = []
-
     for lead in leads:
-        subject, body = create_pitch_for_lead(
-            lead=lead,
-            profile=profile,
-            custom_message=custom_message,
-        )
-
-        results.append({
-            "lead": lead,
-            "subject": subject,
-            "body": body,
-        })
-
+        subject, body = create_pitch_for_lead(lead, profile, custom_message)
+        results.append((lead, subject, body))
     return results
-
-
-def build_contact_lines(phone, website):
-    lines = ""
-
-    if phone:
-        lines += f"\nTelefon: {phone}"
-
-    if website:
-        lines += f"\nHemsida: {website}"
-
-    return lines
-
-
-def improve_custom_message(
-    message,
-    lead_company,
-    lead_industry,
-    lead_city,
-    sender_company,
-    offer,
-    target_customer,
-):
-    message = clean(message)
-
-    if not message:
-        return (
-            f"Jag tror att {sender_company} kan vara relevant för {lead_company}, "
-            f"eftersom vi arbetar med {offer} för {target_customer}."
-        )
-
-    replacements = {
-        "[företag]": lead_company,
-        "{företag}": lead_company,
-        "[company]": lead_company,
-        "{company}": lead_company,
-        "[lead_company]": lead_company,
-        "{lead_company}": lead_company,
-        "[bransch]": lead_industry,
-        "{bransch}": lead_industry,
-        "[stad]": lead_city,
-        "{stad}": lead_city,
-        "[mitt företag]": sender_company,
-        "{mitt företag}": sender_company,
-        "[sender_company]": sender_company,
-        "{sender_company}": sender_company,
-        "[erbjudande]": offer,
-        "{erbjudande}": offer,
-        "[offer]": offer,
-        "{offer}": offer,
-        "[målgrupp]": target_customer,
-        "{målgrupp}": target_customer,
-    }
-
-    for old, new in replacements.items():
-        message = message.replace(old, new)
-
-    return polish_custom_message(message)
-
-
-def polish_custom_message(message):
-    message = clean(message)
-
-    if not message:
-        return ""
-
-    message = message.replace("  ", " ")
-
-    if not message.endswith((".", "?", "!")):
-        message += "."
-
-    return message

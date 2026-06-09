@@ -1,0 +1,392 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklista - FlerKunder</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#05070f;
+color:white;
+}
+
+.layout{
+display:grid;
+grid-template-columns:280px 1fr;
+min-height:100vh;
+}
+
+.sidebar{
+padding:28px;
+background:rgba(255,255,255,.05);
+border-right:1px solid rgba(255,255,255,.1);
+backdrop-filter:blur(20px);
+}
+
+.logo{
+font-size:26px;
+font-weight:900;
+margin-bottom:35px;
+background:linear-gradient(135deg,#23d5ff,#ff2d93);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.sidebar a{
+display:block;
+padding:14px 16px;
+border-radius:14px;
+margin-bottom:8px;
+text-decoration:none;
+color:#cbd5e1;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+background:rgba(255,255,255,.1);
+color:white;
+}
+
+.main{
+padding:35px;
+}
+
+.top h1{
+font-size:54px;
+margin:0;
+letter-spacing:-2px;
+}
+
+.top p{
+color:#94a3b8;
+margin-top:10px;
+}
+
+.grid{
+display:grid;
+gap:18px;
+}
+
+.kpis{
+grid-template-columns:repeat(4,1fr);
+margin-top:30px;
+margin-bottom:30px;
+}
+
+.card{
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.12);
+border-radius:24px;
+padding:24px;
+backdrop-filter:blur(20px);
+box-shadow:0 25px 70px rgba(0,0,0,.3);
+}
+
+.card span{
+color:#94a3b8;
+}
+
+.card strong{
+display:block;
+font-size:34px;
+margin-top:10px;
+}
+
+.two{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-bottom:25px;
+}
+
+.section-title{
+font-size:24px;
+margin-bottom:18px;
+}
+
+.task{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.task input{
+width:20px;
+height:20px;
+}
+
+.task label{
+flex:1;
+}
+
+.agent-log{
+padding:14px;
+margin-bottom:12px;
+border-radius:14px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+}
+
+.goal{
+padding:15px;
+border-radius:14px;
+margin-bottom:12px;
+background:rgba(255,255,255,.05);
+}
+
+.badge{
+display:inline-block;
+padding:6px 10px;
+border-radius:999px;
+background:rgba(35,213,255,.15);
+color:#b9f3ff;
+font-size:12px;
+font-weight:800;
+}
+
+.roadmap{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+}
+
+.roadmap div{
+padding:18px;
+border-radius:18px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+}
+
+@media(max-width:900px){
+
+.layout{
+grid-template-columns:1fr;
+}
+
+.kpis,
+.two,
+.roadmap{
+grid-template-columns:1fr;
+}
+
+}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<div class="logo">FlerKunder</div>
+
+<a href="/dashboard">Dashboard</a>
+<a href="/lead-agent">Lead Agent</a>
+<a href="/admin-portal">Adminportal</a>
+<a class="active" href="/checklist">Checklista</a>
+<a href="/booking/">Boka demo</a>
+<a href="/dashboard">Startsida</a>
+
+</aside>
+
+<main class="main">
+
+<div class="top">
+<h1>Checklista</h1>
+<p>Allt som behöver göras för att få FlerKunder till första betalande kunderna.</p>
+</div>
+
+<section class="grid kpis">
+
+<div class="card">
+<span>Dagens mål</span>
+<strong>4</strong>
+</div>
+
+<div class="card">
+<span>Veckomål</span>
+<strong>10</strong>
+</div>
+
+<div class="card">
+<span>Klara uppgifter</span>
+<strong>18</strong>
+</div>
+
+<div class="card">
+<span>Intäktsmål</span>
+<strong>20k</strong>
+</div>
+
+</section>
+
+<div class="two">
+
+<section class="card">
+
+<h2 class="section-title">Gör idag</h2>
+
+<div class="task">
+<input type="checkbox">
+<label>Hitta 20 nya leads</label>
+</div>
+
+<div class="task">
+<input type="checkbox">
+<label>Skapa 10 pitchar</label>
+</div>
+
+<div class="task">
+<input type="checkbox">
+<label>Kontakta 5 varma leads</label>
+</div>
+
+<div class="task">
+<input type="checkbox">
+<label>Boka 2 demos</label>
+</div>
+
+</section>
+
+<section class="card">
+
+<h2 class="section-title">Veckomål</h2>
+
+<div class="goal">
+Få in 100 nya leads
+</div>
+
+<div class="goal">
+Skapa 40 pitchar
+</div>
+
+<div class="goal">
+Boka 10 demos
+</div>
+
+<div class="goal">
+Få första betalande kunden
+</div>
+
+</section>
+
+</div>
+
+<div class="two">
+
+<section class="card">
+
+<h2 class="section-title">Agentlogg</h2>
+
+<div class="agent-log">
+<span class="badge">Frontend</span>
+Byggde premium startsida
+</div>
+
+<div class="agent-log">
+<span class="badge">Admin</span>
+Byggde adminportal
+</div>
+
+<div class="agent-log">
+<span class="badge">Lead Agent</span>
+Byggde lead-dashboard
+</div>
+
+<div class="agent-log">
+<span class="badge">Booking</span>
+Byggde demoformulär
+</div>
+
+</section>
+
+<section class="card">
+
+<h2 class="section-title">Fokus just nu</h2>
+
+<p style="line-height:1.8;color:#cbd5e1">
+
+Sluta bygga nya funktioner.
+
+Fokusera på:
+<br><br>
+
+”€¢ Hitta leads<br>
+”€¢ Skapa pitchar<br>
+”€¢ Boka demos<br>
+”€¢ Stäng första kunden
+
+</p>
+
+</section>
+
+</div>
+
+<section class="card">
+
+<h2 class="section-title">Roadmap</h2>
+
+<div class="roadmap">
+
+<div>
+<strong>Klart</strong>
+<br><br>
+Dashboard
+<br>
+Adminportal
+<br>
+Lead Agent
+</div>
+
+<div>
+<strong>Klart</strong>
+<br><br>
+Booking
+<br>
+Checklista
+<br>
+Landningssida
+</div>
+
+<div>
+<strong>Nästa</strong>
+<br><br>
+Google Places API
+<br>
+Gmail API
+</div>
+
+<div>
+<strong>Sista steget</strong>
+<br><br>
+Stripe
+<br>
+Google Calendar
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

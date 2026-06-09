@@ -1,0 +1,182 @@
+﻿* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body::before,
+body::after {
+  content: none !important;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container,
+.wrapper,
+.page,
+.content,
+.dashboard,
+main,
+section {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card,
+.panel,
+.box,
+.form-box,
+.login-box,
+.profile-box {
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .container,
+  .wrapper,
+  .page,
+  .content,
+  .dashboard,
+  main,
+  section {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px !important;
+    margin: 0 !important;
+  }
+
+  nav,
+  .navbar,
+  header {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  nav a,
+  .navbar a,
+  header a {
+    font-size: 14px !important;
+  }
+
+  h1 {
+    font-size: 30px !important;
+    line-height: 1.1 !important;
+  }
+
+  h2 {
+    font-size: 23px !important;
+  }
+
+  h3 {
+    font-size: 18px !important;
+  }
+
+  p {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+
+  .hero,
+  .pricing,
+  .dashboard-grid,
+  .stats-grid,
+  .cards,
+  .grid,
+  .lead-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .card,
+  .panel,
+  .box,
+  .form-box,
+  .login-box,
+  .profile-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 12px 0 !important;
+    padding: 18px !important;
+    border-radius: 18px !important;
+  }
+
+  input,
+  select,
+  textarea,
+  button,
+  .btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 16px !important;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: 13px 14px !important;
+    border-radius: 12px !important;
+  }
+
+  button,
+  .btn,
+  a.btn {
+    display: block !important;
+    text-align: center !important;
+    padding: 14px 16px !important;
+    margin-top: 10px !important;
+  }
+
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  td,
+  th {
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .actions,
+  .buttons,
+  .form-row,
+  .row,
+  .flex {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+}

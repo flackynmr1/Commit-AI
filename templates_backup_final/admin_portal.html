@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adminportal - FlerKunder</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+html,body{min-height:100%;overflow-y:auto;margin:0;background:radial-gradient(circle at 20% 0%,rgba(35,213,255,.16),transparent 35%),radial-gradient(circle at 90% 10%,rgba(255,45,147,.14),transparent 40%),#05070f;color:white;font-family:Arial,sans-serif}
+.admin-layout{min-height:100vh;display:grid;grid-template-columns:280px 1fr}
+.admin-sidebar{border-right:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);backdrop-filter:blur(20px);padding:28px;position:sticky;top:0;height:100vh}
+.admin-logo{font-size:26px;font-weight:900;margin-bottom:35px;background:linear-gradient(135deg,#23d5ff,#ff2d93);-webkit-background-clip:text;color:transparent}
+.admin-sidebar a{display:block;padding:14px 16px;border-radius:14px;color:#cbd5e1;text-decoration:none;margin-bottom:8px}
+.admin-sidebar a:hover,.admin-sidebar a.active{background:rgba(255,255,255,.09);color:white}
+.admin-main{padding:34px}
+.admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.admin-top h1{font-size:48px;letter-spacing:-2px;margin:0 0 8px}
+.admin-top p{color:#94a3b8;margin:0}
+.admin-badge{padding:12px 16px;border-radius:999px;background:rgba(35,213,255,.12);border:1px solid rgba(35,213,255,.25);color:#b9f3ff;font-weight:800}
+.admin-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}
+.admin-card,.admin-section{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);backdrop-filter:blur(20px);box-shadow:0 25px 70px rgba(0,0,0,.26)}
+.admin-card{border-radius:24px;padding:22px}
+.admin-card span{color:#94a3b8;font-size:14px}
+.admin-card strong{display:block;font-size:34px;margin-top:10px}
+.admin-section{border-radius:28px;padding:26px;margin-bottom:26px}
+.admin-section h2{font-size:28px;margin:0 0 18px}
+.admin-table-wrap{overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;min-width:950px}
+.admin-table th,.admin-table td{padding:16px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;vertical-align:top}
+.admin-table th{color:#94a3b8;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+.status{display:inline-flex;padding:7px 11px;border-radius:999px;font-size:13px;font-weight:800;background:rgba(35,213,255,.12);color:#b9f3ff}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{padding:9px 11px;border-radius:11px;border:0;text-decoration:none;color:white;background:rgba(255,255,255,.10);font-size:13px;font-weight:800;cursor:pointer}
+.action-btn.blue{background:#2563eb}.action-btn.green{background:#16a34a}.action-btn.pink{background:#db2777}.action-btn.dark{background:#334155}.action-btn.red{background:#ef4444}
+.empty-state{padding:30px;border:1px dashed rgba(255,255,255,.18);border-radius:20px;color:#94a3b8;text-align:center}
+.admin-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tool-card{padding:18px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);text-decoration:none;color:white}
+.tool-card strong{display:block;margin-bottom:8px}
+.tool-card span{color:#94a3b8;font-size:14px;line-height:1.5}
+.mail-card{padding:18px;border-radius:20px;background:rgba(2,6,23,.55);border:1px solid rgba(255,255,255,.1);margin-bottom:14px}
+.mail-card h3{margin:0 0 8px}
+.mail-card p{color:#cbd5e1;line-height:1.6;white-space:pre-wrap}
+.today-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.today-item{padding:16px;border-radius:18px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}
+.copy-note{color:#94a3b8;font-size:13px;margin-top:8px}
+@media(max-width:950px){.admin-layout{grid-template-columns:1fr}.admin-sidebar{height:auto;position:relative}.admin-kpis,.admin-tools,.today-grid{grid-template-columns:1fr}.admin-top{align-items:flex-start;flex-direction:column;gap:16px}}
+</style>
+
+<script>
+function copyMail(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.innerText);
+  alert("Mail kopierat");
+}
+</script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="admin-logo">FlerKunder</div>
+    <a class="active" href="/admin-portal">Adminportal</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/lead-agent">Lead Agent</a>
+    <a href="/checklist">Checklista</a>
+    <a href="/booking/">Boka demo</a>
+    <a href="/dashboard">Startsida</a>
+    <a href="/admin-logout">Logga ut</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-top">
+      <div>
+        <h1>Adminportal</h1>
+        <p>Kontrollrum för bokningar, leads, mailutkast och nästa actions.</p>
+      </div>
+      <div class="admin-badge">Admin inloggad</div>
+    </div>
+
+    <section class="admin-kpis">
+      <div class="admin-card">
+        <span>Bokningar</span>
+        <strong>{{ bookings|length if bookings else 0 }}</strong>
+      </div>
+      <div class="admin-card">
+        <span>Nya idag</span>
+        <strong>{{ bookings|length if bookings else 0 }}</strong>
+      </div>
+      <div class="admin-card">
+        <span>Mail redo</span>
+        <strong>0</strong>
+      </div>
+      <div class="admin-card">
+        <span>Mål denna vecka</span>
+        <strong>20k</strong>
+      </div>
+    </section>
+<section class="admin-section">
+  <h2>Swish-abonnemang</h2>
+
+  <p style="color:#94a3b8;margin-bottom:20px">
+    Kunden swishar och skriver sin email i meddelandet.
+    Därefter aktiverar du planen här.
+  </p>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+
+      <tr>
+        <th>Email</th>
+        <th>Plan</th>
+        <th>Leads</th>
+        <th>Actions</th>
+      </tr>
+
+      {% for user in users %}
+      <tr>
+
+        <td>{{ user.email }}</td>
+
+        <td>
+          <span class="status">
+            {{ user.plan if user.plan else "Gratis Testperiod" }}
+          </span>
+        </td>
+
+        <td>
+          {{ user.leads_used if user.leads_used else 0 }}
+          /
+          {{ user.leads_limit if user.leads_limit else 5 }}
+        </td>
+
+        <td>
+          <div class="actions">
+
+            <a
+              class="action-btn green"
+              href="/admin/activate/{{ user.id }}/starter">
+              Starter 299kr
+            </a>
+
+            <a
+              class="action-btn blue"
+              href="/admin/activate/{{ user.id }}/growth">
+              Growth 699kr
+            </a>
+
+            <a
+              class="action-btn pink"
+              href="/admin/activate/{{ user.id }}/agency">
+              Agency 1499kr
+            </a>
+
+            <a
+              class="action-btn dark"
+              href="/admin/reset-leads/{{ user.id }}">
+              Reset Leads
+            </a>
+
+            <a
+              class="action-btn red"
+              href="/admin/deactivate/{{ user.id }}">
+              Stäng av
+            </a>
+
+          </div>
+        </td>
+
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+
+  <div style="margin-top:20px">
+    <strong>Swish:</strong> 0730281619<br>
+    <span style="color:#94a3b8">
+      Kunden skriver sin email som meddelande.
+    </span>
+  </div>
+
+</section>
+    <section class="admin-section">
+      <h2>Snabbverktyg</h2>
+      <div class="admin-tools">
+        <a class="tool-card" href="/lead-agent"><strong>Lead Agent</strong><span>Hitta riktiga leads, skapa pitchar och förbered mail.</span></a>
+        <a class="tool-card" href="/dashboard"><strong>Dashboard</strong><span>Se mål, fokus och projektstatus.</span></a>
+        <a class="tool-card" href="/checklist"><strong>Checklista</strong><span>Dagens plan, veckomål och agentlogg.</span></a>
+        <a class="tool-card" href="/booking/"><strong>Bokningssida</strong><span>Visa formuläret kunder använder för demo.</span></a>
+      </div>
+    </section>
+
+    <section class="admin-section">
+      <h2>Gör idag</h2>
+      <div class="today-grid">
+        <div class="today-item"><strong>1. Sök 20 leads</strong><br><span style="color:#94a3b8">Använd Lead Agent med en tydlig bransch och stad.</span></div>
+        <div class="today-item"><strong>2. Skapa 10 pitchar</strong><br><span style="color:#94a3b8">Prioritera företag med telefon och hemsida.</span></div>
+        <div class="today-item"><strong>3. Kontakta 5 varma leads</strong><br><span style="color:#94a3b8">Kopiera mail eller ring manuellt tills Gmail API är kopplat.</span></div>
+        <div class="today-item"><strong>4. Boka 2 demos</strong><br><span style="color:#94a3b8">Målet är samtal, inte mer design.</span></div>
+      </div>
+    </section>
+
+    <section class="admin-section">
+      <h2>Bokningsförfrågningar</h2>
+
+      {% if bookings %}
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <tr>
+            <th>Namn</th>
+            <th>Företag</th>
+            <th>Bransch</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Meddelande</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+          {% for b in bookings %}
+          <tr>
+            <td>{{ b.name }}</td>
+            <td>{{ b.company_name }}</td>
+            <td>{{ b.business_type }}</td>
+            <td>{{ b.phone }}</td>
+            <td>{{ b.email }}</td>
+            <td>{{ b.message }}</td>
+            <td><span class="status">{{ b.status }}</span></td>
+            <td>
+              <div class="actions">
+                <a class="action-btn blue" href="#">Kontaktad</a>
+                <a class="action-btn green" href="#">Möte bokat</a>
+                <a class="action-btn pink" href="mailto:{{ b.email }}">Maila</a>
+                <a class="action-btn dark" href="/lead-agent">Skapa lead</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        Inga bokningsförfrågningar än. När någon bokar demo kommer de synas här.
+      </div>
+      {% endif %}
+    </section>
+
+    <section class="admin-section">
+    <h2>Mailutkast redo</h2>
+
+{% set has_pitch = false %}
+
+{% if leads %}
+  {% for lead in leads %}
+    {% if lead.email_body %}
+      <div class="mail-card">
+        <h3>{{ lead.company_name }}</h3>
+
+        <p>
+          <strong>Status:</strong> {{ lead.status }}
+        </p>
+
+        {% if lead.email_subject %}
+        <p>
+          <strong>Ämne:</strong> {{ lead.email_subject }}
+        </p>
+        {% endif %}
+
+        <p id="mail-{{ lead.id }}">{{ lead.email_body }}</p>
+
+        <div class="actions">
+          <button
+            class="action-btn dark"
+            onclick="copyMail('mail-{{ lead.id }}')">
+            Kopiera mail
+          </button>
+
+          {% if lead.email %}
+          <a
+            class="action-btn green"
+            href="mailto:{{ lead.email }}?subject={{ lead.email_subject }}">
+            Öppna mail
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% else %}
+  <div class="empty-state">
+    Inga pitchar skapade ännu. Gå till Lead Agent och klicka ”€œSkapa pitch.
+  </div>
+{% endif %}
+
+</section>
+
+    <section class="admin-section">
+      <h2>Nästa tekniska steg</h2>
+      <div class="admin-tools">
+        <div class="tool-card"><strong>Gmail API</strong><span>Skapa/godkänn/skicka mail från leads.</span></div>
+        <div class="tool-card"><strong>Google Places API</strong><span>Redan igång för riktiga företag. Nästa: bättre filtrering.</span></div>
+        <div class="tool-card"><strong>Stripe</strong><span>Abonnemang: 499, 999 och 1999 kr/mån.</span></div>
+        <div class="tool-card"><strong>Calendar API</strong><span>Automatisk bokning när lead svarar positivt.</span></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

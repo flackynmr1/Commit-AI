@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>SaaS Chatbot Platform</title>
+  <style>
+    body { font-family: Arial; background:#0f172a; color:white; padding:40px; }
+    .card { background:#1e293b; padding:25px; border-radius:16px; max-width:600px; }
+    button { padding:12px 20px; border:0; border-radius:10px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>AI Chatbot SaaS</h1>
+    <p>Skapa en AI-chatbot till företag och ta betalt varje månad.</p>
+
+    <h2>Status</h2>
+    <button onclick="testChatbot()">Testa chatbot</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    async function testChatbot() {
+      const res = await fetch('/chatbot/health');
+      const data = await res.json();
+      document.getElementById('result').innerText =
+        data.message + " ✅";
+    }
+  </script>
+</body>
+</html>

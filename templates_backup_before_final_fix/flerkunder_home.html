@@ -1,0 +1,704 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlerKunder – AI Leadgenerering</title>
+
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:#eef7ff;
+  color:#07111f;
+  overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit}
+
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(73,196,255,.45),transparent 35%),
+    radial-gradient(circle at 85% 15%,rgba(255,92,184,.35),transparent 34%),
+    radial-gradient(circle at 50% 95%,rgba(86,255,205,.35),transparent 40%),
+    linear-gradient(180deg,#f8fdff,#eaf7ff);
+}
+.orb{
+  position:fixed;
+  border-radius:999px;
+  filter:blur(55px);
+  opacity:.45;
+  z-index:-2;
+  animation:float 9s ease-in-out infinite;
+}
+.o1{width:360px;height:360px;background:#3bd5ff;top:90px;left:-90px}
+.o2{width:430px;height:430px;background:#ff5cc8;top:240px;right:-130px;animation-delay:2s}
+.o3{width:320px;height:320px;background:#52ffc6;bottom:-90px;left:35%;animation-delay:4s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-42px)}}
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 7%;
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(7,17,31,.08);
+}
+.logo{
+  font-size:26px;
+  font-weight:950;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.nav-links{display:flex;gap:24px;font-weight:850;color:#334155}
+.nav-cta{
+  padding:13px 19px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  color:white;
+  font-weight:950;
+  box-shadow:0 18px 45px rgba(0,140,255,.25);
+}
+
+.hero{padding:105px 7% 75px}
+.hero-grid{
+  max-width:1280px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:58px;
+  align-items:center;
+}
+.badge{
+  display:inline-flex;
+  padding:10px 15px;
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(0,140,255,.18);
+  color:#006bbd;
+  font-weight:950;
+  margin-bottom:22px;
+  box-shadow:0 16px 45px rgba(0,0,0,.06);
+}
+h1{
+  font-size:78px;
+  line-height:.92;
+  letter-spacing:-4px;
+  margin:0;
+}
+.grad{
+  background:linear-gradient(135deg,#07111f,#008cff,#ff35a8);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.hero p{
+  font-size:20px;
+  line-height:1.7;
+  color:#475569;
+  max-width:690px;
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.btn{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  padding:16px 23px;
+  border-radius:18px;
+  font-weight:950;
+  color:white;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  box-shadow:0 20px 55px rgba(0,140,255,.25);
+}
+.btn.secondary{
+  background:rgba(255,255,255,.78);
+  color:#07111f;
+  border:1px solid rgba(7,17,31,.1);
+  box-shadow:none;
+}
+
+.scene{perspective:1200px}
+.dash{
+  position:relative;
+  padding:24px;
+  border-radius:36px;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 35px 100px rgba(0,70,120,.18);
+  backdrop-filter:blur(24px);
+  transform:rotateY(-12deg) rotateX(8deg);
+  animation:dashFloat 6s ease-in-out infinite;
+  transition:.25s;
+}
+@keyframes dashFloat{0%,100%{translate:0 0}50%{translate:0 -18px}}
+.dash:hover{transform:rotateY(-4deg) rotateX(4deg) scale(1.02)}
+.dash-top{display:flex;justify-content:space-between;margin-bottom:18px}
+.dots{display:flex;gap:8px}.dot{width:12px;height:12px;border-radius:99px;background:#ff35a8}.dot:nth-child(2){background:#facc15}.dot:nth-child(3){background:#00b7ff}
+.live{
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(22,163,74,.13);
+  color:#15803d;
+  font-weight:950;
+  font-size:12px;
+}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.metric{
+  padding:15px;
+  border-radius:20px;
+  background:rgba(248,250,252,.85);
+  border:1px solid rgba(15,23,42,.07);
+}
+.metric small{color:#64748b;font-weight:850}
+.metric strong{display:block;font-size:28px;margin-top:6px}
+.lead{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  padding:16px;
+  border-radius:20px;
+  background:white;
+  border:1px solid rgba(15,23,42,.07);
+  margin-bottom:12px;
+  animation:pulseRow 3s infinite;
+}
+.lead:nth-child(2){animation-delay:.6s}
+.lead:nth-child(3){animation-delay:1.2s}
+@keyframes pulseRow{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+.lead span{display:block;color:#64748b;font-size:13px;margin-top:3px}
+.score{
+  padding:8px 11px;
+  border-radius:999px;
+  background:rgba(22,163,74,.13);
+  color:#15803d;
+  font-weight:950;
+  height:max-content;
+}
+.floating{
+  position:absolute;
+  padding:13px 16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 20px 55px rgba(0,70,120,.13);
+  font-weight:950;
+  animation:miniFloat 4.5s ease-in-out infinite;
+}
+.f1{top:-28px;right:18px}
+.f2{bottom:-28px;left:18px;animation-delay:1.2s}
+@keyframes miniFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+.section{padding:90px 7%}
+.section-heading{text-align:center;max-width:780px;margin:0 auto 54px}
+.eyebrow{color:#008cff;font-weight:950;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
+.section-heading h2{font-size:50px;margin:0;letter-spacing:-2px}
+.section-heading p{color:#64748b;font-size:18px;line-height:1.6}
+
+.features,.pricing-grid{
+  max-width:1240px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:26px;
+}
+.feature,.price-card{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:34px;
+  padding:32px;
+  box-shadow:0 25px 80px rgba(0,70,120,.12);
+  backdrop-filter:blur(24px);
+  transition:.25s;
+}
+.feature:hover,.price-card:hover{transform:translateY(-10px)}
+.feature h3,.price-card h3{font-size:28px;margin:0 0 10px}
+.feature p,.sub{color:#64748b;line-height:1.6}
+.price{font-size:48px;font-weight:950;letter-spacing:-2px;margin:16px 0}
+.price small{font-size:16px;color:#64748b}
+.price-card ul{list-style:none;padding:0;margin:26px 0}
+.price-card li{padding:11px 0;border-bottom:1px solid rgba(15,23,42,.08)}
+.price-card li:before{content:"?";color:#008cff;font-weight:950;margin-right:8px}
+.growth{
+  transform:scale(1.045);
+  border:1px solid rgba(0,140,255,.35);
+  box-shadow:0 35px 110px rgba(0,140,255,.22);
+}
+.agency{
+  background:linear-gradient(145deg,rgba(255,255,255,.85),rgba(255,247,210,.82));
+  border:1px solid rgba(245,158,11,.35);
+}
+.card-badge{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(0,140,255,.12);
+  color:#006bbd;
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:12px;
+}
+.gold{background:rgba(245,158,11,.16);color:#92400e}
+.card-actions{display:flex;flex-direction:column;gap:10px}
+.buy-btn,.demo-btn{
+  display:block;
+  text-align:center;
+  padding:16px;
+  border-radius:17px;
+  font-weight:950;
+  transition:.25s;
+}
+.buy-btn{
+  color:white;
+  background:linear-gradient(135deg,#008cff,#ff35a8);
+  box-shadow:0 18px 45px rgba(0,140,255,.2);
+}
+.demo-btn{
+  background:rgba(255,255,255,.7);
+  border:1px solid rgba(15,23,42,.1);
+}
+.buy-btn:hover,.demo-btn:hover{transform:translateY(-3px)}
+
+.final-cta{text-align:center;padding:90px 7%}
+.final-cta h2{font-size:48px;letter-spacing:-2px;margin:0 0 15px}
+.final-cta p{color:#64748b;font-size:18px}
+.footer{padding:32px 7%;display:flex;justify-content:space-between;color:#64748b;border-top:1px solid rgba(15,23,42,.08)}
+
+@media(max-width:950px){
+  .nav-links{display:none}
+  .hero-grid,.features,.pricing-grid{grid-template-columns:1fr}
+  h1{font-size:48px}
+  .growth{transform:none}
+}
+</style>
+<style id="mobile-ui-final-fix">
+html,body{
+  width:100%!important;
+  min-height:100%!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+}
+
+@media(max-width:768px){
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    zoom:1!important;
+  }
+
+  body{
+    display:block!important;
+  }
+
+  .page,
+  .container,
+  .main,
+  main,
+  section,
+  .auth,
+  .auth-page,
+  .login-page,
+  .register-page,
+  .checkout,
+  .dashboard,
+  .wrapper{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:18px!important;
+  }
+
+  .card,
+  .panel,
+  .box,
+  .form-card,
+  .login-card,
+  .register-card,
+  .checkout-card,
+  .table-card,
+  .hero-card,
+  .live-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0 0 16px!important;
+    padding:20px!important;
+    border-radius:22px!important;
+  }
+
+  .hero,
+  .grid,
+  .cards,
+  .stats,
+  .form-grid,
+  .checkout,
+  .dashboard-grid,
+  .two-col,
+  .columns{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+
+  nav,
+  .nav,
+  .navbar{
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:10px!important;
+    padding:14px 18px!important;
+  }
+
+  .nav-links{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:4px!important;
+  }
+
+  .nav-links a{
+    white-space:nowrap!important;
+    font-size:13px!important;
+    flex:0 0 auto!important;
+  }
+
+  h1{
+    font-size:32px!important;
+    line-height:1.08!important;
+    letter-spacing:-1px!important;
+  }
+
+  h2{
+    font-size:24px!important;
+    line-height:1.15!important;
+  }
+
+  p{
+    font-size:15px!important;
+  }
+
+  input,
+  select,
+  textarea{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    font-size:16px!important;
+  }
+
+  button,
+  .btn{
+    width:100%!important;
+    max-width:100%!important;
+    min-height:48px!important;
+    justify-content:center!important;
+  }
+
+  img,
+  video,
+  iframe{
+    max-width:100%!important;
+    height:auto!important;
+  }
+
+  table{
+    min-width:900px!important;
+  }
+
+  .table-card{
+    overflow-x:auto!important;
+  }
+}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="bg"></div>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+<nav class="nav">
+  <div class="logo">FlerKunder</div>
+  <div class="nav-links">
+    <a href="#features">Funktioner</a>
+    <a href="#pricing">Priser</a>
+    <a href="/auth/login-page">Lead Agent</a>
+  </div>
+  <a class="nav-cta" href="/auth/register-page">Testa gratis</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="badge">? 5 leads gratis – börja på 60 sekunder</div>
+      <h1><span class="grad">Få fler kunder</span><br>med AI-driven leadgenerering.</h1>
+      <p>FlerKunder hittar företag, emails och skapar personliga säljpitchar åt dig. Ett snabbare sätt att fylla kalendern med riktiga möjligheter.</p>
+      <div class="hero-actions">
+        <a class="btn" href="/auth/register-page">Testa gratis</a>
+        <a class="btn secondary" href="#pricing">Se priser</a>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="dash" id="dash">
+        <div class="floating f1">+37 nya leads idag</div>
+        <div class="floating f2">Gmail-utkast redo</div>
+
+        <div class="dash-top">
+          <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+          <div class="live">LIVE DASHBOARD</div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><small>Leads</small><strong id="dashLeads">600</strong></div>
+          <div class="metric"><small>Emails</small><strong>421</strong></div>
+          <div class="metric"><small>Pitchar</small><strong>318</strong></div>
+        </div>
+
+        <div class="lead"><div><strong>Malmö Flyttjänst AB</strong><span>AI-pitch skapad · Email hittad</span></div><div class="score">92</div></div>
+        <div class="lead"><div><strong>JC Flytt & Städ</strong><span>Gmail-utkast redo</span></div><div class="score">88</div></div>
+        <div class="lead"><div><strong>Acta Flytt</strong><span>Google Places · Hemsida hittad</span></div><div class="score">81</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="section">
+  <div class="section-heading">
+    <div class="eyebrow">Systemet</div>
+    <h2>Från sökning till färdigt säljutkast</h2>
+    <p>Hitta leads, filtrera, skapa pitchar och förbered utskick i ett enda flöde.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature"><h3>Lead Finder</h3><p>Sök stad och bransch. Systemet tar fram företag automatiskt.</p></div>
+    <div class="feature"><h3>Email Finder</h3><p>Hitta kontaktmail från företagens hemsidor utan manuellt letande.</p></div>
+    <div class="feature"><h3>AI Pitch + Gmail</h3><p>Skapa personliga mail som säljer ditt företag, inte FlerKunder.</p></div>
+  </div>
+</section>
+
+<section id="pricing" class="section">
+  <div class="section-heading">
+    <div class="eyebrow">Priser</div>
+    <h2>Välj paket och börja direkt</h2>
+    <p>Betala med Swish eller boka demo om du vill se systemet först.</p>
+  </div>
+<div class="pricing-grid">
+
+
+    <!-- STARTER -->
+    <div class="price-card">
+
+      <h3>Starter</h3>
+
+      <div class="price">
+        299 <small>kr/mån</small>
+      </div>
+
+      <p class="sub">
+        För mindre företag som vill börja få in leads snabbt.
+      </p>
+
+      <ul>
+        <li>100 leads per månad</li>
+        <li>Max 50 leads per sökning</li>
+        <li>Email Finder</li>
+        <li>Vanliga AI-pitchar</li>
+        <li>Gmail-utkast</li>
+
+        <li style="opacity:.45">
+          Gemini AI Research
+        </li>
+
+        <li style="opacity:.45">
+          AI Hemsideanalys
+        </li>
+      </ul>
+
+      <div class="card-actions">
+        <a class="buy-btn" href="/checkout/starter">
+          Köp direkt
+        </a>
+
+        <a class="demo-btn" href="/booking/">
+          Boka demo
+        </a>
+      </div>
+    </div>
+
+    <!-- GROWTH -->
+    <div class="price-card growth">
+
+      <div class="card-badge">
+        Mest populär
+      </div>
+
+      <h3>Growth</h3>
+
+      <div class="price">
+        699 <small>kr/mån</small>
+      </div>
+
+      <p class="sub">
+        För företag som vill automatisera sin outbound.
+      </p>
+
+      <ul>
+        <li>600 leads per månad</li>
+        <li>Max 100 leads per sökning</li>
+        <li>Email Finder</li>
+        <li>Gmail-utkast</li>
+        <li>Lead scoring</li>
+
+        <li>
+          ? Gemini AI Research
+        </li>
+
+        <li>
+          ? AI Hemsideanalys
+        </li>
+
+        <li>
+          ? Personliga AI-pitchar
+        </li>
+
+        <li>
+          ? Smart relevansmotor
+        </li>
+
+        <li>
+          ? Företagsresearch automatiskt
+        </li>
+      </ul>
+
+      <div class="card-actions">
+        <a class="buy-btn" href="/checkout/growth">
+          Köp direkt
+        </a>
+
+        <a class="demo-btn" href="/booking/">
+          Boka demo
+        </a>
+      </div>
+    </div>
+
+    <!-- AGENCY -->
+    <div class="price-card agency">
+
+      <div class="card-badge gold">
+        Premium
+      </div>
+
+      <h3>Agency</h3>
+
+      <div class="price">
+        1499 <small>kr/mån</small>
+      </div>
+
+      <p class="sub">
+        För byråer och säljteam som vill skala aggressivt.
+      </p>
+
+      <ul>
+        <li>2000 leads per månad</li>
+        <li>Max 500 leads per sökning</li>
+
+        <li>
+          ? Gemini AI Research
+        </li>
+
+        <li>
+          ? AI Hemsideanalys
+        </li>
+
+        <li>
+          ? Personliga AI-pitchar
+        </li>
+
+        <li>
+          ? Bulk AI-pitchar
+        </li>
+
+        <li>
+          ? Prioriterad AI-processning
+        </li>
+
+        <li>
+          ? Högsta prioritet
+        </li>
+
+        <li>
+          ? Avancerad lead scoring
+        </li>
+      </ul>
+
+      <div class="card-actions">
+        <a class="buy-btn" href="/checkout/agency">
+          Köp direkt
+        </a>
+
+        <a class="demo-btn" href="/booking/">
+          Boka demo
+        </a>
+      </div>
+    </div>
+
+</div>
+
+  </div>
+</section>
+
+<section class="final-cta">
+  <h2>Redo att testa?</h2>
+  <p>Skapa konto och få dina första 5 leads gratis.</p>
+  <a class="btn" href="/auth/register-page">Starta gratis</a>
+</section>
+
+<footer class="footer">
+  <span>FlerKunder © 2026</span>
+  <a href="/admin-login">Admin</a>
+</footer>
+
+<script>
+const dash=document.getElementById("dash");
+document.addEventListener("mousemove",e=>{
+  if(!dash)return;
+  const x=(e.clientX/window.innerWidth-.5)*12;
+  const y=(e.clientY/window.innerHeight-.5)*-10;
+  dash.style.transform=`rotateY(${x-10}deg) rotateX(${y+6}deg)`;
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

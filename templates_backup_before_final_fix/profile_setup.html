@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Företagsprofil - FlerKunder</title>
+<style>
+body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
+.main{max-width:850px;margin:60px auto;padding:30px}
+.panel{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:30px}
+input,textarea{width:100%;padding:15px;margin:10px 0 18px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:#020617;color:white}
+button,a{border:0;border-radius:14px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;font-weight:900;padding:14px 18px;text-decoration:none;cursor:pointer}
+label{color:#cbd5e1;font-weight:900}
+p{color:#94a3b8}
+</style>
+<style id="mobile-ui-final-fix">
+html,body{
+  width:100%!important;
+  min-height:100%!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+}
+
+@media(max-width:768px){
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    zoom:1!important;
+  }
+
+  body{
+    display:block!important;
+  }
+
+  .page,
+  .container,
+  .main,
+  main,
+  section,
+  .auth,
+  .auth-page,
+  .login-page,
+  .register-page,
+  .checkout,
+  .dashboard,
+  .wrapper{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    min-height:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:18px!important;
+  }
+
+  .card,
+  .panel,
+  .box,
+  .form-card,
+  .login-card,
+  .register-card,
+  .checkout-card,
+  .table-card,
+  .hero-card,
+  .live-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0 0 16px!important;
+    padding:20px!important;
+    border-radius:22px!important;
+  }
+
+  .hero,
+  .grid,
+  .cards,
+  .stats,
+  .form-grid,
+  .checkout,
+  .dashboard-grid,
+  .two-col,
+  .columns{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+
+  nav,
+  .nav,
+  .navbar{
+    width:100%!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:10px!important;
+    padding:14px 18px!important;
+  }
+
+  .nav-links{
+    width:100%!important;
+    max-width:100%!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:8px!important;
+    padding-bottom:4px!important;
+  }
+
+  .nav-links a{
+    white-space:nowrap!important;
+    font-size:13px!important;
+    flex:0 0 auto!important;
+  }
+
+  h1{
+    font-size:32px!important;
+    line-height:1.08!important;
+    letter-spacing:-1px!important;
+  }
+
+  h2{
+    font-size:24px!important;
+    line-height:1.15!important;
+  }
+
+  p{
+    font-size:15px!important;
+  }
+
+  input,
+  select,
+  textarea{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    font-size:16px!important;
+  }
+
+  button,
+  .btn{
+    width:100%!important;
+    max-width:100%!important;
+    min-height:48px!important;
+    justify-content:center!important;
+  }
+
+  img,
+  video,
+  iframe{
+    max-width:100%!important;
+    height:auto!important;
+  }
+
+  table{
+    min-width:900px!important;
+  }
+
+  .table-card{
+    overflow-x:auto!important;
+  }
+}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+<body>
+<div class="main">
+  <div class="panel">
+    <h1>Din företagsprofil</h1>
+    <p>Detta används för att skapa personliga emails som säljer ditt företag, inte FlerKunder.</p>
+
+    <form method="POST">
+      <label>Ditt namn</label>
+      <input name="sender_name" value="{{ profile.sender_name or '' }}" placeholder="Ex: Elias">
+
+      <label>Företagsnamn</label>
+      <input name="company_name" value="{{ profile.company_name or '' }}" placeholder="Ex: Malmö Flytthjälp AB">
+
+      <label>Vad erbjuder ni?</label>
+      <textarea name="offer" rows="4" placeholder="Ex: hjälpa företag och privatpersoner med snabb, trygg och prisvärd flytt">{{ profile.offer or '' }}</textarea>
+
+      <label>Vem hjälper ni?</label>
+      <input name="target_customer" value="{{ profile.target_customer or '' }}" placeholder="Ex: privatpersoner och företag i Malmö">
+
+      <label>Proof / tidigare resultat</label>
+      <textarea name="proof" rows="3" placeholder="Ex: 100+ nöjda kunder, 4.8 i betyg, snabb offert inom 24h">{{ profile.proof or '' }}</textarea>
+
+      <label>Telefon</label>
+      <input name="phone" value="{{ profile.phone or '' }}" placeholder="Ex: 070...">
+
+      <label>Hemsida</label>
+      <input name="website" value="{{ profile.website or '' }}" placeholder="https://...">
+
+      <button type="submit">Spara profil</button>
+      <a href="/lead-agent">Till Lead Agent</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

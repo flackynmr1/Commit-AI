@@ -1,0 +1,131 @@
+﻿import re
+
+
+def clean(value, fallback=""):
+    value = (value or "").strip()
+    value = re.sub(r"\s+", " ", value)
+    return value if value else fallback
+
+
+def improve_text(text):
+    text = clean(text)
+
+    fixes = {
+        "hemsdior": "hemsidor",
+        "företagare få": "företagare att få",
+        "få mer kunder": "få fler kunder",
+        "mer kunder": "fler kunder",
+        "ai": "AI",
+        "mail": "mejl",
+        "pitch": "pitchar",
+    }
+
+    for wrong, right in fixes.items():
+        text = text.replace(wrong, right)
+
+    return text
+
+
+def get_attr(obj, name, fallback=""):
+    return getattr(obj, name, fallback) or fallback
+
+
+def build_profile(profile=None):
+    profile = profile or {}
+
+    return {
+        "sender_name": improve_text(profile.get("sender_name", "Ditt namn")),
+        "company_name": improve_text(profile.get("company_name", "Ditt företag")),
+        "offer": improve_text(profile.get("offer", "hjälpa företag att få fler kunder")),
+        "target_customer": improve_text(profile.get("target_customer", "företag som vill växa")),
+        "proof": improve_text(profile.get("proof", "")),
+        "phone": clean(profile.get("phone", "")),
+        "website": clean(profile.get("website", "")),
+        "tone": clean(profile.get("tone", "professionell, enkel och trevlig")),
+    }
+
+
+def detect_angle(lead, profile):
+    industry = clean(get_attr(lead, "industry", "")).lower()
+    city = clean(get_attr(lead, "city", ""))
+
+    if any(x in industry for x in ["bygg", "vvs", "tak", "måleri", "snick"]):
+        return {
+            "problem": "många kunder jämför flera företag innan de ber om offert",
+            "value": "få fler relevanta offertförfrågningar och snabbare uppföljning",
+            "cta": "Skulle det vara intressant att se hur ni kan få in fler förfrågningar i " + city + "?"
+        }
+
+    if any(x in industry for x in ["städ", "flytt", "service"]):
+        return {
+            "problem": "lokala servicebolag tappar ofta kunder när uppföljningen tar för lång tid",
+            "value": "hitta fler lokala företag/kunder och skapa tydligare kontaktflöden",
+            "cta": "Vill du att jag skickar ett kort exempel på hur det hade kunnat se ut för er?"
+        }
+
+    if any(x in industry for x in ["salong", "klinik", "frisör", "massage", "skönhet"]):
+        return {
+            "problem": "många bokningar avgörs av tydlig synlighet och snabb kontakt",
+            "value": "få fler bokningsförfrågningar och bättre uppföljning",
+            "cta": "Vill du att jag skickar ett snabbt exempel anpassat för er verksamhet?"
+        }
+
+    if any(x in industry for x in ["restaurang", "cafe", "bar"]):
+        return {
+            "problem": "restauranger behöver synas tydligt lokalt för att få fler gäster och bokningar",
+            "value": "stärka lokal synlighet och skapa fler kundförfrågningar",
+            "cta": "Är det okej om jag skickar ett kort exempel på hur ni kan använda detta?"
+        }
+
+    return {
+        "problem": "många företag lägger tid på manuell kundjakt utan tydlig struktur",
+        "value": "hitta fler relevanta leads och skapa bättre första kontakt",
+        "cta": "Skulle det vara relevant att jag skickar mer info?"
+    }
+
+
+def create_pitch_for_lead(lead, profile=None, custom_message=None):
+    profile = build_profile(profile)
+
+    lead_company = clean(get_attr(lead, "company_name", "ert företag"))
+    lead_industry = clean(get_attr(lead, "industry", "er bransch"))
+    lead_city = clean(get_attr(lead, "city", ""))
+
+    sender_name = profile["sender_name"]
+    sender_company = profile["company_name"]
+    offer = profile["offer"]
+    target_customer = profile["target_customer"]
+    proof = profile["proof"]
+    phone = profile["phone"]
+    website = profile["website"]
+
+    angle = detect_angle(lead, profile)
+
+    proof_line = f"\n\nKort bakgrund: {proof}" if proof else ""
+    website_line = f"\n\nHär finns mer info: {website}" if website else ""
+    phone_line = f"\n\nDu når mig även på {phone}." if phone else ""
+
+    subject = f"Snabb fråga till {lead_company}"
+
+    body = f"""Hej {lead_company},
+
+Jag såg att ni arbetar inom {lead_industry}{f" i {lead_city}" if lead_city else ""} och tänkte att detta kunde vara relevant.
+
+Ofta är utmaningen att {angle["problem"]}. På {sender_company} arbetar vi med att {offer} för {target_customer}. Det kan hjälpa företag att {angle["value"]}.{proof_line}
+
+{angle["cta"]}
+
+Vänliga hälsningar,
+{sender_name}
+{sender_company}{phone_line}{website_line}
+"""
+
+    return subject, body.strip()
+
+
+def create_pitch_for_many(leads, profile=None, custom_message=None):
+    results = []
+    for lead in leads:
+        subject, body = create_pitch_for_lead(lead, profile, custom_message)
+        results.append((lead, subject, body))
+    return results

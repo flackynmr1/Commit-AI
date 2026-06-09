@@ -100,6 +100,7 @@ def register_page():
 
 @auth.route("/login-page", methods=["GET", "POST"])
 def login_page():
+    session.pop("_flashes", None)
     if request.method == "GET":
         return render_template("login.html")
 
@@ -119,6 +120,7 @@ def login_page():
 
 @auth.route("/logout")
 def logout():
+    session.pop("_flashes", None)
     session.clear()
     return redirect("/")
 
@@ -213,5 +215,6 @@ def profile(current_user):
             "created_at": current_user.created_at.isoformat() if current_user.created_at else None,
         }
     }), 200
+
 
 

@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Dashboard - FlerKunder</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+body{margin:0;background:#05070f;color:white;font-family:Arial,sans-serif}
+.dash-layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:rgba(255,255,255,.055);border-right:1px solid rgba(255,255,255,.1);padding:28px;backdrop-filter:blur(18px)}
+.logo{font-size:26px;font-weight:900;margin-bottom:35px;background:linear-gradient(135deg,#23d5ff,#ff2d93);-webkit-background-clip:text;color:transparent}
+.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:14px 16px;border-radius:14px;margin-bottom:8px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,.1);color:white}
+.main{padding:34px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.top h1{font-size:52px;margin:0;letter-spacing:-2px}
+.top p{color:#94a3b8;margin-top:8px}
+.btn{display:inline-block;padding:13px 18px;border-radius:14px;background:linear-gradient(135deg,#23d5ff,#ff2d93);color:white;text-decoration:none;font-weight:900}
+.grid{display:grid;gap:18px}
+.kpis{grid-template-columns:repeat(4,1fr);margin-bottom:28px}
+.card{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px;backdrop-filter:blur(18px);box-shadow:0 25px 70px rgba(0,0,0,.28)}
+.card span{color:#94a3b8}
+.card strong{display:block;font-size:34px;margin-top:10px}
+.two{grid-template-columns:1.1fr .9fr}
+.section{margin-bottom:24px}
+.section h2{font-size:28px;margin-bottom:16px}
+.task{display:flex;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.08);color:#dbeafe}
+.badge{padding:7px 11px;border-radius:999px;background:rgba(35,213,255,.14);color:#b9f3ff;font-size:13px;font-weight:800}
+.roadmap{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.roadmap div{padding:16px;border-radius:16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09)}
+.quick{grid-template-columns:repeat(4,1fr)}
+.quick a{padding:18px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);text-decoration:none;color:white}
+.quick strong{display:block;margin-bottom:7px}
+.quick span{color:#94a3b8;font-size:14px}
+@media(max-width:900px){.dash-layout,.two,.kpis,.quick,.roadmap{grid-template-columns:1fr}.top{display:block}.main{padding:20px}}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="dash-layout">
+  <aside class="sidebar">
+    <div class="logo">FlerKunder</div>
+    <a class="active" href="/dashboard">Dashboard</a>
+    <a href="/lead-agent">Lead Agent</a>
+    <a href="/admin-portal">Adminportal</a>
+    <a href="/checklist">Checklista</a>
+    <a href="/booking/">Boka demo</a>
+    <a href="/dashboard">Startsida</a>
+    <a href="/admin-logout">Logga ut</a>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div>
+        <h1>Command Center</h1>
+        <p>Dagens mål, leads, pitchar och nästa actions samlat på ett ställe.</p>
+      </div>
+      <a class="btn" href="/lead-agent">Starta leadflöde</a>
+    </div>
+
+    <section class="grid kpis">
+      <div class="card"><span>Nya leads idag</span><strong>20</strong></div>
+      <div class="card"><span>Pitchar redo</span><strong>10</strong></div>
+      <div class="card"><span>Bokningar</span><strong>3</strong></div>
+      <div class="card"><span>Veckomål</span><strong>20k</strong></div>
+    </section>
+
+    <section class="grid quick section">
+      <a href="/lead-agent"><strong>Lead Agent</strong><span>Hitta leads och skapa pitchar</span></a>
+      <a href="/admin-portal"><strong>Adminportal</strong><span>Se bokningar och mailutkast</span></a>
+      <a href="/checklist"><strong>Checklista</strong><span>Dagens och veckans plan</span></a>
+      <a href="/booking/"><strong>Boka demo</strong><span>Visa kundformuläret</span></a>
+    </section>
+
+    <section class="grid two">
+      <div class="card section">
+        <h2>Gör idag</h2>
+        <div class="task"><span>Hitta 20 nya leads</span><b class="badge">Mål idag</b></div>
+        <div class="task"><span>Skapa 10 personliga pitchar</span><b class="badge">Prioritet</b></div>
+        <div class="task"><span>Följ upp varma leads</span><b class="badge">Intäkt</b></div>
+        <div class="task"><span>Boka minst 2 demos</span><b class="badge">Viktigt</b></div>
+      </div>
+
+      <div class="card section">
+        <h2>Motivation</h2>
+        <p style="color:#cbd5e1;line-height:1.7">
+          Dagens fokus är inte att bygga mer funktioner. Dagens fokus är att skapa fler kundsamtal.
+          Varje lead, pitch och demo flyttar FlerKunder närmare första betalande kunderna.
+        </p>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Veckoplan</h2>
+      <div class="roadmap">
+        <div><strong>100 leads</strong><br><span style="color:#94a3b8">Bygg pipeline</span></div>
+        <div><strong>40 pitchar</strong><br><span style="color:#94a3b8">Skapa mailutkast</span></div>
+        <div><strong>10 demos</strong><br><span style="color:#94a3b8">Boka samtal</span></div>
+        <div><strong>2 kunder</strong><br><span style="color:#94a3b8">Stäng första affärer</span></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <h2>Det enda som är kvar tekniskt</h2>
+      <div class="roadmap">
+        <div>Gmail API för riktiga mailutkast/utskick</div>
+        <div>Google Places API för riktiga leads</div>
+        <div>Stripe för betalningar</div>
+        <div>Google Calendar API för automatisk mötesbokning</div>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

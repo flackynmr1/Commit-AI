@@ -1,205 +1,254 @@
+﻿import re
+from urllib.request import Request, urlopen
+from html.parser import HTMLParser
+
+
 def clean(value, fallback=""):
-    if value is None:
-        return fallback
-    value = str(value).strip()
+    value = (value or "").strip()
+    value = re.sub(r"\s+", " ", value)
     return value if value else fallback
 
 
-def lower(value):
-    return clean(value).lower()
+def fix_text(text):
+    text = clean(text)
+    fixes = {
+        "hemsdior": "hemsidor",
+        "mer kunder": "fler kunder",
+        "få mer": "få fler",
+        "ai": "AI",
+        "mail": "mejl",
+        "steavfel": "stavfel",
+        "service bolag": "servicebolag",
+    }
+    for wrong, right in fixes.items():
+        text = re.sub(rf"\b{re.escape(wrong)}\b", right, text, flags=re.IGNORECASE)
+    return text
 
 
-SERVICE_RULES = {
-    "flytt": {
-        "keywords": ["flytt", "transport", "bortforsling", "magasinering", "kontorsflytt"],
-        "targets": {
-            "fastighetsbolag": "fastighetsbolag hanterar lokaler, hyresgäster och flyttar oftare än många andra företag",
-            "mäklare": "mäklare möter kunder som ofta är mitt i en flyttprocess",
-            "kontor": "kontor kan behöva hjälp med kontorsflyttar, möbler och transport",
-            "coworking": "coworking-miljöer har ofta företag som växer, byter plats eller behöver flytthjälp",
-            "bygg": "byggföretag kan behöva transport, bortforsling och materialflytt",
-            "lager": "lager och logistikverksamheter har ofta transport- och flyttbehov",
-            "butik": "butiker kan behöva hjälp med leveranser, ommöblering eller flytt",
-        },
-        "angle": "flytt, transport och bortforsling",
-        "cta": "vill ni att jag skickar över ett kort exempel på hur vi kan hjälpa vid nästa flytt eller transport?",
-    },
-
-    "stad": {
-        "keywords": ["städ", "städfirma", "lokalvård", "rengöring", "kontorsstäd"],
-        "targets": {
-            "kontor": "kontor behöver ofta löpande städning för att hålla arbetsmiljön fräsch",
-            "restaurang": "restauranger har höga krav på renlighet och regelbunden städning",
-            "hotell": "hotell är beroende av renlighet och återkommande städflöden",
-            "gym": "gym behöver ofta frekvent städning på grund av många dagliga besökare",
-            "klinik": "kliniker behöver en ren och trygg miljö för kunder och personal",
-            "salong": "salonger behöver hålla lokalerna rena och representativa varje dag",
-            "fastighetsbolag": "fastighetsbolag behöver ofta trappstädning, flyttstädning och lokalvård",
-        },
-        "angle": "städning och lokalvård",
-        "cta": "vill ni att jag skickar över ett kort upplägg för hur vi kan hjälpa med städningen?",
-    },
-
-    "webb": {
-        "keywords": ["webb", "hemsida", "webbyrå", "seo", "design", "digital närvaro"],
-        "targets": {
-            "restaurang": "restauranger vinner ofta kunder genom en tydlig hemsida, meny och bokningsflöde",
-            "bygg": "byggföretag kan få fler offertförfrågningar med en tydlig hemsida och lokalt SEO",
-            "vvs": "VVS-företag kan få fler akuta och lokala förfrågningar via en bättre hemsida",
-            "salong": "salonger får ofta fler bokningar när tjänster, priser och kontaktvägar är tydliga",
-            "klinik": "kliniker behöver förtroende, tydlig information och smidiga bokningsvägar online",
-            "butik": "butiker kan öka besök och förfrågningar med bättre digital synlighet",
-            "gym": "gym kan få fler provträningar och leads med bättre landningssidor",
-        },
-        "angle": "hemsida, SEO och fler kundförfrågningar",
-        "cta": "vill ni att jag skickar ett kort exempel på vad som skulle kunna förbättras digitalt?",
-    },
-
-    "marketing": {
-        "keywords": ["marketing", "marknadsföring", "annonser", "leads", "reklam", "sociala medier"],
-        "targets": {
-            "restaurang": "restauranger kan få fler bokningar med bättre annonser och lokal synlighet",
-            "salong": "salonger kan fylla kalendern med lokala kampanjer och återkommande kunder",
-            "gym": "gym kan få fler provträningar genom lokala kampanjer",
-            "bygg": "byggföretag kan få fler offertförfrågningar med rätt leadflöde",
-            "vvs": "VVS-företag kan få fler lokala förfrågningar när kunder söker akut hjälp",
-            "klinik": "kliniker kan få fler bokningar genom tydligare erbjudanden och annonser",
-            "butik": "butiker kan driva fler besök och köp med lokal marknadsföring",
-        },
-        "angle": "marknadsföring och leadgenerering",
-        "cta": "vill ni att jag skickar över ett kort förslag på hur ni kan få fler förfrågningar?",
-    },
-
-    "foto": {
-        "keywords": ["foto", "fotograf", "video", "content", "bilder", "film"],
-        "targets": {
-            "restaurang": "restauranger säljer mycket på bra bilder av mat, lokal och känsla",
-            "hotell": "hotell behöver starka bilder för att bygga förtroende och få fler bokningar",
-            "mäklare": "mäklare är beroende av bra bilder för att skapa intresse",
-            "salong": "salonger kan visa resultat, miljö och känsla med bättre content",
-            "gym": "gym kan få fler leads med starkt video- och bildmaterial",
-            "butik": "butiker kan lyfta produkter och kampanjer med bättre content",
-        },
-        "angle": "foto, video och content",
-        "cta": "vill ni att jag skickar över ett kort exempel på content som skulle passa er?",
-    },
-}
-
-
-def detect_service_category(profile):
-    text = lower(
-        " ".join([
-            clean(profile.get("company_name")),
-            clean(profile.get("offer")),
-            clean(profile.get("target_customer")),
-            clean(profile.get("proof")),
-        ])
-    )
-
-    for category, data in SERVICE_RULES.items():
-        for keyword in data["keywords"]:
-            if keyword in text:
-                return category
-
-    return "general"
-
-
-def lead_text(lead):
-    return lower(
-        " ".join([
-            clean(getattr(lead, "company_name", "")),
-            clean(getattr(lead, "industry", "")),
-            clean(getattr(lead, "city", "")),
-            clean(getattr(lead, "website", "")),
-            clean(getattr(lead, "source", "")),
-        ])
-    )
-
-
-def get_lead_industry(lead):
-    return lower(getattr(lead, "industry", ""))
-
-
-def score_lead_relevance(lead, profile):
-    category = detect_service_category(profile)
-    text = lead_text(lead)
-    industry = get_lead_industry(lead)
-
-    company_name = clean(profile.get("company_name"), "ert företag")
-    offer = clean(profile.get("offer"), "våra tjänster")
-    target_customer = clean(profile.get("target_customer"), "företag")
-
-    if category == "general":
-        return {
-            "score": 55,
-            "category": "general",
-            "is_relevant": True,
-            "angle": offer,
-            "reason": f"ni matchar målgruppen som {company_name} vill nå",
-            "matched_target": target_customer,
-            "cta": "vill ni att jag skickar över lite mer information?",
-        }
-
-    rules = SERVICE_RULES[category]
-
-    best_match = None
-    best_reason = None
-    score = 25
-
-    for target, reason in rules["targets"].items():
-        if target in text or target in industry:
-            best_match = target
-            best_reason = reason
-            score = 90
-            break
-
-    if not best_match:
-        score = 45
-        best_match = industry or "företag"
-        best_reason = (
-            f"ni kan passa målgruppen för {company_name}, men matchningen är inte helt säker"
-        )
-
+def build_ai_profile(raw):
+    service_type = clean(raw.get("service_type"), "other")
     return {
-        "score": score,
-        "category": category,
-        "is_relevant": score >= 60,
-        "angle": rules["angle"],
-        "reason": best_reason,
-        "matched_target": best_match,
-        "cta": rules["cta"],
+        "sender_name": fix_text(raw.get("sender_name", "")),
+        "company_name": fix_text(raw.get("company_name", "")),
+        "service_type": service_type,
+        "offer": fix_text(raw.get("offer", "")),
+        "problem_solved": fix_text(raw.get("problem_solved", "")),
+        "target_customer": fix_text(raw.get("target_customer", "")),
+        "customer_result": fix_text(raw.get("customer_result", "")),
+        "proof": fix_text(raw.get("proof", "")),
+        "phone": clean(raw.get("phone", "")),
+        "website": clean(raw.get("website", "")),
+        "tone": clean(raw.get("tone", "professionell, enkel och inte för säljig")),
     }
 
 
-def build_relevance_sentence(lead, profile):
-    relevance = score_lead_relevance(lead, profile)
+class Extractor(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.skip = False
+        self.parts = []
 
-    company = clean(getattr(lead, "company_name", ""), "ert företag")
+    def handle_starttag(self, tag, attrs):
+        if tag in ["script", "style", "noscript"]:
+            self.skip = True
+
+    def handle_endtag(self, tag):
+        if tag in ["script", "style", "noscript"]:
+            self.skip = False
+
+    def handle_data(self, data):
+        if not self.skip:
+            d = clean(data)
+            if d:
+                self.parts.append(d)
+
+
+def fetch_website_text(url, limit=2500):
+    url = clean(url)
+    if not url:
+        return ""
+    if not url.startswith("http"):
+        url = "https://" + url
+    try:
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req, timeout=5) as res:
+            html = res.read().decode("utf-8", errors="ignore")
+        ex = Extractor()
+        ex.feed(html)
+        return clean(" ".join(ex.parts))[:limit]
+    except Exception:
+        return ""
+
+
+SERVICE_KEYWORDS = {
+    "website": ["hemsida", "webb", "landningssida", "design", "konvertering", "offert", "kontakt"],
+    "seo": ["google", "seo", "synlighet", "sök", "lokal", "ranking"],
+    "ads": ["annonser", "google ads", "meta ads", "kampanj", "trafik", "kunder"],
+    "leadgen": ["leads", "kundförfrågningar", "möten", "prospekt", "försäljning"],
+    "ai_chatbot": ["svar", "kundservice", "bokning", "chatbot", "receptionist", "kontakt"],
+    "marketing": ["marknadsföring", "synlighet", "sociala medier", "kampanj", "varumärke"],
+    "vvs": ["vvs", "rör", "installation", "värme", "vatten", "avlopp", "entreprenad"],
+    "other": [],
+}
+
+INDUSTRY_KEYWORDS = {
+    "flytt_stad": ["flytt", "städ", "flyttfirma", "städfirma"],
+    "bygg": ["bygg", "tak", "snick", "måleri", "renovering"],
+    "vvs": ["vvs", "rör", "värme", "avlopp", "installation"],
+    "salong": ["salong", "frisör", "klinik", "massage", "skönhet"],
+    "restaurang": ["restaurang", "cafe", "café", "bar", "mat"],
+    "professional": ["redovisning", "juridik", "konsult", "byrå"],
+}
+
+
+def detect_industry_group(industry, website_text=""):
+    text = f"{industry} {website_text}".lower()
+    for group, words in INDUSTRY_KEYWORDS.items():
+        if any(w in text for w in words):
+            return group
+    return "general"
+
+
+def detect_service_type(profile):
+    service_type = clean(profile.get("service_type", "other")).lower()
+    raw = " ".join([
+        clean(profile.get("offer", "")),
+        clean(profile.get("problem_solved", "")),
+        clean(profile.get("target_customer", "")),
+        clean(profile.get("customer_result", "")),
+    ]).lower()
+
+    if service_type and service_type != "other":
+        return service_type
+
+    scores = {}
+    for stype, words in SERVICE_KEYWORDS.items():
+        scores[stype] = sum(1 for w in words if w in raw)
+
+    best = max(scores, key=scores.get)
+    return best if scores[best] > 0 else "other"
+
+
+def calculate_match(service_type, industry_group, website_text, profile):
+    score = 40
+    reasons = []
+    warnings = []
+
+    service_to_good_industries = {
+        "website": ["flytt_stad", "bygg", "vvs", "salong", "restaurang", "professional", "general"],
+        "seo": ["flytt_stad", "bygg", "vvs", "salong", "restaurang", "professional", "general"],
+        "ads": ["flytt_stad", "salong", "restaurang", "professional", "general"],
+        "leadgen": ["bygg", "vvs", "professional", "general"],
+        "ai_chatbot": ["flytt_stad", "salong", "professional", "general"],
+        "marketing": ["flytt_stad", "salong", "restaurang", "professional", "general"],
+        "vvs": ["vvs", "bygg"],
+        "other": ["general"],
+    }
+
+    if industry_group in service_to_good_industries.get(service_type, []):
+        score += 35
+        reasons.append("tjänsten matchar leadens bransch")
+    else:
+        score -= 20
+        warnings.append("tjänsten verkar inte matcha leadens bransch särskilt bra")
+
+    if website_text:
+        score += 12
+        reasons.append("det finns information online att anpassa pitchen efter")
+
+    raw_target = clean(profile.get("target_customer", "")).lower()
+    if industry_group != "general" and any(w in raw_target for w in INDUSTRY_KEYWORDS.get(industry_group, [])):
+        score += 18
+        reasons.append("leadens bransch finns i din målgrupp")
+
+    if service_type == "vvs" and industry_group == "flytt_stad":
+        score = min(score, 35)
+        warnings.append("flytt/städ är inte en tydlig köpare av VVS-tjänster")
+
+    return max(0, min(score, 98)), reasons[:4], warnings[:3]
+
+
+def get_relevance_angle(service_type, industry_group):
+    if service_type == "website":
+        return {
+            "problem": "kunder ofta jämför flera företag innan de bestämmer sig",
+            "value": "göra hemsidan tydligare, bygga mer förtroende och få fler besökare att ta kontakt",
+            "angle": "fler offertförfrågningar via hemsidan",
+        }
+
+    if service_type == "seo":
+        return {
+            "problem": "många kunder söker lokalt på Google innan de väljer företag",
+            "value": "synas bättre när kunder söker efter era tjänster",
+            "angle": "bättre lokal synlighet",
+        }
+
+    if service_type == "ads":
+        return {
+            "problem": "det kan vara svårt att få ett jämnt inflöde av nya kunder",
+            "value": "driva mer relevant trafik och fler förfrågningar",
+            "angle": "fler kunder via annonsering",
+        }
+
+    if service_type == "ai_chatbot":
+        return {
+            "problem": "förfrågningar ofta tappas när kunder inte får svar snabbt",
+            "value": "svara snabbare, samla in kontaktuppgifter och boka fler samtal",
+            "angle": "snabbare kundrespons",
+        }
+
+    if service_type == "vvs":
+        return {
+            "problem": "projekt ofta kräver rätt kompetens, snabb planering och pålitliga samarbeten",
+            "value": "hjälpa med VVS-installationer, projektstöd eller samarbeten där rätt kompetens behövs",
+            "angle": "VVS-stöd och samarbeten",
+        }
+
+    return {
+        "problem": "det kan vara svårt att få rätt kundkontakt utan tydlig positionering",
+        "value": "skapa tydligare första kontakt och bättre matchning",
+        "angle": "relevant samarbete",
+    }
+
+
+def analyze_lead(lead, profile):
+    company = clean(getattr(lead, "company_name", ""), "företaget")
     industry = clean(getattr(lead, "industry", ""), "er bransch")
-    city = clean(getattr(lead, "city", ""), "Sverige")
+    city = clean(getattr(lead, "city", ""))
+    website = clean(getattr(lead, "website", ""))
 
-    if relevance["is_relevant"]:
-        return (
-            f"Jag såg att {company} arbetar inom {industry} i {city}. "
-            f"Anledningen till att jag kontaktar er är att {relevance['reason']}."
-        )
+    website_text = fetch_website_text(website)
+    service_type = detect_service_type(profile)
+    industry_group = detect_industry_group(industry, website_text)
 
-    return (
-        f"Jag såg att {company} arbetar inom {industry} i {city}. "
-        f"Jag är inte helt säker på om timingen är rätt, men jag ville ändå höra om "
-        f"{relevance['angle']} kan vara relevant för er framöver."
+    match_score, reasons, warnings = calculate_match(
+        service_type=service_type,
+        industry_group=industry_group,
+        website_text=website_text,
+        profile=profile,
     )
 
+    angle = get_relevance_angle(service_type, industry_group)
 
-def build_pitch_angle(lead, profile):
-    relevance = score_lead_relevance(lead, profile)
-    return relevance["angle"]
+    if website_text:
+        insight = f"Jag såg att ni arbetar med {industry.lower()} och har information online där kunder kan läsa mer om era tjänster."
+    elif city:
+        insight = f"Jag såg att ni är verksamma inom {industry.lower()} i {city}."
+    else:
+        insight = f"Jag såg att ni arbetar inom {industry.lower()}."
 
-
-def build_cta(lead, profile):
-    relevance = score_lead_relevance(lead, profile)
-    return relevance["cta"]
-
-
-def is_relevant_lead(lead, profile, min_score=60):
-    return score_lead_relevance(lead, profile)["score"] >= min_score
+    return {
+        "company": company,
+        "industry": industry,
+        "city": city,
+        "service_type": service_type,
+        "industry_group": industry_group,
+        "match_score": match_score,
+        "is_relevant": match_score >= 55,
+        "reasons": reasons,
+        "warnings": warnings,
+        "insight": insight,
+        "problem": angle["problem"],
+        "value": angle["value"],
+        "angle": angle["angle"],
+    }

@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Företagsprofil - FlerKunder</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f8ff;color:#07111f}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 15% 10%,rgba(0,140,255,.22),transparent 32%),radial-gradient(circle at 85% 10%,rgba(255,53,168,.18),transparent 32%),linear-gradient(180deg,#fbfdff,#eef7ff)}
+.page{min-height:100vh;padding:40px 7%;display:flex;align-items:center;justify-content:center}
+.card{width:100%;max-width:920px;background:rgba(255,255,255,.9);border:1px solid white;border-radius:34px;padding:34px;box-shadow:0 25px 80px rgba(15,23,42,.1)}
+.logo{font-size:28px;font-weight:950;background:linear-gradient(135deg,#008cff,#ff35a8);-webkit-background-clip:text;color:transparent;margin-bottom:18px}
+.badge{display:inline-flex;padding:9px 14px;border-radius:999px;background:rgba(0,140,255,.1);color:#006bbd;font-weight:950;margin-bottom:16px}
+h1{font-size:44px;line-height:1;letter-spacing:-2px;margin:0 0 14px}
+p{color:#64748b;line-height:1.6}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:20px;padding:16px;margin:20px 0;font-weight:800;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-weight:900;margin:14px 0 7px}
+input,textarea{width:100%;border:1px solid rgba(15,23,42,.12);background:white;border-radius:16px;padding:14px;font-size:15px}
+textarea{min-height:130px;resize:vertical;line-height:1.5}
+.help{font-size:13px;color:#64748b;margin-top:6px;line-height:1.45}
+.example{background:#f8fafc;border:1px solid rgba(15,23,42,.08);border-radius:18px;padding:14px;margin-top:8px;color:#334155;font-size:14px;line-height:1.5}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:16px;font-weight:950;background:linear-gradient(135deg,#008cff,#ff35a8);color:white;text-decoration:none}
+.btn.secondary{background:white;color:#07111f;border:1px solid rgba(15,23,42,.1)}
+@media(max-width:768px){
+  .page{padding:18px}
+  .card{padding:22px;border-radius:24px}
+  h1{font-size:34px}
+  .grid{grid-template-columns:1fr}
+  .btn{width:100%;min-height:48px}
+}
+</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
+
+<body>
+<div class="bg"></div>
+
+<div class="page">
+  <div class="card">
+    <div class="logo">FlerKunder</div>
+    <div class="badge">Företagsprofil</div>
+
+    <h1>Berätta vad ditt företag gör.</h1>
+
+    <p>
+      Den här profilen används som underlag när AI:n skapar personliga pitchar till dina leads.
+      Ju tydligare du skriver här, desto bättre och mer träffsäkra blir mailen.
+    </p>
+
+    <div class="notice">
+      Tips: Skriv enkelt och ärligt. AI:n ska förbättra texten, rätta stavfel och göra den professionell i pitcharna.
+      Undvik bara att skriva för kort, till exempel "vi säljer tjänster".
+    </div>
+
+    <form method="POST" action="/leads/profile/setup">
+
+      <div class="grid">
+        <div>
+          <label>Företagsnamn</label>
+          <input name="company_name" placeholder="Ex: FlerKunder" required>
+          <div class="help">Namnet som ska användas i pitcharna.</div>
+        </div>
+
+        <div>
+          <label>Bransch</label>
+          <input name="industry" placeholder="Ex: AI, marknadsföring, webbyrå, städfirma" required>
+          <div class="help">Hjälper AI:n förstå vilka kunder du passar för.</div>
+        </div>
+      </div>
+
+      <label>Vad erbjuder ni?</label>
+      <textarea name="offer" placeholder="Ex: Vi hjälper småföretag att hitta fler kunder genom AI-genererade leads, personliga mailutkast och enklare uppföljning." required></textarea>
+      <div class="help">Skriv vad ni säljer, vilket problem ni löser och varför kunden borde bry sig.</div>
+
+      <div class="example">
+        Bra exempel: "Vi hjälper lokala företag som städfirmor, byggfirmor och konsulter att hitta fler potentiella kunder, skapa personliga kontaktmail och boka fler möten utan att lägga timmar på manuell research."
+      </div>
+
+      <label>Vem hjälper ni?</label>
+      <textarea name="target_customer" placeholder="Ex: Småföretag, lokala servicebolag, byråer och företag som vill få fler kundmöten." required></textarea>
+      <div class="help">Beskriv vilka kunder du helst vill nå. Detta gör pitcharna mer relevanta.</div>
+
+      <label>Vad gör er bättre eller annorlunda?</label>
+      <textarea name="unique_value" placeholder="Ex: Vi kombinerar AI, lead research och färdiga mailutkast så företag kan komma igång snabbare utan dyra annonser." required></textarea>
+      <div class="help">Här kan du skriva era styrkor. AI:n gör texten mer säljande och rättar språket.</div>
+
+      <label>Ton i pitchen</label>
+      <input name="tone" placeholder="Ex: professionell, enkel, trevlig, inte för säljig" value="professionell, enkel och trevlig">
+
+      <div class="actions">
+        <button class="btn" type="submit">Spara företagsprofil</button>
+        <a class="btn secondary" href="/lead-agent">Till Lead Agent</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+

@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-<head>
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>Jarvis Agents</title>
   <style>
@@ -67,7 +67,7 @@
       font-size: 18px;
     }
   </style>
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
 <body>
   <div class="boot">
     <h1>JARVIS AGENT MODE</h1>
@@ -93,7 +93,7 @@ async function loadTasks() {
     const res = await fetch("../content_factory/logs/tasks.json?x=" + Date.now());
     const data = await res.json();
     document.getElementById("tasks").innerHTML = data.slice(-8).map(t =>
-      `<div>[${t.time}] <b>${t.agent}</b> — ${t.status}: ${t.detail}</div>`
+      `<div>[${t.time}] <b>${t.agent}</b> â€” ${t.status}: ${t.detail}</div>`
     ).join("");
   } catch(e) {
     document.getElementById("tasks").innerHTML = "Waiting for agents...";
@@ -104,3 +104,6 @@ loadTasks();
 </script>
 </body>
 </html>
+
+
+

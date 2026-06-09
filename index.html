@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-<head>
+<head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JARVIS</title>
     <link rel="stylesheet" href="/static/style.css">
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mobile_fix.css') }}"></head>
 
 <body>
 
@@ -13,7 +13,7 @@
 
     <h1>JARVIS ACTIVE</h1>
 
-    <input id="input" placeholder="Säg något..." />
+    <input id="input" placeholder="SÃ¤g nÃ¥got..." />
     <button onclick="send()">Send</button>
 
     <div id="output"></div>
@@ -46,7 +46,7 @@ function speak(text){
     window.speechSynthesis.speak(msg);
 }
 
-// 🎤 voice input
+// ðŸŽ¤ voice input
 function startVoice(){
 
     let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -74,4 +74,7 @@ function startVoice(){
 
 </script>
 </body>
-</html><button onclick="startVoice()">🎤 Talk</button>
+</html><button onclick="startVoice()">ðŸŽ¤ Talk</button>
+
+
+

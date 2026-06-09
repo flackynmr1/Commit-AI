@@ -1,4 +1,5 @@
-﻿
+﻿from service_profiles import SERVICE_PROFILES
+
 from ai_research_agent import create_ai_research_pitch
 from email_history_models import EmailHistory
 from flask import render_template, request, redirect, url_for, session, flash
@@ -116,7 +117,7 @@ def lead_dashboard():
         leads=all_leads,
         usage=get_usage_context(),
         lead_options=LEAD_OPTIONS,
-        profile=session.get("company_profile", {}),
+        profile=session.get("company_profile", {}), services=SERVICE_PROFILES,
     )
 
 
@@ -226,7 +227,7 @@ def profile_setup():
 
     return render_template(
         "profile_setup.html",
-        profile=session.get("company_profile", {}),
+        profile=session.get("company_profile", {}), services=SERVICE_PROFILES,
     )
 
 
@@ -586,6 +587,8 @@ def email_history():
     ).all()
 
     return render_template("email_history.html", history=history)
+
+
 
 
 
