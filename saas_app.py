@@ -1,4 +1,4 @@
-from service_profiles import SERVICE_PROFILES, detect_service_type, get_service_profile
+﻿from service_profiles import SERVICE_PROFILES, detect_service_type, get_service_profile
 import os
 from functools import wraps
 from flask import Flask, render_template, session, redirect, request
@@ -228,12 +228,23 @@ app = create_app()
 @app.route("/google4d43ec67c07761aa.html")
 def google_verify():
     return "google-site-verification: google4d43ec67c07761aa.html", 200, {"Content-Type": "text/plain"}
+
+@app.route("/sitemap.xml")
+def sitemap():
+    xml = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.flerkunder.site/</loc>
+  </url>
+</urlset>"""
+    return xml, 200, {"Content-Type": "application/xml"}
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5050)),
         debug=False
     )
+
 
 
 
